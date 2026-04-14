@@ -6,13 +6,11 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>../ProyectoComponentes_DisenoSoftware/presentacion</module>
         <module>ComponentesNegocio</module>
         <module>ComponentesPersistencia</module>
         <module>ComponentesDominio</module>
         <module>ComponentesDTO</module>
-        <module>../ProyectoComponentes_DisenoSoftware/ComponentesPresentacion</module>
-        <module>PresentacionComponentes</module>
+        <module>ComponentesPresentacion</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
