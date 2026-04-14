@@ -1,6 +1,11 @@
 package PruebasPantallas;
 
+import javax.swing.SwingUtilities;
 import pantallas.VadministrarClientes;
+import pantallas.ViniciarSolicitud;
+import pantallas.ViniciarVenta;
+import pantallas.Vinicio;
+import pantallas.VinicioSesion;
 
 /**
  *
@@ -9,7 +14,6 @@ import pantallas.VadministrarClientes;
 public class Pruebas {
 
     public static void main(String[] args) {
-        VadministrarClientes ventana = new VadministrarClientes();
-        ventana.setVisible(true);
+        SwingUtilities.invokeLater(() -> new ViniciarSolicitud().setVisible(true));
     }
 }
