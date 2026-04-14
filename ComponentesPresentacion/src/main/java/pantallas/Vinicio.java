@@ -4,6 +4,7 @@
  */
 package pantallas;
 
+import coordinadores.Coordinador;
 import java.awt.BorderLayout;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
@@ -16,8 +17,15 @@ import javax.swing.border.EmptyBorder;
  * @author DANIEL
  */
 public class Vinicio extends JFrame {
+    private Coordinador coordinador;
 
-    public Vinicio() {
+    public Vinicio(Coordinador coordinador) {
+        this.coordinador = coordinador;
+        initComponents();
+    }
+
+
+    private void initComponents() {
         setTitle("Technoware - Panel de Control");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1100, 750);
@@ -54,6 +62,31 @@ public class Vinicio extends JFrame {
             btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
             btn.setFocusPainted(false);
             btn.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.WHITE));
+            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+
+            btn.addActionListener(e -> {
+                switch (texto) {
+                    case "Inicio":
+
+                        coordinador.mostrarVentanaInicio();
+                        break;
+                    case "Iniciar venta":
+                        coordinador.mostrarVentanaVenta();
+                        break;
+                    case "Iniciar solicitud":
+                        coordinador.mostrarVentanaSolicitud();
+                        break;
+                    case "Historial de ventas":
+                        // coordinador.mostrarHistorialVentas(); // Por si los implementas después
+                        JOptionPane.showMessageDialog(this, "Módulo de Historial en desarrollo");
+                        break;
+                    case "Historial de solicitudes":
+                        JOptionPane.showMessageDialog(this, "Módulo de Historial en desarrollo");
+                        break;
+                }
+            });
+
             nav.add(btn);
         }
         return nav;

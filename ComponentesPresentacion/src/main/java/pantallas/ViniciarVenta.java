@@ -4,6 +4,7 @@
  */
 package pantallas;
 
+import coordinadores.Coordinador;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.*;
@@ -16,8 +17,10 @@ import javax.swing.border.EmptyBorder;
 public class ViniciarVenta extends JFrame {
 
     private JPanel contenedorListaPiezas;
+    private Coordinador coordinador;
 
-    public ViniciarVenta() {
+    public ViniciarVenta(Coordinador coordinador) {
+        this.coordinador = coordinador;
       setTitle("Technoware - Iniciar Venta");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1300, 850);
@@ -52,17 +55,66 @@ public class ViniciarVenta extends JFrame {
         JPanel nav = new JPanel(new GridLayout(1, 5));
         nav.setPreferredSize(new Dimension(0, 65));
         nav.setBackground(new Color(0, 95, 255));
-        String[] botones = {"Inicio", "Iniciar venta", "Iniciar solicitud", "Historial de ventas", "Historial de solicitudes"};
-        for (String texto : botones) {
+        
+        String[] nombres = {"Inicio", "Iniciar venta", "Iniciar solicitud", "Historial de ventas", "Historial de solicitudes"};
+        
+        for (String texto : nombres) {
             JButton btn = new JButton(texto);
             btn.setForeground(Color.WHITE);
             btn.setBackground(new Color(0, 95, 255));
             btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
             btn.setFocusPainted(false);
             btn.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.WHITE));
+            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+            btn.addActionListener(e -> {
+                switch (texto) {
+                    case "Inicio":
+                        coordinador.mostrarVentanaInicio();
+                        break;
+                    case "Iniciar venta":
+                        break;
+                    case "Iniciar solicitud":
+                        coordinador.mostrarVentanaSolicitud();
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(this, "Módulo " + texto + " en desarrollo");
+                        break;
+                }
+            });
+            
             nav.add(btn);
         }
         return nav;
+    }
+
+    private JPanel crearBarraInferior() {
+        JPanel p = new JPanel(new BorderLayout());
+        p.setBackground(Color.WHITE);
+        p.setBorder(new EmptyBorder(10, 30, 20, 30));
+        
+        JButton btnBack = new JButton("←"); 
+        btnBack.setFont(new Font("Arial", Font.BOLD, 40));
+        btnBack.setContentAreaFilled(false); 
+        btnBack.setBorderPainted(false);
+        btnBack.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        btnBack.addActionListener(e -> coordinador.mostrarVentanaInicio());
+
+        JButton btnNext = new JButton("Continuar");
+        btnNext.setBackground(new Color(0, 95, 255)); 
+        btnNext.setForeground(Color.WHITE);
+        btnNext.setFont(new Font("Segoe UI", Font.BOLD, 16)); 
+        btnNext.setPreferredSize(new Dimension(200, 50));
+        btnNext.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        btnNext.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Procesando venta...");
+        });
+
+        p.add(btnBack, BorderLayout.WEST); 
+        p.add(btnNext, BorderLayout.EAST);
+        return p;
     }
 
     private JPanel crearPanelBusqueda() {
@@ -152,18 +204,6 @@ public class ViniciarVenta extends JFrame {
         return p;
     }
 
-    private JPanel crearBarraInferior() {
-        JPanel p = new JPanel(new BorderLayout());
-        p.setBackground(Color.WHITE);
-        p.setBorder(new EmptyBorder(10, 30, 20, 30));
-        JButton btnBack = new JButton("←"); btnBack.setFont(new Font("Arial", Font.BOLD, 40));
-        btnBack.setContentAreaFilled(false); btnBack.setBorderPainted(false);
-        JButton btnNext = new JButton("Continuar");
-        btnNext.setBackground(new Color(0, 95, 255)); btnNext.setForeground(Color.WHITE);
-        btnNext.setFont(new Font("Segoe UI", Font.BOLD, 16)); btnNext.setPreferredSize(new Dimension(200, 50));
-        p.add(btnBack, BorderLayout.WEST); p.add(btnNext, BorderLayout.EAST);
-        return p;
-    }
 
     class CardPieza extends PanelRedondeado {
         public CardPieza(String nombre, String marca, String precio) {

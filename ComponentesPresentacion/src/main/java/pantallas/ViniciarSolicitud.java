@@ -4,6 +4,7 @@
  */
 package pantallas;
 
+import coordinadores.Coordinador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -38,8 +39,10 @@ import javax.swing.border.EmptyBorder;
 public class ViniciarSolicitud extends JFrame { 
 
     private JPanel contenedorListaPiezas;
+    private Coordinador coordinador; // Agregado
 
-    public ViniciarSolicitud() {
+    public ViniciarSolicitud(Coordinador coordinador) {
+        this.coordinador = coordinador; // Inicializado
         setTitle("Technoware - Iniciar Solicitud");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1300, 850);
@@ -49,6 +52,7 @@ public class ViniciarSolicitud extends JFrame {
 
         add(crearNavegacion(), BorderLayout.NORTH);
 
+        // ... resto del código del panel contenido ...
         JPanel contenido = new JPanel(new GridBagLayout());
         contenido.setBackground(Color.WHITE);
         contenido.setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -67,7 +71,6 @@ public class ViniciarSolicitud extends JFrame {
         contenido.add(crearPanelCarrito(), g);
 
         add(contenido, BorderLayout.CENTER);
-        
         add(crearBarraInferior(), BorderLayout.SOUTH);
     }
 
@@ -76,6 +79,7 @@ public class ViniciarSolicitud extends JFrame {
         nav.setPreferredSize(new Dimension(0, 65));
         nav.setBackground(new Color(0, 95, 255));
         String[] botones = {"Inicio", "Iniciar venta", "Iniciar solicitud", "Historial de ventas", "Historial de solicitudes"};
+        
         for (String texto : botones) {
             JButton btn = new JButton(texto);
             btn.setForeground(Color.WHITE);
@@ -83,9 +87,55 @@ public class ViniciarSolicitud extends JFrame {
             btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
             btn.setFocusPainted(false);
             btn.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.WHITE));
+            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+            // LÓGICA DE NAVEGACIÓN
+            btn.addActionListener(e -> {
+                switch (texto) {
+                    case "Inicio":
+                        coordinador.mostrarVentanaInicio();
+                        break;
+                    case "Iniciar venta":
+                        coordinador.mostrarVentanaVenta();
+                        break;
+                    case "Iniciar solicitud":
+                        // Ya estamos aquí
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(this, "Módulo " + texto + " en desarrollo");
+                        break;
+                }
+            });
             nav.add(btn);
         }
         return nav;
+    }
+
+    private JPanel crearBarraInferior() {
+        JPanel p = new JPanel(new BorderLayout());
+        p.setBackground(Color.WHITE);
+        p.setBorder(new EmptyBorder(10, 30, 20, 30));
+        
+        JButton btnBack = new JButton("←"); 
+        btnBack.setFont(new Font("Arial", Font.BOLD, 40));
+        btnBack.setContentAreaFilled(false); 
+        btnBack.setBorderPainted(false);
+        btnBack.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        // Acción de retroceso: Volver al menú de inicio
+        btnBack.addActionListener(e -> coordinador.mostrarVentanaInicio());
+
+        JButton btnNext = new JButton("Continuar");
+        btnNext.setBackground(new Color(0, 95, 255)); 
+        btnNext.setForeground(Color.WHITE);
+        btnNext.setFont(new Font("Segoe UI", Font.BOLD, 16)); 
+        btnNext.setPreferredSize(new Dimension(200, 50));
+        btnNext.setFocusPainted(false);
+        btnNext.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        p.add(btnBack, BorderLayout.WEST); 
+        p.add(btnNext, BorderLayout.EAST);
+        return p;
     }
 
     private JPanel crearPanelBusqueda() {
@@ -176,29 +226,6 @@ public class ViniciarSolicitud extends JFrame {
         JLabel t = new JLabel("Solicitud"); t.setFont(new Font("Segoe UI", Font.BOLD, 20));
         JLabel tot = new JLabel("Total: $ 0"); tot.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         p.add(t); p.add(Box.createVerticalStrut(10)); p.add(tot);
-        return p;
-    }
-
-    private JPanel crearBarraInferior() {
-        JPanel p = new JPanel(new BorderLayout());
-        p.setBackground(Color.WHITE);
-        p.setBorder(new EmptyBorder(10, 30, 20, 30));
-        
-        JButton btnBack = new JButton("←"); 
-        btnBack.setFont(new Font("Arial", Font.BOLD, 40));
-        btnBack.setContentAreaFilled(false); 
-        btnBack.setBorderPainted(false);
-        btnBack.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        JButton btnNext = new JButton("Continuar");
-        btnNext.setBackground(new Color(0, 95, 255)); 
-        btnNext.setForeground(Color.WHITE);
-        btnNext.setFont(new Font("Segoe UI", Font.BOLD, 16)); 
-        btnNext.setPreferredSize(new Dimension(200, 50));
-        btnNext.setFocusPainted(false);
-
-        p.add(btnBack, BorderLayout.WEST); 
-        p.add(btnNext, BorderLayout.EAST);
         return p;
     }
 
