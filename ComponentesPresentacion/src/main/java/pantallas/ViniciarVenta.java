@@ -77,8 +77,11 @@ public class ViniciarVenta extends JFrame {
                     case "Iniciar solicitud":
                         coordinador.mostrarVentanaSolicitud();
                         break;
-                    default:
-                        JOptionPane.showMessageDialog(this, "Módulo " + texto + " en desarrollo");
+                    case "Historial de ventas":
+                        coordinador.mostrarHistorialVentas();
+                        break;
+                    case "Historial de solicitudes":
+                        coordinador.mostrarHistorialSolicitudes();
                         break;
                 }
             });

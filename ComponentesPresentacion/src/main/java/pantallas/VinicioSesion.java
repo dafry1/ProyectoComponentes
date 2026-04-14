@@ -5,6 +5,7 @@
 
 package pantallas;
 
+import coordinadores.Coordinador;
 import java.awt.Color;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
@@ -17,7 +18,7 @@ import javax.swing.border.EmptyBorder;
  */
 public class VinicioSesion extends JFrame {
 
-    public VinicioSesion() {
+    public VinicioSesion(Coordinador coordinador) {
         setTitle("Technoware - Inicio de Sesión");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 650);
@@ -37,7 +38,7 @@ public class VinicioSesion extends JFrame {
         banner.setLayout(new GridBagLayout());
         
         JLabel lblLogo = new JLabel("Technoware");
-        lblLogo.setFont(new Font("Segoe UI", Font.BOLD, 72)); // Fuente moderna
+        lblLogo.setFont(new Font("Segoe UI", Font.BOLD, 72)); 
         lblLogo.setForeground(Color.WHITE);
         banner.add(lblLogo);
 
@@ -86,6 +87,8 @@ public class VinicioSesion extends JFrame {
         btnIngresar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
         btnIngresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+        btnIngresar.addActionListener(e -> coordinador.mostrarVentanaInicio());
+                
         formBox.add(lblUser);
         formBox.add(Box.createVerticalStrut(5));
         formBox.add(txtUser);

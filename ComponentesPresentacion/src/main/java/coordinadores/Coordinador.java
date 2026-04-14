@@ -40,6 +40,13 @@ public class Coordinador implements IObservador {
     }
     
     /**
+     * Muestra la pantalla de Inicio (Dashboard principal).
+     */
+    public void mostrarVentanaInicioSesion() {
+        abrirNuevaVentana(() -> new VinicioSesion(this));
+    }
+    
+    /**
      * Muestra la pantalla de Historial de ventas.
      */
     public void mostrarHistorialVentas() {

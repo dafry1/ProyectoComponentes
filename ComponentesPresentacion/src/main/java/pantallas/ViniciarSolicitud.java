@@ -89,7 +89,6 @@ public class ViniciarSolicitud extends JFrame {
             btn.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.WHITE));
             btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-            // LÓGICA DE NAVEGACIÓN
             btn.addActionListener(e -> {
                 switch (texto) {
                     case "Inicio":
@@ -99,10 +98,12 @@ public class ViniciarSolicitud extends JFrame {
                         coordinador.mostrarVentanaVenta();
                         break;
                     case "Iniciar solicitud":
-                        // Ya estamos aquí
                         break;
-                    default:
-                        JOptionPane.showMessageDialog(this, "Módulo " + texto + " en desarrollo");
+                    case "Historial de ventas":
+                        coordinador.mostrarHistorialVentas();
+                        break;
+                    case "Historial de solicitudes":
+                        coordinador.mostrarHistorialSolicitudes();
                         break;
                 }
             });
