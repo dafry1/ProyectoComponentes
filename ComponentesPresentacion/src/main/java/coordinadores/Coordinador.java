@@ -38,6 +38,20 @@ public class Coordinador implements IObservador {
     public void mostrarVentanaInicio() {
         abrirNuevaVentana(() -> new Vinicio(this));
     }
+    
+    /**
+     * Muestra la pantalla de Historial de ventas.
+     */
+    public void mostrarHistorialVentas() {
+        abrirNuevaVentana(() -> new VhistorialVentas(this));
+    }
+    
+    /**
+     * Muestra la pantalla de Historial de solicitudes.
+     */
+    public void mostrarHistorialSolicitudes() {
+        abrirNuevaVentana(() -> new VhistorialSolicitudes(this));
+    }
 
     /**
      * Método privado para centralizar la lógica de cerrar la anterior y abrir

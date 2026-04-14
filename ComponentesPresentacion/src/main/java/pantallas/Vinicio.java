@@ -78,11 +78,10 @@ public class Vinicio extends JFrame {
                         coordinador.mostrarVentanaSolicitud();
                         break;
                     case "Historial de ventas":
-                        // coordinador.mostrarHistorialVentas(); // Por si los implementas después
-                        JOptionPane.showMessageDialog(this, "Módulo de Historial en desarrollo");
+                        coordinador.mostrarHistorialVentas();
                         break;
                     case "Historial de solicitudes":
-                        JOptionPane.showMessageDialog(this, "Módulo de Historial en desarrollo");
+                        coordinador.mostrarHistorialSolicitudes();
                         break;
                 }
             });
