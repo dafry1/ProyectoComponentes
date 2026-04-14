@@ -14,12 +14,21 @@ public class PiezaDTO {
     private double costoPieza;
     private String marcaPieza;
     private String modeloPieza;
+    private int stockPieza;
     
     /**
      * Constructor vacio de la clase PiezaDTO.
      */
     public PiezaDTO(){}
-
+    public PiezaDTO(Long id, String tipoPieza, double costoPieza, String marcaPieza, String modeloPieza, int stockPieza) {
+        this.id = id;
+        this.tipoPieza = tipoPieza;
+        this.costoPieza = costoPieza;
+        this.marcaPieza = marcaPieza;
+        this.modeloPieza = modeloPieza;
+        this.stockPieza = stockPieza;
+    }
+    
     /**
      * Método para obtener el valor del ID del pieza.
      * 
@@ -108,5 +117,21 @@ public class PiezaDTO {
      */
     public void setModeloPieza(String modeloPieza) {
         this.modeloPieza = modeloPieza;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getStockPieza() {
+        return stockPieza;
+    }
+
+    public void setStockPieza(int stockPieza) {
+        this.stockPieza = stockPieza;
     }
 }
