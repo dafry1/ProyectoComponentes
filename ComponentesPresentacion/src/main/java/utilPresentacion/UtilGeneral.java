@@ -138,20 +138,7 @@ public class UtilGeneral {
 
     
     
-    /**
-     * Configura el frame de donde se llame
-     *
-     * @param texto
-     * @param frame
-     */
-    public static void configurarFrame(String texto, JFrame frame) {
-        frame.setTitle("Technoware - " + texto);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1300, 850);
-        frame.setLocationRelativeTo(null);
-        frame.getContentPane().setBackground(Constantes.COLOR_FONDO);
-        frame.setLayout(new BorderLayout());
-    }
+   
     
    
     
@@ -166,33 +153,6 @@ public class UtilGeneral {
     public static CampoTextoRedondeado crearCampoTexto() {
         return new CampoTextoRedondeado(Constantes.NUM_CARACTERES);
     }
-
-    
-    
-    /**
-     * Crea un campo de texto ya configurado
-     *
-     * @param panel
-     * @param etiqueta el label
-     * @param tamanio
-     */
-    public static JTextField crearCampoFormulario(JPanel panel, String etiqueta) {
-        CampoTextoRedondeado campo = crearCampoTexto();
-        JLabel label = new JLabel(etiqueta);
-
-        //Configura de qué lado van a aparecer
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        campo.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        //Agrega al panel y define pequeño espacio
-        panel.add(label);
-        panel.add(Box.createVerticalStrut(5));
-        panel.add(campo);
-        panel.add(Box.createVerticalStrut(15));
-
-        return campo;
-    }
-
     
     
     /**
@@ -215,46 +175,6 @@ public class UtilGeneral {
             }
         }
     }
-    
-    
-    public static void dialogoAviso(Component componente, String mensaje) {
-        JOptionPane.showMessageDialog(componente, mensaje, "Aviso", JOptionPane.WARNING_MESSAGE);
-    }
-    
-    public static void dialogoSiNo(Component componente, String mensaje) {
-        JOptionPane.showMessageDialog(componente, mensaje, "Aviso", JOptionPane.YES_OPTION);
-    }
-    
-    
-    
-    /**
-     * En orden de instrucciones:
-     * -Acomoda en layout
-     * -Bloquea la pantalla de fondo
-     * -Si se puede ajustar el tamaño o no
-     * 
-     * @param dialogo 
-     */
-    public static void configurarDialogoInicio(JDialog dialogo, boolean reajustable) {
-        dialogo.setLayout(new BorderLayout());
-        dialogo.setModal(true);
-        dialogo.setResizable(reajustable);
-    }
-    
-    
-    
-    /**
-     * En orden de instrucciones:
-     * -Ajusta el tamaño del contenido
-     * -Centra respecto al menú principal
-     */
-    public static void configurarDialogoFinal(JDialog dialogo) {
-        dialogo.pack();
-        dialogo.setLocationRelativeTo(null);
-        dialogo.setVisible(true);
-    }
-    
-    
     
     /**
      * Procesa (reescala) una imagen de forma centralizada

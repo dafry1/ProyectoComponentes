@@ -66,49 +66,4 @@ public class UtilPanel {
         panel.setBorder(new EmptyBorder(5, 20, 5, 20));
         return panel;
     }
-    
-    
-    
-    /**
-     * Crea el panel superior de navegación con lógica incluida
-     * 
-     * @param frame donde es desplegado
-     * @param coordinador que se encarga de navegar
-     * 
-     * @return el panel superior totalmente navegable
-     */
-    public static JPanel crearNavegacion(JFrame frame, ICoordinadorPresentacion coordinador) {
-        
-        //Creación y configuración
-        JPanel nav = new JPanel(new GridLayout(1, 5));
-        nav.setPreferredSize(new Dimension(0, 65));
-        nav.setBackground(new Color(0, 95, 255));
-        
-        //Arreglo con los apartados
-        String[] nombres = {"Inicio", "Iniciar venta", "Iniciar solicitud", "Historial de ventas", "Historial de solicitudes"};
-        
-        //Crea un botón por cada apartado anterior y lo configura
-        for (String texto: nombres) {
-            JButton btn = new JButton(texto);
-            btn.setForeground(Constantes.COLOR_TEXTO_BOTONES);
-            btn.setBackground(Constantes.COLOR_BOTONES);
-            btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
-            btn.setFocusPainted(false);
-            btn.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.WHITE));
-            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-            //Dependiendo de qué campo sea presionado, creará una respectiva pantalla
-            btn.addActionListener(e -> {
-                switch (texto) {
-                    case "Inicio" -> coordinador.mostrarVentanaInicio();
-                    case "Iniciar venta" -> coordinador.mostrarVentanaVenta();
-                    case "Historial de ventas" -> {}
-                    case "Historial de solicitudes" -> coordinador.mostrarHistorialSolicitudes();
-                    default -> JOptionPane.showMessageDialog(frame, "Módulo en desarrollo");
-                }
-            });
-            nav.add(btn);
-        }
-        return nav;
-    }
 }

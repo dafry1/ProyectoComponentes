@@ -4,6 +4,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import utilEstilos.UtilSwing;
 import utilPresentacion.UtilBoton;
 import utilPresentacion.UtilGeneral;
 import utilPresentacion.UtilPanel;
@@ -14,15 +15,15 @@ import utilPresentacion.UtilPanel;
  */
 public class infoPieza extends JDialog {
     
-    public infoPieza(IDTO pieza) {
+    public infoPieza(IDTO objeto) {
         
-        UtilGeneral.configurarDialogoInicio(this, true);
+        UtilSwing.configurarDialogoInicio(this, true);
         
         //Crea el panel
         JPanel panel = UtilPanel.crearPanel();
     
         //Crea el label
-        String info = pieza.mostrarInfo();
+        String info = objeto.mostrarInfo();
         JLabel label = UtilGeneral.crearLabel(info);
         panel.add(label);
         
@@ -36,6 +37,6 @@ public class infoPieza extends JDialog {
         //Agrega el diálogo
         add(panel);
         
-        UtilGeneral.configurarDialogoFinal(this);
+        UtilSwing.configurarDialogoFinal(this);
     }
 }

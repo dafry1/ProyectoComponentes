@@ -31,6 +31,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import utilEstilos.UtilSwing;
 import utilPresentacion.UtilGeneral;
 
 /**
@@ -46,7 +47,7 @@ public class ViniciarSolicitud extends JFrame {
         this.coordinador = coordinador; // Inicializado
 
         
-        UtilGeneral.configurarFrame("Technoware - Iniciar solicitud", this);
+        UtilSwing.configurarFrame("Technoware - Iniciar solicitud", this);
 
         
         add(crearNavegacion(), BorderLayout.NORTH);

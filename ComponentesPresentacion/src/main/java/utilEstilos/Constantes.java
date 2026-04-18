@@ -8,6 +8,9 @@ import java.awt.Font;
  */
 public class Constantes {
     
+    /** Arreglo que ya define los campos de la barra superior de navegación */
+    public static final String[] CAMPOS_PANEL_SUPERIOR = {
+    "Inicio", "Iniciar venta", "Iniciar solicitud", "Historial de ventas", "Historial de solicitudes"};
     
     /** Constante que protege el texto que pide el nombre */
     public static final String PIEZA_NOMBRE = "Nombre de la pieza";

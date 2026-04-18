@@ -13,6 +13,8 @@ import utilPresentacion.UtilPanel;
 import java.util.List;
 import java.util.ArrayList;
 import observadores.IObservador;
+import utilEstilos.UtilBuild;
+import utilEstilos.UtilSwing;
 import utilPresentacion.UtilBoton.BotonAlmacenador;
 
 /**
@@ -40,10 +42,10 @@ public class ViniciarVenta extends JFrame implements IObservador {
         this.coordinador = coordinador;
         
         //Configuración general
-        UtilGeneral.configurarFrame("Iniciar venta", this);
+        UtilSwing.configurarFrame("Iniciar venta", this);
 
         //Añade el panel posterior
-        add(UtilPanel.crearNavegacion(this, coordinador), BorderLayout.NORTH);
+        add(UtilBuild.crearNavegacion(this, coordinador), BorderLayout.NORTH);
 
         //Crea el panel principal que contiene lo importante
         JPanel contenido = new JPanel(new GridBagLayout()); 
@@ -259,7 +261,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         contenedorListaPiezas.add(Box.createVerticalStrut(15));
     }
 
-    //PENDIENTE TODAVIA
+    //PENDIENTE 
     @Override
     public void observar() {
         
