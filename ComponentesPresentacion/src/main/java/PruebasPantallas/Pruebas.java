@@ -1,11 +1,11 @@
 package PruebasPantallas;
 
-import coordinadores.Coordinador;
+import coordinadores.CoordinadorPresentacion;
 import javax.swing.SwingUtilities;
-import pantallas.ViniciarSolicitud;
-import pantallas.ViniciarVenta;
-import pantallas.Vinicio;
-import pantallas.VinicioSesion;
+import pantallasVentas.ViniciarSolicitud;
+import pantallasVentas.ViniciarVenta;
+import pantallasPrincipales.Vinicio;
+import pantallasPrincipales.VinicioSesion;
 
 /**
  *
@@ -14,7 +14,7 @@ import pantallas.VinicioSesion;
 public class Pruebas {
 
     public static void main(String[] args) {
-        Coordinador coordinador = new Coordinador();
+        CoordinadorPresentacion coordinador = new CoordinadorPresentacion();
         coordinador.mostrarVentanaInicioSesion();
         
     }

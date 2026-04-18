@@ -6,9 +6,6 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>ComponentesNegocio</module>
-        <module>ComponentesPersistencia</module>
-        <module>ComponentesDominio</module>
         <module>ComponentesDTO</module>
         <module>ComponentesPresentacion</module>
     </modules>

@@ -1,5 +1,7 @@
 package DTOS;
 
+import interfaces.IDTO;
+
 /**
  * PiezaDTO.java
  * 
@@ -8,25 +10,53 @@ package DTOS;
  * 
  * @author Aaron
  */
-public class PiezaDTO {
+public class PiezaDTO implements IDTO {
     private Long id;
-    private String tipoPieza;
-    private double costoPieza;
+    private String nombre;
+    private String categoria;
     private String marcaPieza;
     private String modeloPieza;
+    private double costoPieza;
     private int stockPieza;
     
     /**
      * Constructor vacio de la clase PiezaDTO.
      */
     public PiezaDTO(){}
-    public PiezaDTO(Long id, String tipoPieza, double costoPieza, String marcaPieza, String modeloPieza, int stockPieza) {
+    public PiezaDTO(Long id, String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza) {
         this.id = id;
-        this.tipoPieza = tipoPieza;
-        this.costoPieza = costoPieza;
+        this.nombre = nombre;
+        this.categoria = categoria;
         this.marcaPieza = marcaPieza;
         this.modeloPieza = modeloPieza;
+        this.costoPieza = costoPieza;
         this.stockPieza = stockPieza;
+    }
+    
+    //CONSTRUCTOR BASICO TEMPORAL
+    public PiezaDTO(String nombre, String categoria, String marcaPieza, double costoPieza) {
+        this.nombre = nombre;
+        this.categoria = categoria;
+        this.marcaPieza = marcaPieza;
+        this.costoPieza = costoPieza;
+    }
+    
+    /** Implementación de nombreDTO() */
+    @Override
+    public String nombreDTO() {
+        return "Pieza";
+    }
+
+    /** Implementación de mostrarInfo() */
+    @Override
+    public String mostrarInfo() {
+        return "Información de la pieza: \n"
+             + "Nombre: " + nombre + "\n"
+             + "Categoría: " + categoria + "\n"
+             + "Marca: " + marcaPieza + "\n"
+             + "Modelo: " + modeloPieza + "\n"
+             + "Precio: " + costoPieza + "\n"
+             + "Stock restante: " + stockPieza + "\n";
     }
     
     /**
@@ -52,17 +82,17 @@ public class PiezaDTO {
      * 
      * @return Valor del tipo de la pieza.
      */
-    public String getTipoPieza() {
-        return tipoPieza;
+    public String getCategoria() {
+        return categoria;
     }
 
     /**
      * Método para asignar el valor del tipo a la pieza.
      * 
-     * @param tipoPieza Valor del tipo a asignar a la pieza.
+     * @param categoria Valor del tipo a asignar a la pieza.
      */
-    public void setTipoPieza(String tipoPieza) {
-        this.tipoPieza = tipoPieza;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     /**
@@ -133,5 +163,13 @@ public class PiezaDTO {
 
     public void setStockPieza(int stockPieza) {
         this.stockPieza = stockPieza;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }
