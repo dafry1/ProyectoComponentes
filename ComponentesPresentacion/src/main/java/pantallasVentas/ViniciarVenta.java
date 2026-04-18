@@ -1,5 +1,6 @@
 package pantallasVentas;
 import DTOS.PiezaDTO;
+import coordinadores.CoordinadorEstados;
 import coordinadores.ICoordinadorPresentacion;
 import java.awt.*;
 import java.util.HashMap;
@@ -32,6 +33,10 @@ public class ViniciarVenta extends JFrame implements IObservador {
     
     //Arreglo de constantes ya definidas para los campos de texto y así no pelearnos con strings sueltos
     private String[] campos = {Constantes.PIEZA_NOMBRE, Constantes.PIEZA_CATEGORIA, Constantes.PIEZA_MARCA, Constantes.PIEZA_PRECIOMAX};
+    
+    private double totalCarrito = CoordinadorEstados.singleton().totalCarrito();
+    
+    private JLabel labelTotal = new JLabel("Total: $ " + totalCarrito);
     
     /**
      * Constructor donde se ensambla toda el frame
@@ -80,10 +85,11 @@ public class ViniciarVenta extends JFrame implements IObservador {
     
     
     /**
-     * 
+     * Crea la sección central, donde aparecen las tarjetas de todas las piezas
      * 
      * @param piezas
-     * @return 
+     * 
+     * @return el panel listo
      */
     private JPanel crearSeccionCentral(List<PiezaDTO> piezas) {
         JPanel p = new JPanel(new BorderLayout());
@@ -101,9 +107,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         contenedorListaPiezas.setBackground(Color.WHITE);
 
         //Dibuja un campo por cada pieza
-        for (PiezaDTO pieza: piezas) {
-            dibujarTarjeta(pieza);
-        }
+        dibujarTarjetas(piezas);
 
         //Crea y configura un scroll por si son varios
         JScrollPane scroll = new JScrollPane(contenedorListaPiezas);
@@ -200,70 +204,95 @@ public class ViniciarVenta extends JFrame implements IObservador {
     
 
     private JPanel crearPanelCarrito() {
+        labelTotal.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
         p.setBackground(Color.WHITE);
+        
         JLabel t = new JLabel("Carrito"); t.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        JLabel tot = new JLabel("Total: $ 0"); tot.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        p.add(t); p.add(Box.createVerticalStrut(10)); p.add(tot);
+
+        p.add(t); 
+        p.add(Box.createVerticalStrut(10)); 
+        p.add(labelTotal);
         return p;
     }
     
     
     
     /**
+     * Dibuja y habita cada tarjeta que le corresponde una pieza en específico
+     * Crea la tarjeta de UtilPanel
+     * Extrae los datos de la pieza
+     * Configura cómo se plasma la información
+     * Crea el BotonAlmacenador mostrarInfo
+     * Esa información del DTO se manda a un diálogo
      * 
-     * @param pieza 
+     * @param pieza específica
      */
-    private void dibujarTarjeta(PiezaDTO pieza) {
-        JPanel carta = UtilPanel.dibujarTarjeta();
+    private void dibujarTarjetas(List<PiezaDTO> piezas) {
         
         //Declara variables
-        String nombre = pieza.getNombre();
-        String marca = pieza.getMarcaPieza();
-        double precio = pieza.getCostoPieza();
+        String nombre;
+        String marca;
+        double precio;
         
-        //Crea el panel de información básica
-        JPanel panelInfoBasica = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
-        panelInfoBasica.setOpaque(false);
-        JLabel ico = new JLabel("▣"); ico.setFont(new Font("Arial", Font.BOLD, 40));
-        String desc = "<html><font color='white' size='4'><b>"+nombre+"</b></font><br><font color='white'>"+marca+"</font></html>";
-        panelInfoBasica.add(ico); 
-        panelInfoBasica.add(new JLabel(desc));
+        //Por cada pieza de la lista...
+        for (PiezaDTO pieza: piezas) {
+             JPanel tarjeta = UtilPanel.dibujarTarjeta();
         
-        //Sección para mostrar información adicional: el precio y el botón de detalles
-        JPanel panelMostrarInfo = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 15));
-        panelMostrarInfo.setOpaque(false);
-        JLabel lblP = new JLabel("$" + precio); 
-        lblP.setForeground(new Color(50, 255, 100));
-        lblP.setFont(new Font("Segoe UI", Font.BOLD, 22));
+            //Asigna valores
+            nombre = pieza.getNombre();
+            marca = pieza.getMarcaPieza();
+            precio = pieza.getCostoPieza();
+            
+            //Crea el panel de información básica
+            JPanel panelInfoBasica = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
+            panelInfoBasica.setOpaque(false);
+            JLabel ico = new JLabel("▣"); ico.setFont(new Font("Arial", Font.BOLD, 40));
+            String desc = "<html><font color='white' size='4'><b>"+nombre+"</b></font><br><font color='white'>"+marca+"</font></html>";
+            panelInfoBasica.add(ico); 
+            panelInfoBasica.add(new JLabel(desc));
 
-        //Crea un botón de información adicional
-        Color colorBoton = new Color(50, 255, 100);
-        UtilBoton.BotonAlmacenador botonInfo = new BotonAlmacenador("MostrarInfo", pieza);
-        botonInfo.setBackground(colorBoton);
-        UtilBoton.asignarHoverBoton(botonInfo, colorBoton.darker());
-        panelMostrarInfo.add(lblP); 
-        panelMostrarInfo.add(botonInfo);
-        
-        //Agrega funcionalidad al botón de mostrarInfo
-        botonInfo.addActionListener(e -> {
-            System.out.println(pieza.mostrarInfo());
-            coordinador.abrirDialogo(() -> new infoPieza(botonInfo.getDTO()));
-        });
+            //Sección para mostrar información adicional: el precio y el botón de detalles
+            JPanel panelMostrarInfo = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 15));
+            panelMostrarInfo.setOpaque(false);
+            JLabel lblP = new JLabel("$" + precio); 
+            lblP.setForeground(new Color(50, 255, 100));
+            lblP.setFont(new Font("Segoe UI", Font.BOLD, 22));
 
-        //Agrega al panel principal
-        carta.add(panelInfoBasica, BorderLayout.WEST);
-        carta.add(panelMostrarInfo, BorderLayout.EAST);
-        
-        //Agrega al panel
-        contenedorListaPiezas.add(carta);
-        contenedorListaPiezas.add(Box.createVerticalStrut(15));
+            //Crea un botón de información adicional
+            Color colorBoton = new Color(50, 255, 100);
+            UtilBoton.BotonAlmacenador botonInfo = new BotonAlmacenador("MostrarInfo", pieza);
+            botonInfo.setBackground(colorBoton);
+            UtilBoton.asignarHoverBoton(botonInfo, colorBoton.darker());
+            panelMostrarInfo.add(lblP); 
+            panelMostrarInfo.add(botonInfo);
+
+            //Agrega funcionalidad al botón de mostrarInfo
+            botonInfo.addActionListener(e -> {
+                System.out.println(pieza.mostrarInfo());
+                coordinador.abrirDialogo(() -> new InfoPieza(ViniciarVenta.this, botonInfo.getDTO()));
+            });
+
+            //Agrega al panel principal
+            tarjeta.add(panelInfoBasica, BorderLayout.WEST);
+            tarjeta.add(panelMostrarInfo, BorderLayout.EAST);
+
+            //Agrega al panel
+            contenedorListaPiezas.add(tarjeta);
+            contenedorListaPiezas.add(Box.createVerticalStrut(15));
+        }
     }
 
-    //PENDIENTE 
+    
+    
+    /** Actualiza el label que indica el total del carrito directamente del coordinador */
     @Override
     public void observar() {
-        
+        totalCarrito = CoordinadorEstados.singleton().totalCarrito();
+        labelTotal.setText("Total: $ " + totalCarrito);
+        revalidate();
+        repaint();
     }
 }

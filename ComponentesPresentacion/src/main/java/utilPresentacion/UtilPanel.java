@@ -27,7 +27,8 @@ import utilEstilos.Constantes;
  */
 public class UtilPanel {
     
-    public static class PanelRedondeado extends JPanel {
+    //Panel con estilo personalizado
+    private static class PanelRedondeado extends JPanel {
         private int r; 
         private Color c;
         public PanelRedondeado(int radio, Color color) { 
@@ -42,6 +43,14 @@ public class UtilPanel {
             g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), r, r));
         }
     }
+    
+    
+    
+    /**
+     * Dibuja un panel con estilo propio
+     * 
+     * @return un panel
+     */
     public static JPanel crearPanel() {
         return new PanelRedondeado(40, new Color(220, 220, 220));
     }

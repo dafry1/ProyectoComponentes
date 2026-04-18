@@ -5,5 +5,5 @@ package observadores;
  * @author Andre
  */
 public interface IObservador {
-    void observar();
+    void observar(); //(Válgame el nombre)
 }

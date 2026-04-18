@@ -1,4 +1,5 @@
 package utilEstilos;
+import coordinadores.CoordinadorEstados;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.JDialog;
@@ -16,16 +17,16 @@ public class UtilSwing {
      /**
      * Configura el frame de donde se llame
      *
-     * @param texto de la ventana más la etiqueta del sistema "TechnoWare"
+     * @param titulo de la ventana más la etiqueta del sistema "TechnoWare"
      * @param frame
      */
-    public static void configurarFrame(String texto, JFrame frame) {
-        frame.setTitle("Technoware - " + texto);
+    public static void configurarFrame(String titulo, JFrame frame) {
+        frame.setTitle("Technoware - " + titulo);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1300, 850);
         frame.setLocationRelativeTo(null);
         frame.getContentPane().setBackground(Constantes.COLOR_FONDO);
-        frame.setLayout(new BorderLayout());
+        frame.setLayout(new BorderLayout()); //-> Este atrbituo puede cambiarse según se necesite
     }
     
     /**
@@ -60,8 +61,32 @@ public class UtilSwing {
         JOptionPane.showMessageDialog(componente, mensaje, "Aviso", JOptionPane.WARNING_MESSAGE);
     }
     
-    /** Centraliza la estética de un diálogo de confirmación */
-    public static int dialogoSiNo(Component componente, String mensaje) {
-        return JOptionPane.showConfirmDialog(componente, mensaje, "Confirmar", JOptionPane.YES_NO_OPTION);
+    /**
+     * Centraliza la estética y funcionalidad de un diálogo de confirmación
+     * 
+     * @param componente donde aparecerá (diálogo, frame)
+     * @param mensaje
+     * 
+     * @return true si se confirma, false de lo contrario
+     */
+    public static boolean dialogoConfirmacion(Component componente, String mensaje) {
+        //Define las opciones manualmente
+        Object[] opciones = {"Sí", "No"};
+
+        //Crea el diálogo de opciones con diferentes parámetros
+        //Se hace manualmente para insertar las opciones
+        int seleccion = JOptionPane.showOptionDialog(
+                componente, 
+                mensaje, 
+                "Confirmar", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.QUESTION_MESSAGE, 
+                null,      
+                opciones, //Los botones son las opciones
+                opciones[0] //Resalta por defecto el primero
+        );
+
+        //Regresa si lo seleccionado coincide con confirmar el diálogo
+        return seleccion == JOptionPane.YES_OPTION;
     }
 }

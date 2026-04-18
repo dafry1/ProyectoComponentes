@@ -60,24 +60,6 @@ public class PiezaDTO implements IDTO {
     }
     
     /**
-     * Método para obtener el valor del ID del pieza.
-     * 
-     * @return Valor del ID del pieza.
-     */
-    public Long getID(){
-        return id;
-    }
-    
-    /**
-     * Método para asignar el valor del ID al pieza.
-     * 
-     * @param id Valor del ID a asignar al pieza.
-     */
-    public void setID(Long id){
-        this.id = id;
-    }
-    
-    /**
      * Método para obtener el valor del tipo de la pieza.
      * 
      * @return Valor del tipo de la pieza.
