@@ -33,21 +33,22 @@ public class UtilSwing {
      * En orden de instrucciones:
      * -Acomoda en layout
      * -Bloquea la pantalla de fondo
-     * -Si se puede ajustar el tamaño o no
      * 
      * @param dialogo
      * @param esReajustable 
      */
     public static void configurarDialogoInicio(JDialog dialogo, boolean esReajustable) {
         dialogo.setLayout(new BorderLayout());
-        dialogo.setModal(true);
         dialogo.setResizable(esReajustable);
+        dialogo.setModal(true);
     }
     
     /**
      * En orden de instrucciones:
      * -Ajusta el tamaño del contenido
      * -Centra respecto al menú principal
+     * -Lo hace visible
+     * 
      * @param dialogo
      */
     public static void configurarDialogoFinal(JDialog dialogo) {
@@ -58,7 +59,7 @@ public class UtilSwing {
     
     /** Centraliza la estética de un diálogo de aviso */
     public static void dialogoAviso(Component componente, String mensaje) {
-        JOptionPane.showMessageDialog(componente, mensaje, "Aviso", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(componente, mensaje);
     }
     
     /**

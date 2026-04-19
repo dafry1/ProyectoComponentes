@@ -1,7 +1,5 @@
 package DTOS;
 
-import interfaces.IDTO;
-
 /**
  * PiezaDTO.java
  * 
@@ -10,8 +8,7 @@ import interfaces.IDTO;
  * 
  * @author Aaron
  */
-public class PiezaDTO implements IDTO {
-    private Long id;
+public class PiezaDTO extends DTO {
     private String nombre;
     private String categoria;
     private String marcaPieza;
@@ -41,23 +38,6 @@ public class PiezaDTO implements IDTO {
         this.costoPieza = costoPieza;
     }
     
-    /** Implementación de nombreDTO() */
-    @Override
-    public String nombreDTO() {
-        return "Pieza";
-    }
-
-    /** Implementación de mostrarInfo() */
-    @Override
-    public String mostrarInfo() {
-        return "Información de la pieza: \n"
-             + "Nombre: " + nombre + "\n"
-             + "Categoría: " + categoria + "\n"
-             + "Marca: " + marcaPieza + "\n"
-             + "Modelo: " + modeloPieza + "\n"
-             + "Precio: " + costoPieza + "\n"
-             + "Stock restante: " + stockPieza + "\n";
-    }
     
     /**
      * Método para obtener el valor del tipo de la pieza.
@@ -130,15 +110,7 @@ public class PiezaDTO implements IDTO {
     public void setModeloPieza(String modeloPieza) {
         this.modeloPieza = modeloPieza;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    
     public int getStockPieza() {
         return stockPieza;
     }

@@ -2,6 +2,7 @@ package coordinadores;
 
 import DTOS.PiezaDTO;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -46,14 +47,21 @@ public class CoordinadorEstados {
     //Carrito actual
     private List<PiezaDTO> carrito = new ArrayList<>();
     
-    /** Regresa las piezas del carrito de ventas */
+    /** Regresa una lista inmutable del carrito. Solo el coordinador la puede modificar */
     public List<PiezaDTO> getCarrito() {
-        return carrito;
+        return Collections.unmodifiableList(carrito);
     }
     
-    /** Agrega una pieza al carrito sin tocar directamente la referencia a la lista*/
+    /** Agrega una pieza al carrito sin tocar directamente la referencia a la lista */
     public void agregarPiezaCarrito(PiezaDTO pieza) {
-        carrito.add(pieza);
+        if (pieza != null) { 
+            carrito.add(pieza); 
+        }
+    }
+    
+    /** Elimina una pieza del carrito sin tocar directamente la referencia a la lista */
+    public void eliminarPiezaCarrito(PiezaDTO pieza) {
+        carrito.removeIf(p -> p.esIgual(pieza.getId()));
     }
     
     /**
@@ -61,15 +69,11 @@ public class CoordinadorEstados {
      * @return total del carrito
      */
     public double totalCarrito() {
-        double total = 0.0;
-        for (PiezaDTO p: carrito) {
-            total += p.getCostoPieza();
-        }
-        return total; 
+        return carrito.stream().mapToDouble(PiezaDTO::getCostoPieza).sum();
     }
     
-    /** Limpia el carrito con una referencia nueva vacía*/
+    /** Encapsula la lógica de limpiar el carrito */
     public void limpiarCarrito() {
-        carrito = new ArrayList<>();
+        carrito.clear();
     }
 }

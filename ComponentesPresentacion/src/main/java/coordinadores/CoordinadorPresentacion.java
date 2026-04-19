@@ -97,6 +97,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     public void abrirDialogo(Supplier<? extends JDialog> formulario) {
         // Los diálogos no cierran la ventana principal, se muestran encima
         JDialog dialogo = formulario.get();
+        dialogo.pack();
         dialogo.setLocationRelativeTo(ventanaActual);
         dialogo.setVisible(true);
     }

@@ -1,5 +1,5 @@
 package utilPresentacion;
-import interfaces.IDTO;
+import DTOS.DTO;
 import utilEstilos.Constantes;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -28,8 +28,9 @@ public class UtilBoton {
             setContentAreaFilled(false); 
             setOpaque(false);
             setBorderPainted(false);
+            this.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
-
+        
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
@@ -54,12 +55,12 @@ public class UtilBoton {
      * así cada botón lleva consigo una "mochila" que solo es invocada
      */
     public static class BotonAlmacenador extends BotonPersonalizado {
-        IDTO dto;
-        public BotonAlmacenador(String texto, IDTO dto) {
+        DTO dto;
+        public BotonAlmacenador(String texto, DTO dto) {
             super(texto);
             this.dto = dto;
         }
-        public IDTO getDTO() {return dto;}
+        public DTO getDTO() {return dto;}
     }
     
     
@@ -73,14 +74,16 @@ public class UtilBoton {
     public static JButton crearBoton(String texto) {
         JButton boton = new BotonPersonalizado(texto);
         
+        //Colores
         boton.setFont(Constantes.FUENTE);
         boton.setBackground(Constantes.COLOR_BOTONES);
         boton.setForeground(Constantes.COLOR_TEXTO_BOTONES);
         
+        //Borde
         boton.setFocusPainted(false);
         boton.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
-        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+        //Hover
         asignarHoverBoton(boton, Constantes.COLOR_BOTON_HOVER);
         return boton;
     }
@@ -114,17 +117,14 @@ public class UtilBoton {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 boton.setBackground(colorHover.darker());
             }
-
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 boton.setBackground(colorOriginal);
             }
-
             @Override
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 boton.setBackground(colorHover.darker().darker());
             }
-
             @Override
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 boton.setBackground(colorHover);

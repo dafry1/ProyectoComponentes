@@ -66,11 +66,10 @@ public class ViniciarVenta extends JFrame implements IObservador {
         g.gridx = 0; g.weightx = 0.25; g.weighty = 1.0; contenido.add(crearPanelBusqueda(), g);
         
         //ESTO PRONTO DEBE SER CAMBIADO A UN METODO QUE REGRESE COSAS
-        PiezaDTO piezaFalsa = new PiezaDTO("Intel i5 - 1102", "Procesador", "Intel", 2000.0);
+        PiezaDTO piezaFalsa = new PiezaDTO("Intel i5 - 1102", "Procesador", "Intel", 10.533);
         List<PiezaDTO> piezasFalsas = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             piezasFalsas.add(piezaFalsa);
-            
         }
 
         //Agrega los paneles
@@ -134,7 +133,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         JButton botonContinuar = UtilBoton.crearBoton("Continuar");
         botonContinuar.setPreferredSize(new Dimension(200, 50));
         botonContinuar.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Procesando venta...");
+            UtilSwing.dialogoAviso(this, "Procesando venta...");
         });
 
         //Agrega los botones al panel
@@ -271,7 +270,6 @@ public class ViniciarVenta extends JFrame implements IObservador {
 
             //Agrega funcionalidad al botón de mostrarInfo
             botonInfo.addActionListener(e -> {
-                System.out.println(pieza.mostrarInfo());
                 coordinador.abrirDialogo(() -> new infoPieza(ViniciarVenta.this, botonInfo.getDTO()));
             });
 
