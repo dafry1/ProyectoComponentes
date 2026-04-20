@@ -2,6 +2,7 @@ package pantallasVentas;
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import coordinadores.CoordinadorEstados;
+import coordinadores.CoordinadorNegocio;
 import coordinadores.ICoordinadorPresentacion;
 import java.awt.*;
 import java.util.HashMap;
@@ -76,15 +77,8 @@ public class ViniciarVenta extends JFrame implements IObservador {
         //Agrega a dicho panel
         g.gridx = 0; g.weightx = 0.25; g.weighty = 1.0; contenido.add(crearPanelBusqueda(), g);
         
-        //FIXME: ESTO PRONTO DEBE SER CAMBIADO A UN METODO EN NEGOCIO QUE REGRESE COSAS
-        PiezaDTO piezaFalsa = new PiezaDTO("Intel i5 - 1102", "Procesador", "Intel", 2000);
-        List<PiezaDTO> piezasFalsas = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            piezasFalsas.add(piezaFalsa);
-        }
-
         //Agrega los paneles
-        JPanel panelSeccionCentral = crearSeccionCentral(piezasFalsas);
+        JPanel panelSeccionCentral = crearSeccionCentral(CoordinadorNegocio.singleton().consultarPiezas());
         g.gridx = 1; g.weightx = 0.40; contenido.add(panelSeccionCentral, g);
         
         boolean PROBANDO = true;
