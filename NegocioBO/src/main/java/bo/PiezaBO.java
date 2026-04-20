@@ -5,6 +5,7 @@ import DTOS.PiezaDTO;
 import interfaces.IPiezaBO;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * BO que se conecta directamente con la persistencia para
@@ -13,7 +14,10 @@ import java.util.List;
  * @author Andre
  */
 public class PiezaBO implements IPiezaBO {
+   private static final Logger LOG = Logger.getLogger(PiezaBO.class.getName());
+    
     private static List<PiezaDTO> PIEZAS = new ArrayList<>();
+    
     static {
         PiezaDTO pieza1 = new PiezaDTO();
         pieza1.setNombre("Ryzen 5 9600X");
@@ -67,15 +71,15 @@ public class PiezaBO implements IPiezaBO {
         
         for (PiezaDTO pieza: PIEZAS) {
             
-            if (pieza.getNombre().equalsIgnoreCase(detalle.getPieza().getNombre())) {
+            if (pieza.equals(detalle.getPieza())) {
                 int stockActual = pieza.getStockPieza();
                 int cantidadVendida = detalle.getCantidad();
                 
                 if (stockActual >= cantidadVendida) {
                     pieza.setStockPieza(stockActual - cantidadVendida);
-                    System.out.println("Stock actualizado: " + pieza.getNombre() + " ahora tiene " + pieza.getStockPieza());
+                   LOG.info("Stock actualizado: " + pieza.getNombre() + " ahora tiene " + pieza.getStockPieza());
                 } else {
-                    System.out.println("Error: No hay suficiente stock para " + pieza.getNombre());
+                    LOG.warning("Error: No hay suficiente stock para " + pieza.getNombre());
                 }
                 return;
             }

@@ -1,21 +1,13 @@
 package utilPresentacion;
-import coordinadores.CoordinadorPresentacion;
-import coordinadores.ICoordinadorPresentacion;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import utilEstilos.Constantes;
@@ -23,6 +15,7 @@ import utilEstilos.Constantes;
 /**
  * Clase que centraliza la lógica para crear el panel de navegación superior
  * En lugar de construirse cada vez, solo se llama a esta clase
+ * 
  * @author Andre
  */
 public class UtilPanel {
@@ -65,13 +58,20 @@ public class UtilPanel {
      * @return la tarjeta vacía para configurarla a gusto
      */
     public static JPanel dibujarTarjeta() {
+        //Estilo
         JPanel panel = crearPanel();
         panel.setBackground(Constantes.COLOR_BOTONES);
         panel.setOpaque(true);
+        
+        //Establece dimensiones
         panel.setMaximumSize(new Dimension(650, 100)); 
         panel.setPreferredSize(new Dimension(600, 100));
+        
+        //Posición
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.setLayout(new BorderLayout());
+        
+        //Borde
         panel.setBorder(new EmptyBorder(5, 20, 5, 20));
         return panel;
     }

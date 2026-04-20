@@ -1,9 +1,11 @@
 package coordinadores;
 
+import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
-import fachadaVentas.FachadaVentas;
+import fachada.FachadaVentas;
 import interfaces.IFachadaVentas;
 import java.util.List;
+import observadores.IObservador;
 
 /**
  * Coordinador encargado de recopilar todas las fachadas con lógica
@@ -30,6 +32,8 @@ public class CoordinadorNegocio {
         return instancia;
     }
     
+    
+    
     /**
      * Regresa todas las piezas del sistema, dadas directamente
      * por el IFachadaVentas
@@ -38,5 +42,31 @@ public class CoordinadorNegocio {
      */
     public List<PiezaDTO> consultarPiezas() {
         return fachadaVentas.consultarPiezas();
+    }
+    
+    
+    
+    /**
+     * Orquesta todos los métodos necesarios para llevar a
+     * cabo una venta dentro del sistema. Actualiza stock,
+     * limpia el carrito, etc.
+     * 
+     * @param carrito para la venta. No puede ser null
+     * @param observador si se necesita actualizar algo. Puede ser null
+     */
+    public void procesarVenta(List<DetallesVentaDTO> carrito, IObservador observador) {
+        
+        //Actualiza el stock por cada pieza de cada elemento del carrito directamente
+        for (DetallesVentaDTO detalle: carrito) {
+            fachadaVentas.actualizarStock(detalle);
+        }
+        
+        //Limpia el carrito de ventas
+        CoordinadorEstados.singleton().limpiarCarritoVenta();
+        
+        //Activa al observador si existe
+        if (observador != null) {
+            observador.observar();
+        }
     }
 }

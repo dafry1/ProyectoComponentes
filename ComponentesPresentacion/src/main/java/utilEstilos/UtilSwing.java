@@ -1,5 +1,4 @@
 package utilEstilos;
-import coordinadores.CoordinadorEstados;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.JDialog;
@@ -29,6 +28,8 @@ public class UtilSwing {
         frame.setLayout(new BorderLayout()); //-> Este atrbituo puede cambiarse según se necesite
     }
     
+    
+    
     /**
      * En orden de instrucciones:
      * -Acomoda en layout
@@ -42,6 +43,8 @@ public class UtilSwing {
         dialogo.setResizable(esReajustable);
         dialogo.setModal(true);
     }
+    
+    
     
     /**
      * En orden de instrucciones:
@@ -57,6 +60,8 @@ public class UtilSwing {
         dialogo.setVisible(true);
     }
     
+    
+    
     /**
      * Centraliza la estética de un diálogo de aviso
      * 
@@ -67,6 +72,8 @@ public class UtilSwing {
         JOptionPane.showMessageDialog(pantalla, mensaje);
     }
     
+    
+    
     /**
      * Centraliza la estética de un diálogo de alerta
      * 
@@ -76,6 +83,8 @@ public class UtilSwing {
     public static void dialogoAlerta(Component pantalla, String mensaje) {
         JOptionPane.showMessageDialog(pantalla, mensaje, "Alerta", JOptionPane.WARNING_MESSAGE);
     }
+    
+    
     
     /**
      * Centraliza la estética y funcionalidad de un diálogo de confirmación. Mediante
