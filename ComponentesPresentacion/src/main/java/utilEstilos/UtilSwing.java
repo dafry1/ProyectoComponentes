@@ -62,6 +62,11 @@ public class UtilSwing {
         JOptionPane.showMessageDialog(componente, mensaje);
     }
     
+    /** Centraliza la estética de un diálogo de alerta */
+    public static void dialogoAlerta(Component componente, String mensaje) {
+        JOptionPane.showMessageDialog(componente, mensaje, "Alerta", JOptionPane.WARNING_MESSAGE);
+    }
+    
     /**
      * Centraliza la estética y funcionalidad de un diálogo de confirmación
      * 
@@ -72,7 +77,7 @@ public class UtilSwing {
      */
     public static boolean dialogoConfirmacion(Component componente, String mensaje) {
         //Define las opciones manualmente
-        Object[] opciones = {"Sí", "No"};
+        Object[] opciones = {"Confirmar", "Cancelar"};
 
         //Crea el diálogo de opciones con diferentes parámetros
         //Se hace manualmente para insertar las opciones

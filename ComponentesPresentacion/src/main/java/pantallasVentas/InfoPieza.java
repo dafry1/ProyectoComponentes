@@ -1,14 +1,17 @@
 package pantallasVentas;
 
+//SUBETE AL GITHUB
+import DTOS.DTO;
+import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import coordinadores.CoordinadorEstados;
-import interfaces.IDTO;
 import java.awt.Component;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import observadores.IObservador;
 import utilEstilos.UtilSwing;
 import utilPresentacion.UtilBoton;
@@ -25,67 +28,105 @@ public class infoPieza extends JDialog {
     //Observa la pieza elegida
     private IObservador observador;
 
-    public infoPieza(IObservador observador, IDTO dto) {
-        //Configuración inicial
-        this.observador = observador;
-        UtilSwing.configurarDialogoInicio(this, true);
+    public infoPieza(IObservador observador, DTO dto) {
+        // Configuración inicial
+        this.observador = observador;   
+        this.setModal(false);
+        this.setResizable(true);
+        this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
-
-        PiezaDTO pieza = (PiezaDTO) dto;
-
-        //Crea el label de paneles
-        JPanel panelLabels = UtilPanel.crearPanel();
-        panelLabels.setLayout(new BoxLayout(panelLabels, BoxLayout.Y_AXIS));
-        panelLabels.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 10, 20));
-
-        //Crea los labels
-        panelLabels.add(UtilGeneral.crearLabel("ID de la pieza: " + pieza.getId()));
-        panelLabels.add(UtilGeneral.crearLabel("Nombre: " + pieza.getNombre()));
-        panelLabels.add(UtilGeneral.crearLabel("Categoría: " + pieza.getCategoria()));
-        panelLabels.add(UtilGeneral.crearLabel("Marca: " + pieza.getMarcaPieza()));
-        panelLabels.add(UtilGeneral.crearLabel("Modelo: " + pieza.getModeloPieza()));
-
-        //Crea el panel de botones
-        JPanel panelBoton = UtilPanel.crearPanel();
-        panelBoton.setLayout(new BoxLayout(panelBoton, BoxLayout.Y_AXIS));
-        panelBoton.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 20, 20));
-
-        //Label de stock al panel
-        JLabel labelStock = UtilGeneral.crearLabel("Stock disponible: " + pieza.getStockPieza());
-        labelStock.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelBoton.add(labelStock);
         
-        //Espacio
-        panelBoton.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 15)));
+        //Castea
+        PiezaDTO pieza = (PiezaDTO) dto;
+        
+        //Extrae la información
+        Long id = pieza.getId();
+        String nombre = pieza.getNombre();
+        String categoria = pieza.getCategoria();
+        String marca = pieza.getMarcaPieza();
+        String modelo = pieza.getModeloPieza();
+        double costo = pieza.getCostoPieza();
 
-        //Crea e inyecta lógica al botón
+        //Crea el panel principal
+        JPanel panelPrincipal = new JPanel();
+        panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
+        panelPrincipal.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 50, 30, 50));
+        panelPrincipal.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        //Crea un arreglo de Strings con base en la información de la pieza
+        String[] info = {
+            "ID de la pieza: " + id,
+            "Nombre: " + nombre,
+            "Categoría: " + categoria,
+            "Marca: " + marca,
+            "Modelo: " + modelo
+        };
+
+        //Crea un label por cada elemento del arreglo
+        for (String texto: info) {
+            JLabel lbl = UtilGeneral.crearLabel(texto);
+            lbl.setAlignmentX(Component.CENTER_ALIGNMENT);
+            panelPrincipal.add(lbl);
+            panelPrincipal.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 5)));
+        }
+
+        //Pequeño espacio
+        panelPrincipal.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 20)));
+
+        //Label del stock local restante de la pieza
+        JLabel labelStock = UtilGeneral.crearLabel("Stock disponible: " + pieza.getStockPieza());
+        labelStock.setFont(labelStock.getFont().deriveFont(java.awt.Font.BOLD, 14f));
+        labelStock.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelPrincipal.add(labelStock);
+        
+        //Crea un campo de texto para ingresar
+        JTextField campoCantidad = UtilGeneral.crearCampoTexto();
+        panelPrincipal.add(campoCantidad);
+
+        //Pequeño espacio
+        panelPrincipal.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 25)));
+
+        //Boton que selecciona la pieza
         JButton boton = UtilBoton.crearBoton("Seleccionar");
         boton.setAlignmentX(Component.CENTER_ALIGNMENT);
         boton.addActionListener(e -> {
             
+            //Confirma con el regex que sean únicamente números del 1 al 9
+            String cantidadString = campoCantidad.getText();
+            if (!cantidadString.matches("[1-9]\\d*")) {
+                UtilSwing.dialogoAlerta(infoPieza.this, "Ingrese un número entero positivo");
+                return;
+            }
+            
             //Crea un diálogo de confirmación
             boolean confirmarAgregar = UtilSwing.dialogoConfirmacion(boton, "¿Desea agregar esta pieza al carrito?");
-            
-            //Si confirma, se manda al coordinador y se llama al observador
             if (confirmarAgregar) {
-                CoordinadorEstados.singleton().agregarPiezaCarrito(pieza);
+                
+                //Convierte a entero solo si se confirma intención
+                int cantidad = Integer.parseInt(cantidadString);
+                
+                //Crea el detalle
+                DetallesVentaDTO detalle = new DetallesVentaDTO();
+                detalle.setPieza(pieza);
+                detalle.setCantidad(cantidad);
+                detalle.setCosto(costo);
+                detalle.setSubtotal(cantidad*costo);
+                
+                //Agrega el detalle al carrito y notifica al observador
+                CoordinadorEstados.singleton().agregarCarritoVenta(detalle);
                 observador.observar();
-                UtilSwing.dialogoAviso(this, "Pieza agregada al carrito con éxito.");
-                this.dispose();
-            } 
-            
-            //Si se cancela, cierra el diálogo
-            else {
+                UtilSwing.dialogoAviso(this, "Se agregaron " + cantidad + " de la pieza " + nombre);
                 this.dispose();
             }
         });
-        panelBoton.add(boton);
+        panelPrincipal.add(boton);
 
-        //Agrega al diálogo
-        this.add(panelLabels);
-        this.add(panelBoton);
-
+        //Agregar todo al diálogo
+        this.add(panelPrincipal);
+        
         //Configuración final
-        UtilSwing.configurarDialogoFinal(this);
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
     }
 }

@@ -21,7 +21,7 @@ public class PiezaDTO extends DTO {
      */
     public PiezaDTO(){}
     public PiezaDTO(Long id, String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza) {
-        this.id = id;
+        super(id);
         this.nombre = nombre;
         this.categoria = categoria;
         this.marcaPieza = marcaPieza;

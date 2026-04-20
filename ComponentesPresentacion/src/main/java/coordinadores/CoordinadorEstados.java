@@ -1,5 +1,6 @@
 package coordinadores;
 
+import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,35 +46,37 @@ public class CoordinadorEstados {
     
     //----- MÉTODOS DEL CARRITO -----//
     //Carrito actual
-    private List<PiezaDTO> carrito = new ArrayList<>();
+    private List<DetallesVentaDTO> carritoVenta = new ArrayList<>();
     
     /** Regresa una lista inmutable del carrito. Solo el coordinador la puede modificar */
-    public List<PiezaDTO> getCarrito() {
-        return Collections.unmodifiableList(carrito);
+    public List<DetallesVentaDTO> getCarritoVenta() {
+        return Collections.unmodifiableList(carritoVenta);
     }
     
     /** Agrega una pieza al carrito sin tocar directamente la referencia a la lista */
-    public void agregarPiezaCarrito(PiezaDTO pieza) {
-        if (pieza != null) { 
-            carrito.add(pieza); 
+    public void agregarCarritoVenta(DetallesVentaDTO detalle) {
+        if (detalle != null) { 
+            carritoVenta.add(detalle); 
         }
     }
     
     /** Elimina una pieza del carrito sin tocar directamente la referencia a la lista */
-    public void eliminarPiezaCarrito(PiezaDTO pieza) {
-        carrito.removeIf(p -> p.esIgual(pieza.getId()));
+    public void eliminarCarritoVenta(DetallesVentaDTO detalle) {
+        carritoVenta.remove(detalle);
     }
     
     /**
      * Suma el costo de todos los elementos del carrito
      * @return total del carrito
      */
-    public double totalCarrito() {
-        return carrito.stream().mapToDouble(PiezaDTO::getCostoPieza).sum();
+    public double totalCarritoVenta() {
+        return carritoVenta.stream().mapToDouble(DetallesVentaDTO::getSubtotal).sum();
     }
     
     /** Encapsula la lógica de limpiar el carrito */
-    public void limpiarCarrito() {
-        carrito.clear();
+    public void limpiarCarritoVenta() {
+        carritoVenta.clear();
     }
+    
+    //SUBETE AL GITHUB
 }

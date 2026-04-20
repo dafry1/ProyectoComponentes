@@ -1,4 +1,5 @@
 package pantallasVentas;
+import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import coordinadores.CoordinadorEstados;
 import coordinadores.ICoordinadorPresentacion;
@@ -25,17 +26,27 @@ import utilPresentacion.UtilBoton.BotonAlmacenador;
  */
 public class ViniciarVenta extends JFrame implements IObservador {
 
-    //Atributos
+    //Se usa en más de un método
     private JPanel contenedorListaPiezas;
+    private JPanel contenedorListaDetalles;
+    
+    //CoordinadorPresentacion que mueve pantallas
     private ICoordinadorPresentacion coordinador;
+    
+    //Mapa que contiene los campos de búsqueda para recuperarlos después
     Map<String, JTextField> mapaCampos = new HashMap<>();
+    
+    //Botón de buscar como atributo para usarlo en más de un método
     JButton botonBuscar = UtilBoton.crearBoton("Buscar");
     
     //Arreglo de constantes ya definidas para los campos de texto y así no pelearnos con strings sueltos
     private String[] campos = {Constantes.PIEZA_NOMBRE, Constantes.PIEZA_CATEGORIA, Constantes.PIEZA_MARCA, Constantes.PIEZA_PRECIOMAX};
     
-    private double totalCarrito = CoordinadorEstados.singleton().totalCarrito();
+    //Siempre actualizado desde el CoordiandorEstados
+    private List<DetallesVentaDTO> carrito = CoordinadorEstados.singleton().getCarritoVenta();
+    private double totalCarrito = CoordinadorEstados.singleton().totalCarritoVenta();
     
+    //Se usa en más de un método
     private JLabel labelTotal = new JLabel("Total: $ " + totalCarrito);
     
     /**
@@ -65,8 +76,8 @@ public class ViniciarVenta extends JFrame implements IObservador {
         //Agrega a dicho panel
         g.gridx = 0; g.weightx = 0.25; g.weighty = 1.0; contenido.add(crearPanelBusqueda(), g);
         
-        //ESTO PRONTO DEBE SER CAMBIADO A UN METODO QUE REGRESE COSAS
-        PiezaDTO piezaFalsa = new PiezaDTO("Intel i5 - 1102", "Procesador", "Intel", 10.533);
+        //FIXME: ESTO PRONTO DEBE SER CAMBIADO A UN METODO EN NEGOCIO QUE REGRESE COSAS
+        PiezaDTO piezaFalsa = new PiezaDTO("Intel i5 - 1102", "Procesador", "Intel", 2000);
         List<PiezaDTO> piezasFalsas = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             piezasFalsas.add(piezaFalsa);
@@ -74,8 +85,14 @@ public class ViniciarVenta extends JFrame implements IObservador {
 
         //Agrega los paneles
         JPanel panelSeccionCentral = crearSeccionCentral(piezasFalsas);
-        g.gridx = 1; g.weightx = 0.65; contenido.add(panelSeccionCentral, g);
-        g.gridx = 2; g.weightx = 0.10; contenido.add(crearPanelCarrito(), g);
+        g.gridx = 1; g.weightx = 0.40; contenido.add(panelSeccionCentral, g);
+        
+        boolean PROBANDO = true;
+        if(PROBANDO) {
+            JPanel panelSeccionDerecha = crearSeccionDerecha();
+            g.gridx = 2; g.weightx = 0.35; contenido.add(panelSeccionDerecha, g);
+        }
+
 
         //Añade al frame
         add(contenido, BorderLayout.CENTER);
@@ -104,10 +121,10 @@ public class ViniciarVenta extends JFrame implements IObservador {
         contenedorListaPiezas = new JPanel();
         contenedorListaPiezas.setLayout(new BoxLayout(contenedorListaPiezas, BoxLayout.Y_AXIS));
         contenedorListaPiezas.setBackground(Color.WHITE);
-
+        
         //Dibuja un campo por cada pieza
-        dibujarTarjetas(piezas);
-
+        dibujarTarjetasPiezas(piezas);
+        
         //Crea y configura un scroll por si son varios
         JScrollPane scroll = new JScrollPane(contenedorListaPiezas);
         scroll.setBorder(null);
@@ -119,6 +136,45 @@ public class ViniciarVenta extends JFrame implements IObservador {
         //Regresa el panel
         return p;
     }
+    
+    
+    
+    private JPanel crearSeccionDerecha () {
+        JPanel p = new JPanel(new BorderLayout());
+        p.setOpaque(false);
+
+        //Encabezado
+        JLabel titulo = new JLabel("Piezas", SwingConstants.CENTER);
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        titulo.setBorder(new EmptyBorder(0, 0, 15, 0));
+        p.add(titulo, BorderLayout.NORTH);
+        
+        //Llena el atributo del contenedor de detalles
+        contenedorListaDetalles = new JPanel();
+        contenedorListaDetalles.setLayout(new BoxLayout(contenedorListaDetalles, BoxLayout.Y_AXIS));
+        contenedorListaDetalles.setBackground(Color.WHITE);
+
+        //Campo de los detalles
+        dibujarTarjetasCarrito();
+
+        //Crea un scroll para la lista de detalles
+        JScrollPane scrollD = new JScrollPane(contenedorListaDetalles);
+        scrollD.setBorder(null);
+        scrollD.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollD.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollD.getVerticalScrollBar().setUnitIncrement(16);
+        p.add(scrollD, BorderLayout.CENTER);
+        
+        // AGREGAR EL TOTAL AQUÍ
+        labelTotal.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        labelTotal.setHorizontalAlignment(SwingConstants.CENTER);
+        labelTotal.setBorder(new EmptyBorder(10, 0, 0, 0));
+        p.add(labelTotal, BorderLayout.SOUTH);
+        
+        return p;
+    }
+    
+    
     
     private JPanel crearBarraInferior() {
         JPanel p = new JPanel(new BorderLayout());
@@ -201,7 +257,8 @@ public class ViniciarVenta extends JFrame implements IObservador {
         return p;
     }
     
-
+    
+    //Crea el panel del carrito
     private JPanel crearPanelCarrito() {
         labelTotal.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         
@@ -219,6 +276,67 @@ public class ViniciarVenta extends JFrame implements IObservador {
     
     
     
+    
+    private void dibujarTarjetasCarrito() {
+        
+        //Declara variables
+        String nombre;
+        int cantidad;
+        double costo;
+        double subtotal;
+        
+        for (DetallesVentaDTO detalle: CoordinadorEstados.singleton().getCarritoVenta()) {
+            JPanel tarjeta = UtilPanel.dibujarTarjeta();
+            
+            //Asigna valores
+            nombre = detalle.getPieza().getNombre();
+            cantidad = detalle.getCantidad();
+            costo = detalle.getCosto();
+            subtotal = detalle.getSubtotal();
+            
+             //Crea el panel de información básica
+            JPanel panelInfoBasica = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
+            panelInfoBasica.setOpaque(false);
+            JLabel ico = new JLabel("▣"); ico.setFont(new Font("Arial", Font.BOLD, 40));
+            String desc = "<html><font color='white' size='4'><b>"+nombre+" (" + cantidad + ")</b></font><br><font color='white'>$ "+costo+"</font></html>";
+            panelInfoBasica.add(ico); 
+            panelInfoBasica.add(new JLabel(desc));
+            
+            //Sección para mostrar información adicional: el precio y el botón de detalles
+            JPanel panelMostrarInfo = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 15));
+            panelMostrarInfo.setOpaque(false);
+            JLabel lblP = new JLabel("$" + subtotal); 
+            lblP.setForeground(new Color(50, 255, 100));
+            lblP.setFont(new Font("Segoe UI", Font.BOLD, 22));
+            
+            //Crea un botón de información adicional
+            Color colorBoton = new Color(50, 255, 100);
+            UtilBoton.BotonAlmacenador botonInfo = new BotonAlmacenador("Más información", detalle);
+            botonInfo.setBackground(colorBoton);
+            UtilBoton.asignarHoverBoton(botonInfo, colorBoton.darker());
+            panelMostrarInfo.add(lblP); 
+            panelMostrarInfo.add(botonInfo);
+            
+            //Agrega funcionalidad al botón de mostrarInfo
+            botonInfo.addActionListener(e -> {
+                UtilSwing.dialogoAviso(ViniciarVenta.this, "Aún en proceso..."); //-> FIXME: TEMPORAL
+                //coordinador.abrirDialogo(() -> new InfoDetalle(ViniciarVenta.this, botonInfo.getDTO())); //-> FIXME: LUEGO SE MANDA A UNA CLASE EN ESPECÍFICO
+            });
+            
+            //Agrega al panel principal
+            tarjeta.add(panelInfoBasica, BorderLayout.WEST);
+            tarjeta.add(panelMostrarInfo, BorderLayout.EAST);
+
+            //Agrega al panel
+            contenedorListaDetalles.add(tarjeta);
+            contenedorListaDetalles.add(Box.createVerticalStrut(15));
+
+        }
+        
+    }
+    
+    
+    
     /**
      * Dibuja y habita cada tarjeta que le corresponde una pieza en específico
      * Crea la tarjeta de UtilPanel
@@ -229,7 +347,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
      * 
      * @param pieza específica
      */
-    private void dibujarTarjetas(List<PiezaDTO> piezas) {
+    private void dibujarTarjetasPiezas(List<PiezaDTO> piezas) {
         
         //Declara variables
         String nombre;
@@ -238,7 +356,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         
         //Por cada pieza de la lista...
         for (PiezaDTO pieza: piezas) {
-             JPanel tarjeta = UtilPanel.dibujarTarjeta();
+            JPanel tarjeta = UtilPanel.dibujarTarjeta();
         
             //Asigna valores
             nombre = pieza.getNombre();
@@ -262,7 +380,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
 
             //Crea un botón de información adicional
             Color colorBoton = new Color(50, 255, 100);
-            UtilBoton.BotonAlmacenador botonInfo = new BotonAlmacenador("MostrarInfo", pieza);
+            UtilBoton.BotonAlmacenador botonInfo = new BotonAlmacenador("Más información", pieza);
             botonInfo.setBackground(colorBoton);
             UtilBoton.asignarHoverBoton(botonInfo, colorBoton.darker());
             panelMostrarInfo.add(lblP); 
@@ -288,9 +406,11 @@ public class ViniciarVenta extends JFrame implements IObservador {
     /** Actualiza el label que indica el total del carrito directamente del coordinador */
     @Override
     public void observar() {
-        totalCarrito = CoordinadorEstados.singleton().totalCarrito();
+        totalCarrito = CoordinadorEstados.singleton().totalCarritoVenta();
         labelTotal.setText("Total: $ " + totalCarrito);
-        revalidate();
-        repaint();
+        contenedorListaDetalles.removeAll();
+        dibujarTarjetasCarrito();
+        contenedorListaDetalles.revalidate();
+        contenedorListaDetalles.repaint();
     }
 }
