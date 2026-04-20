@@ -6,9 +6,11 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>ComponentesDTO</module>
         <module>ComponentesPresentacion</module>
         <module>SubsistemaVentas</module>
+        <module>SubsistemaInicioSesion</module>
+        <module>NegocioBO</module>
+        <module>NegocioDTO</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

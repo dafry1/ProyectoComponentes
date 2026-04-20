@@ -6,10 +6,11 @@
         <artifactId>ProyectoComponentes</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>ComponentesDTO</artifactId>
+    <artifactId>SubsistemaInicioSesion</artifactId>
     <packaging>jar</packaging>
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
-        <exec.mainClass>com.mycompany.componentesdto.ComponentesDTO</exec.mainClass>
+        <exec.mainClass>com.mycompany.subsistema_iniciosesion.Subsistema_InicioSesion</exec.mainClass>
     </properties>
+    <name>SubsistemaInicioSesion</name>
 </project>
