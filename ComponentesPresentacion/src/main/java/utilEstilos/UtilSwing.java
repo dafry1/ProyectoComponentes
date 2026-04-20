@@ -57,25 +57,38 @@ public class UtilSwing {
         dialogo.setVisible(true);
     }
     
-    /** Centraliza la estética de un diálogo de aviso */
-    public static void dialogoAviso(Component componente, String mensaje) {
-        JOptionPane.showMessageDialog(componente, mensaje);
-    }
-    
-    /** Centraliza la estética de un diálogo de alerta */
-    public static void dialogoAlerta(Component componente, String mensaje) {
-        JOptionPane.showMessageDialog(componente, mensaje, "Alerta", JOptionPane.WARNING_MESSAGE);
+    /**
+     * Centraliza la estética de un diálogo de aviso
+     * 
+     * @param pantalla donde va a aparecer
+     * @param mensaje a mostrar
+     */
+    public static void dialogoAviso(Component pantalla, String mensaje) {
+        JOptionPane.showMessageDialog(pantalla, mensaje);
     }
     
     /**
-     * Centraliza la estética y funcionalidad de un diálogo de confirmación
+     * Centraliza la estética de un diálogo de alerta
+     * 
+     * @param pantalla donde va a aparecer
+     * @param mensaje a mostrar
+     */
+    public static void dialogoAlerta(Component pantalla, String mensaje) {
+        JOptionPane.showMessageDialog(pantalla, mensaje, "Alerta", JOptionPane.WARNING_MESSAGE);
+    }
+    
+    /**
+     * Centraliza la estética y funcionalidad de un diálogo de confirmación. Mediante
+     * un Runnable, que es como una función anónima, permite manejar fácilmente
+     * acciones deseadas al confirmar la acción. Esto evita tener que usar condicionales
+     * en donde se implemente, leyéndose de forma más fácil y natural
      * 
      * @param componente donde aparecerá (diálogo, frame)
      * @param mensaje
+     * @param funcion a ejecutar una vez confirmado
      * 
-     * @return true si se confirma, false de lo contrario
      */
-    public static boolean dialogoConfirmacion(Component componente, String mensaje) {
+    public static void dialogoConfirmacion(Component componente, String mensaje, Runnable funcion) {
         //Define las opciones manualmente
         Object[] opciones = {"Confirmar", "Cancelar"};
 
@@ -92,7 +105,9 @@ public class UtilSwing {
                 opciones[0] //Resalta por defecto el primero
         );
 
-        //Regresa si lo seleccionado coincide con confirmar el diálogo
-        return seleccion == JOptionPane.YES_OPTION;
+        //Ejecuta la acción si se confirma
+        if (seleccion == JOptionPane.YES_OPTION) {
+            funcion.run();
+        }
     }
 }

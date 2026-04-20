@@ -1,7 +1,6 @@
 package coordinadores;
 
 import DTOS.DetallesVentaDTO;
-import DTOS.PiezaDTO;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -77,6 +76,4 @@ public class CoordinadorEstados {
     public void limpiarCarritoVenta() {
         carritoVenta.clear();
     }
-    
-    //SUBETE AL GITHUB
 }
