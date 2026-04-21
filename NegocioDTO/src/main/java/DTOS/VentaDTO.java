@@ -16,6 +16,8 @@ public class VentaDTO extends DTO {
     private double total;
     private String fechaHora;
     private String folio;
+    
+    public static int contador; //FIXME: LÓGICA QUE POR MIENTRAS GENERARÁ EL FOLIO
 
     /** Constructor vacío */
     public VentaDTO() {}
@@ -37,6 +39,7 @@ public class VentaDTO extends DTO {
         this.total = total;
         this.fechaHora = fechaHora;
         this.folio = folio;
+        this.contador++;
     }
 
     public ClienteDTO getCliente() {

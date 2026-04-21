@@ -8,8 +8,7 @@ package DTOS;
  * 
  * @author Aaron
  */
-public class ClienteDTO {
-    private Long id;
+public class ClienteDTO extends DTO {
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
@@ -19,24 +18,6 @@ public class ClienteDTO {
      * Constructor vacio de la clase ClienteDTO.
      */
     public ClienteDTO(){}
-
-    /**
-     * Método para obtener el valor del ID del cliente.
-     * 
-     * @return Valor del ID del cliente.
-     */
-    public Long getID(){
-        return id;
-    }
-    
-    /**
-     * Método para asignar el valor del ID al cliente.
-     * 
-     * @param id Valor del ID a asignar al cliente.
-     */
-    public void setID(Long id){
-        this.id = id;
-    }
     
     /**
      * Método para obtener el valor del nombre del cliente.

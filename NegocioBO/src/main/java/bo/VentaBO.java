@@ -27,7 +27,19 @@ public class VentaBO implements IVentaBO {
         venta.setCliente(cliente);
         venta.setDetalles(detalles);
         venta.setFechaHora("Hoy xd");
-        venta.setFolio("001"); 
+        generarFolio(venta); //-> FIXME: DE IGUAL FORMA ES UNA IMPLEMENTACIÓN TEMPORAL
         return venta;
+    }
+    
+    
+    
+    /**
+     * Genera un folio para la venta
+     * 
+     * @param venta FIXME: TEMPORAL, EN FUNCIÓN REAL DEBE ACUDIR AL DAO PARA CONTAR LAS QUE LLEVAN EN EL DÍA
+     */
+    private void generarFolio(VentaDTO venta) {
+        String PREFIJO = "TW-";
+        venta.setFolio(PREFIJO + venta.contador);
     }
 }

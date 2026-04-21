@@ -26,4 +26,12 @@ public interface IPiezaBO {
      * @param detalle de la pieza a actualizar el stock
      */
     void actualizarStock(DetallesVentaDTO detalle); 
+    
+    /**
+     * Utiliza el método actualizarStock iterando sobre la lista
+     * de detalles para actualizar todos las piezas
+     * 
+     * @param detalles de la venta y el stock se debe actualizar
+     */
+    void actualizarStockTrasVenta(List<DetallesVentaDTO> detalles);
 }

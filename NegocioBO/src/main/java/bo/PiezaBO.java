@@ -2,10 +2,10 @@ package bo;
 
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
+import excepciones.NegocioException;
 import interfaces.IPiezaBO;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * BO que se conecta directamente con la persistencia para
@@ -14,12 +14,14 @@ import java.util.logging.Logger;
  * @author Andre
  */
 public class PiezaBO implements IPiezaBO {
-    private static final Logger LOG = Logger.getLogger(PiezaBO.class.getName());
+    private static final System.Logger LOG = System.getLogger(VentaBO.class.getName());
+    private static String CARRITO_VACIO = "No se puede procesar una venta con un carrito vacío";
     
     private static List<PiezaDTO> PIEZAS = new ArrayList<>();
     
     static {
         PiezaDTO pieza1 = new PiezaDTO();
+        pieza1.setId(1L);
         pieza1.setNombre("Ryzen 5 9600X");
         pieza1.setCategoria("Procesador");
         pieza1.setMarcaPieza("AMD");
@@ -29,6 +31,7 @@ public class PiezaBO implements IPiezaBO {
         PIEZAS.add(pieza1);
         
         PiezaDTO pieza2 = new PiezaDTO();
+        pieza2.setId(2L);
         pieza2.setNombre("Core i9-14900K");
         pieza2.setCategoria("Procesador");
         pieza2.setMarcaPieza("Intel");
@@ -38,6 +41,7 @@ public class PiezaBO implements IPiezaBO {
         PIEZAS.add(pieza2);
         
         PiezaDTO pieza3 = new PiezaDTO();
+        pieza3.setId(3L);
         pieza3.setNombre("Trident Z5 RGB");
         pieza3.setCategoria("RAM");
         pieza3.setMarcaPieza("G.Skill");
@@ -67,7 +71,7 @@ public class PiezaBO implements IPiezaBO {
      * @param detalle 
      */
     @Override
-    public void actualizarStock(DetallesVentaDTO detalle) {
+    public void actualizarStock(DetallesVentaDTO detalle) { //-> FIXME: ESTO DEBE CONSULTAR DIRECTO AL DAO
         
         for (PiezaDTO pieza: PIEZAS) {
             
@@ -77,12 +81,35 @@ public class PiezaBO implements IPiezaBO {
                 
                 if (stockActual >= cantidadVendida) {
                     pieza.setStockPieza(stockActual - cantidadVendida);
-                   LOG.info(() -> "Stock actualizado: " + pieza.getNombre() + " ahora tiene " + pieza.getStockPieza());
+                    LOG.log(System.Logger.Level.DEBUG, "Stock actualizado: " + pieza.getNombre() + " ahora tiene " + pieza.getStockPieza());
                 } else {
-                    LOG.warning(() -> "Error: No hay suficiente stock para " + pieza.getNombre());
+                    LOG.log(System.Logger.Level.ERROR, CARRITO_VACIO);
                 }
                 return;
             }
+        }
+    }
+    
+    
+    
+    /**
+     * Utiliza el método actualizarStock iterando sobre la lista
+     * de detalles para actualizar todos las piezas
+     * 
+     * @param detalles de la venta y el stock se debe actualizar
+     */
+    @Override
+    public void actualizarStockTrasVenta(List<DetallesVentaDTO> detalles) {
+        
+        //Excepción si la lista está vacía o es null
+        if (detalles == null || detalles.isEmpty()) {
+            LOG.log(System.Logger.Level.ERROR, CARRITO_VACIO);
+            throw new NegocioException(CARRITO_VACIO);
+        }
+        
+        //Hace la iteración propiamente dicha
+        for (DetallesVentaDTO detalle: detalles) {
+            actualizarStock(detalle);
         }
     }
 }

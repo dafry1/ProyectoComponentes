@@ -22,13 +22,6 @@ public interface IFachadaVentas {
     List<PiezaDTO> consultarPiezas();
     
     /**
-     * Actualiza el stock de una pieza en específico
-     * 
-     * @param detalle de la pieza para restarle stock 
-     */
-    void actualizarStock(DetallesVentaDTO detalle);
-    
-    /**
      * Orquesta la lógica de procesar una venta (registro de
      * la venta, actualización de stock)
      * 

@@ -3,7 +3,7 @@ package DTOS;
 /**
  * Superclase de la cual todos nuestros DTOs van a heredar para así
  * establecer un marco en común de comportamiento y atributos. En este
- * caso, todos los DTO poseen una ID y el método esIgual(), que permite
+ * caso, todos los DTO poseen una ID y el equals sobreescrito, que permite
  * comparar IDs Long. También sirve para establecer contratos genéricos,
  * como con el objeto BotonAlmacenador, que sabe que solo debe guardar
  * un DTO, sin conocer de qué se trata específicamente. Es abstracta porque

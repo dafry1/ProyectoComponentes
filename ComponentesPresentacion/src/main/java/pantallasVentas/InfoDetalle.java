@@ -23,12 +23,12 @@ import utilPresentacion.UtilGeneral;
  * 
  * @author Andre
  */
-public class InfoPieza extends JDialog {
+public class InfoDetalle extends JDialog {
 
     //Observa la pieza elegida
     private IObservador observador;
 
-    public InfoPieza(IObservador observador, DTO dto) {
+    public InfoDetalle(IObservador observador, DTO dto) {
         // Configuración inicial
         this.observador = observador;   
         this.setModal(false);
@@ -37,25 +37,16 @@ public class InfoPieza extends JDialog {
         this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
         
         //Castea
-        PiezaDTO pieza = (PiezaDTO) dto;
+        DetallesVentaDTO detalle = (DetallesVentaDTO) dto;
         
         //Extrae la información
-        Long id = pieza.getId();
-        String nombre = pieza.getNombre();
-        String categoria = pieza.getCategoria();
-        String marca = pieza.getMarcaPieza();
-        String modelo = pieza.getModeloPieza();
-        double costo = pieza.getCostoPieza();
+        Long id = detalle.getId();
+        int cantidad = detalle.getCantidad();
+        double subtotal = detalle.getSubtotal();
+        PiezaDTO pieza = detalle.getPieza();
+        String nombrePieza = pieza.getNombre();
+        int stockPieza = pieza.getStockPieza();
         
-        //Stock real, de la BD
-        int stock = pieza.getStockPieza();
-        
-        //Stock que se está manejando actualmente
-        int stockCarito = CoordinadorEstados.singleton().calcularStockAntesVenta(id);
-        
-        //Recalcula y usa este valor, considerando las piezas ya ingresadas al carrito
-        int stockDisponible = stock - stockCarito;
-
         //Crea el panel principal
         JPanel panelPrincipal = new JPanel();
         panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
@@ -64,11 +55,10 @@ public class InfoPieza extends JDialog {
         
         //Crea un arreglo de Strings con base en la información de la pieza
         String[] info = {
-            "ID de la pieza: " + id,
-            "Nombre: " + nombre,
-            "Categoría: " + categoria,
-            "Marca: " + marca,
-            "Modelo: " + modelo
+            "ID del detalle: " + id,
+            "Nombre: " + nombrePieza,
+            "Cantidad: " + cantidad,
+            "Subtotal: " + subtotal,
         };
 
         //Crea un label por cada elemento del arreglo
@@ -83,12 +73,12 @@ public class InfoPieza extends JDialog {
         panelPrincipal.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 20)));
 
         //Label del stock local restante de la pieza
-        JLabel labelStock = UtilGeneral.crearLabel("Stock disponible: " + stockDisponible);
+        JLabel labelStock = UtilGeneral.crearLabel("Cantidad de piezas: " + cantidad);
         labelStock.setFont(labelStock.getFont().deriveFont(java.awt.Font.BOLD, 14f));
         labelStock.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelPrincipal.add(labelStock);
         
-        //Crea un campo de texto para ingresar
+        //Crea un campo de texto para editar la cantidad
         JTextField campoCantidad = UtilGeneral.crearCampoTexto();
         panelPrincipal.add(campoCantidad);
 
@@ -103,7 +93,7 @@ public class InfoPieza extends JDialog {
             //Lanza mensaje si el número no es válido
             String cantidadString = campoCantidad.getText();
             if (!UtilFormato.numeroEnteroPositivo(cantidadString)) {
-                UtilSwing.dialogoAlerta(InfoPieza.this, "Ingrese un número entero positivo");
+                UtilSwing.dialogoAlerta(InfoDetalle.this, "Ingrese un número entero positivo");
                 return;
             }
             
@@ -111,31 +101,27 @@ public class InfoPieza extends JDialog {
             UtilSwing.dialogoConfirmacion(boton, "¿Desea agregar esta pieza al carrito?", () -> {
                 
                 //Parsea solo si se confirma el agregado
-                int cantidad = Integer.parseInt(cantidadString);
+                int cantidadActualizar = Integer.parseInt(cantidadString);
                 
-                if (stockDisponible == 0) {
-                    UtilSwing.dialogoAlerta(InfoPieza.this, "No hay stock disponible para esta pieza. Se recomienda hacer una solicitud");
+                //FIXME: QUIZÁ ESTO PUEDE HACER QUE BORRE TODO EL DETALLE
+                if (cantidadActualizar == 0) {
+                    UtilSwing.dialogoAlerta(InfoDetalle.this, "No hay stock disponible para esta pieza. Se recomienda hacer una solicitud");
                     return;
                 }
                 
                 //Valida stock suficiente
-                if (cantidad > stockDisponible) {
-                    UtilSwing.dialogoAlerta(InfoPieza.this, cantidad + " excede el stock actual (" + stockDisponible + ")");
+                if (cantidadActualizar > stockPieza) {
+                    UtilSwing.dialogoAlerta(InfoDetalle.this, cantidad + " excede el stock actual (" + stockPieza + ")");
                     return;
                 }
                 
-                //Crea el detalle
-                DetallesVentaDTO detalle = new DetallesVentaDTO();
-                detalle.setPieza(pieza);
-                detalle.setCantidad(cantidad);
-                detalle.setCosto(costo);
-                detalle.setSubtotal(cantidad*costo);
-                
-                //Agrega el detalle al carrito y notifica al observador
-                CoordinadorEstados.singleton().agregarCarritoVenta(detalle);
+                //Actualiza el detalle y notifica al observador
+                detalle.setCantidad(cantidadActualizar);
                 observador.observar();
-                UtilSwing.dialogoAviso(this, "Se agregaron " + cantidad + " de la pieza " + nombre);
+                UtilSwing.dialogoAviso(this, "Se actualizaron " + cantidadActualizar + " de la pieza " + nombrePieza);
                 this.dispose();
+                
+                //TODO: AQUÍ TAMBIÉN DEBE ACTUALIZAR LA LISTA SUPONGO
             });
         });
         panelPrincipal.add(boton);

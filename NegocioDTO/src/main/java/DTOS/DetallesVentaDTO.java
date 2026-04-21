@@ -1,7 +1,5 @@
 package DTOS;
 
-//SUBETE
-
 /**
  * DTO que representa una parte de un pedido de una venta
  * 

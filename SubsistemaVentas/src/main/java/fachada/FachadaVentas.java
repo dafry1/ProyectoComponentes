@@ -6,6 +6,7 @@ import DTOS.PiezaDTO;
 import DTOS.VentaDTO;
 import bo.PiezaBO;
 import bo.VentaBO;
+import excepciones.NegocioException;
 import interfaces.IFachadaVentas;
 import interfaces.IPiezaBO;
 import interfaces.IVentaBO;
@@ -19,6 +20,9 @@ import java.util.List;
  * @author Andre
  */
 public class FachadaVentas implements IFachadaVentas {
+    private static final System.Logger LOG = System.getLogger(FachadaVentas.class.getName());
+    private static String CARRITO_VACIO = "No se puede procesar una venta con un carrito vacío";
+    private static String SIN_CLIENTE = "No se asignó un cliente para la venta";
     
     //Interfaces
     private IPiezaBO piezaBO = new PiezaBO();
@@ -37,46 +41,32 @@ public class FachadaVentas implements IFachadaVentas {
     
     
     /**
-     * Cambia el stock actual de la pieza correspondiente
-     * al detalle ingresado como parámetro, restando la
-     * cantidad de dicha venta. Público porque podría
-     * quererse hacer atómicamente, aunque lo dudo...
-     * 
-     * @param detalle de la pieza para restarle stock 
-     */
-    @Override
-    public void actualizarStock(DetallesVentaDTO detalle) {
-        piezaBO.actualizarStock(detalle);
-    }
-    
-    
-    
-    /**
      * Orquesta la lógica de procesar una venta (registro de
      * la venta, actualización de stock)
      * 
-     * @param cliente que compró las piezas
+     * @param cliente que compró las piezass
      * @param detalles de la venta
      * 
      * @return la venta registrada
      */
     @Override
     public VentaDTO procesarVenta(ClienteDTO cliente, List<DetallesVentaDTO> detalles) {
-        actualizarStockTrasVenta(detalles);
-        return ventaBO.registrarVenta(cliente, detalles);
-    }
-    
-    
-    
-    /**
-     * Utiliza el método actualizarStock iterando sobre la lista
-     * de detalles para actualizar todos las piezas
-     * 
-     * @param detalles de la venta y el stock se debe actualizar
-     */
-    private void actualizarStockTrasVenta(List<DetallesVentaDTO> detalles) {
-        for (DetallesVentaDTO detalle: detalles) {
-            actualizarStock(detalle);
+        
+        //Excepción si la lista está vacía o es null
+        if (detalles == null || detalles.isEmpty()) {
+            LOG.log(System.Logger.Level.ERROR, CARRITO_VACIO);
+            throw new NegocioException(CARRITO_VACIO);
         }
+        
+        //Excepción si es null
+        if (cliente == null) {
+            cliente = new ClienteDTO(); //-> FIXME: LO CREA AHÍ A LA AHÍ SE VA XD LUEGO DEBE VALIDAR BIEN
+            //LOG.log(System.Logger.Level.ERROR, SIN_CLIENTE);
+            //throw new NegocioException(SIN_CLIENTE);
+        } 
+        
+        //Actualiza stock y registra la venta
+        piezaBO.actualizarStockTrasVenta(detalles);
+        return ventaBO.registrarVenta(cliente, detalles);
     }
 }
