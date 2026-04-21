@@ -6,6 +6,8 @@ package pantallasPrincipales;
 
 import DTOS.EmpleadoDTO;
 import bo.EmpleadoBO;
+import coordinadores.CoordinadorEstados;
+import coordinadores.CoordinadorNegocio;
 import coordinadores.CoordinadorPresentacion;
 import java.awt.Color;
 import java.awt.*;
@@ -19,7 +21,7 @@ import javax.swing.border.EmptyBorder;
  */
 public class VinicioSesion extends JFrame {
 
-    public VinicioSesion(CoordinadorPresentacion coordinador) {
+    public VinicioSesion(CoordinadorPresentacion coordinador, CoordinadorNegocio coordinadorNegocio, CoordinadorEstados coordinadorEstados) {
         setTitle("Technoware - Inicio de Sesión");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 650);
@@ -88,38 +90,33 @@ public class VinicioSesion extends JFrame {
         btnIngresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         btnIngresar.addActionListener(e -> {
+            String user = txtUser.getText().trim();
+            String pass = new String(txtPass.getPassword());
+
+            if (user.isEmpty() || pass.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Campos vacíos", "Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             try {
-                String usuarioIngresado = txtUser.getText().trim();
-                String passwordIngresada = new String(txtPass.getPassword());
+                EmpleadoDTO empleado = coordinadorNegocio.autenticar(user, pass);
 
-                if (usuarioIngresado.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Debe ingresar un nombre de usuario", "Error", JOptionPane.ERROR_MESSAGE);
-                    txtUser.requestFocus();
-                    return;
-                }
+            if (empleado != null) {
+                coordinadorEstados.singleton().establecerSesion(empleado);
 
-                if (passwordIngresada.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Debe ingresar la contraseña", "Error", JOptionPane.ERROR_MESSAGE);
-                    txtPass.requestFocus();
-                    return;
-                }
+                JOptionPane.showMessageDialog(this, "Bienvenido " + empleado.getNombreUsuario());
+                coordinador.mostrarVentanaInicio();
+                this.dispose();
 
-                EmpleadoDTO empleado = coordinador.autenticar(usuarioIngresado, passwordIngresada);
-
-                if (empleado != null) {
-                    JOptionPane.showMessageDialog(this, "Bienvenido");
-                    coordinador.mostrarVentanaInicio();
-                    this.dispose();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
                     txtPass.setText("");
                 }
-
             } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error técnico de conexión: " + ex.getMessage());
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             }
         });
+    
 
         formBox.add(lblUser);
         formBox.add(Box.createVerticalStrut(5));

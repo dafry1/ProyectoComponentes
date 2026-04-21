@@ -1,7 +1,9 @@
 package coordinadores;
 
 import DTOS.DetallesVentaDTO;
+import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
+import bo.EmpleadoBO;
 import fachada.FachadaVentas;
 import interfaces.IFachadaVentas;
 import java.util.List;
@@ -25,7 +27,7 @@ public class CoordinadorNegocio {
      * 
      * @return la instancia única
      */
-    public static CoordinadorNegocio singleton() {
+    public static CoordinadorNegocio getInstance() {
         if (instancia == null) {
             instancia = new CoordinadorNegocio();
         }
@@ -66,5 +68,9 @@ public class CoordinadorNegocio {
         if (observador != null) {
             observador.observar();
         }
+    }
+    
+    public EmpleadoDTO autenticar(String user, String pass) {
+        return EmpleadoBO.getInstanceEmpleadoBO().login(user, pass);
     }
 }

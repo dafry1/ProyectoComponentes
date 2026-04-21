@@ -56,5 +56,4 @@ public interface ICoordinadorPresentacion {
     
     void arrancar();
     
-    public EmpleadoDTO autenticar(String user, String pass);
 }

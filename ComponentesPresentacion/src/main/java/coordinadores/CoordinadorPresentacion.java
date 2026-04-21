@@ -21,7 +21,6 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
 
     private JFrame ventanaActual;
     private boolean administrador = false;
-
     public CoordinadorPresentacion() {
     }
 
@@ -54,7 +53,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
      */
     @Override
     public void mostrarVentanaInicioSesion() {
-        abrirNuevaVentana(() -> new VinicioSesion(this));
+        abrirNuevaVentana(() -> new VinicioSesion(this, CoordinadorNegocio.getInstance(),CoordinadorEstados.singleton()));
     }
 
     /**
@@ -110,8 +109,5 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
         mostrarVentanaVenta();
     }
 
-    @Override
-    public EmpleadoDTO autenticar(String user, String pass) {
-        return EmpleadoBO.getInstanceEmpleadoBO().login(user, pass);
-    }
+
 }

@@ -77,7 +77,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         g.gridx = 0; g.weightx = 0.10; g.weighty = 1.0; contenido.add(crearPanelBusqueda(), g);
         
         //Agrega los paneles
-        JPanel panelSeccionCentral = crearSeccionCentral(CoordinadorNegocio.singleton().consultarPiezas());
+        JPanel panelSeccionCentral = crearSeccionCentral(CoordinadorNegocio.getInstance().consultarPiezas());
         g.gridx = 1; g.weightx = 0.30; contenido.add(panelSeccionCentral, g);
         g.gridx = 2; g.weightx = 0.30; contenido.add(crearPanelCarrito(), g);
         
@@ -194,7 +194,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
             }
             
             //Procesa la venta
-            CoordinadorNegocio.singleton().procesarVenta(carrito, ViniciarVenta.this);
+            CoordinadorNegocio.getInstance().procesarVenta(carrito, ViniciarVenta.this);
         });
 
         //Agrega los botones al panel
