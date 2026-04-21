@@ -5,7 +5,9 @@ import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
 import DTOS.VentaDTO;
 import bo.EmpleadoBO;
+import fachada.FachadaInicioSesion;
 import fachada.FachadaVentas;
+import interfaces.IFachadaInicioSesion;
 import interfaces.IFachadaVentas;
 import java.util.List;
 import observadores.IObservador;
@@ -22,6 +24,7 @@ public class CoordinadorNegocio {
     
     //Instancia de la fachada del subsistema de las ventas
     private IFachadaVentas fachadaVentas = new FachadaVentas();
+    private IFachadaInicioSesion fachadaInicioSesion = new FachadaInicioSesion();
     
     /**
      * Crea la instancia única del coordiandor
@@ -63,6 +66,7 @@ public class CoordinadorNegocio {
         VentaDTO venta = fachadaVentas.procesarVenta(null, carrito);
         int numPieza = 1;
 
+        //FIXME: PRINTS TEMPORALES
         System.out.println("================ Venta registrada ================");
         System.out.println("Cliente: " + venta.getCliente().getNombre());
         System.out.println("Detalles: ");
@@ -87,6 +91,6 @@ public class CoordinadorNegocio {
     }
     
     public EmpleadoDTO autenticar(String user, String pass) {
-        return EmpleadoBO.getInstanceEmpleadoBO().login(user, pass);
+        return fachadaInicioSesion.login(user, pass);
     }
 }

@@ -13,4 +13,11 @@
         <exec.mainClass>com.mycompany.subsistema_iniciosesion.Subsistema_InicioSesion</exec.mainClass>
     </properties>
     <name>SubsistemaInicioSesion</name>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>NegocioBO</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>
