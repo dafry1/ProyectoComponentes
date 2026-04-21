@@ -1,4 +1,5 @@
 package coordinadores;
+import DTOS.EmpleadoDTO;
 import java.util.function.Supplier;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -54,4 +55,6 @@ public interface ICoordinadorPresentacion {
     void navegar(JFrame actual, Supplier<JFrame> siguiente);
     
     void arrancar();
+    
+    public EmpleadoDTO autenticar(String user, String pass);
 }

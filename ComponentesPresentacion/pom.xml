@@ -23,12 +23,12 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ComponentesNegocio</artifactId>
+            <artifactId>NegocioBO</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ComponentesDTO</artifactId>
+            <artifactId>NegocioDTO</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

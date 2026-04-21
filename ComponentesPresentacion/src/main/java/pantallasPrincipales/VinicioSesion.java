@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package pantallasPrincipales;
 
+import DTOS.EmpleadoDTO;
+import bo.EmpleadoBO;
 import coordinadores.CoordinadorPresentacion;
 import java.awt.Color;
 import java.awt.*;
@@ -23,22 +24,21 @@ public class VinicioSesion extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 650);
         setLocationRelativeTo(null);
-        
+
         getContentPane().setBackground(new Color(247, 247, 247));
-        setLayout(new GridBagLayout()); 
+        setLayout(new GridBagLayout());
 
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-        container.setOpaque(false); 
-    
+        container.setOpaque(false);
 
         RoundedPanel banner = new RoundedPanel(50, new Color(0, 95, 255));
         banner.setPreferredSize(new Dimension(600, 220));
         banner.setMaximumSize(new Dimension(600, 220));
         banner.setLayout(new GridBagLayout());
-        
+
         JLabel lblLogo = new JLabel("Technoware");
-        lblLogo.setFont(new Font("Segoe UI", Font.BOLD, 72)); 
+        lblLogo.setFont(new Font("Segoe UI", Font.BOLD, 72));
         lblLogo.setForeground(Color.WHITE);
         banner.add(lblLogo);
 
@@ -59,7 +59,7 @@ public class VinicioSesion extends JFrame {
         lblUser.setFont(labelFont);
         lblUser.setForeground(labelColor);
         lblUser.setAlignmentX(Component.LEFT_ALIGNMENT);
-        
+
         JTextField txtUser = new JTextField("");
         txtUser.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         txtUser.setBorder(BorderFactory.createCompoundBorder(
@@ -70,7 +70,7 @@ public class VinicioSesion extends JFrame {
         lblPass.setFont(labelFont);
         lblPass.setForeground(labelColor);
         lblPass.setAlignmentX(Component.LEFT_ALIGNMENT);
-        
+
         JPasswordField txtPass = new JPasswordField("");
         txtPass.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         txtPass.setBorder(BorderFactory.createCompoundBorder(
@@ -87,8 +87,40 @@ public class VinicioSesion extends JFrame {
         btnIngresar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
         btnIngresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        btnIngresar.addActionListener(e -> coordinador.mostrarVentanaInicio());
-                
+        btnIngresar.addActionListener(e -> {
+            try {
+                String usuarioIngresado = txtUser.getText().trim();
+                String passwordIngresada = new String(txtPass.getPassword());
+
+                if (usuarioIngresado.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Debe ingresar un nombre de usuario", "Error", JOptionPane.ERROR_MESSAGE);
+                    txtUser.requestFocus();
+                    return;
+                }
+
+                if (passwordIngresada.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Debe ingresar la contraseña", "Error", JOptionPane.ERROR_MESSAGE);
+                    txtPass.requestFocus();
+                    return;
+                }
+
+                EmpleadoDTO empleado = coordinador.autenticar(usuarioIngresado, passwordIngresada);
+
+                if (empleado != null) {
+                    JOptionPane.showMessageDialog(this, "Bienvenido");
+                    coordinador.mostrarVentanaInicio();
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
+                    txtPass.setText("");
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error técnico de conexión: " + ex.getMessage());
+            }
+        });
+
         formBox.add(lblUser);
         formBox.add(Box.createVerticalStrut(5));
         formBox.add(txtUser);
@@ -107,6 +139,7 @@ public class VinicioSesion extends JFrame {
     }
 
     class RoundedPanel extends JPanel {
+
         private int radius;
         private Color bgColor;
 

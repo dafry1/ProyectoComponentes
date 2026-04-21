@@ -388,9 +388,9 @@ public class ViniciarVenta extends JFrame implements IObservador {
             panelMostrarInfo.add(botonInfo);
 
             //Agrega funcionalidad al botón de mostrarInfo
-            botonInfo.addActionListener(e -> {
-                coordinador.abrirDialogo(() -> new infoPieza(ViniciarVenta.this, botonInfo.getDTO()));
-            });
+//            botonInfo.addActionListener(e -> {
+//                coordinador.abrirDialogo(() -> new infoPieza(ViniciarVenta.this, botonInfo.getDTO()));
+//            });
 
             //Agrega al panel principal
             tarjeta.add(panelInfoBasica, BorderLayout.WEST);

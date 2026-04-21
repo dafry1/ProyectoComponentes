@@ -1,5 +1,7 @@
 package coordinadores;
 
+import DTOS.EmpleadoDTO;
+import bo.EmpleadoBO;
 import pantallasPrincipales.VinicioSesion;
 import pantallasPrincipales.Vinicio;
 import pantallasVentas.VhistorialSolicitudes;
@@ -46,7 +48,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     public void mostrarVentanaInicio() {
         abrirNuevaVentana(() -> new Vinicio(this));
     }
-    
+
     /**
      * Muestra la pantalla de Inicio (Dashboard principal).
      */
@@ -54,7 +56,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     public void mostrarVentanaInicioSesion() {
         abrirNuevaVentana(() -> new VinicioSesion(this));
     }
-    
+
     /**
      * Muestra la pantalla de Historial de ventas.
      */
@@ -62,7 +64,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     public void mostrarHistorialVentas() {
         abrirNuevaVentana(() -> new VhistorialVentas(this));
     }
-    
+
     /**
      * Muestra la pantalla de Historial de solicitudes.
      */
@@ -101,9 +103,15 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
         dialogo.setLocationRelativeTo(ventanaActual);
         dialogo.setVisible(true);
     }
-    
+
     // Método para arrancar el sistema
+    @Override
     public void arrancar() {
         mostrarVentanaVenta();
+    }
+
+    @Override
+    public EmpleadoDTO autenticar(String user, String pass) {
+        return EmpleadoBO.getInstanceEmpleadoBO().login(user, pass);
     }
 }
