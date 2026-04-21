@@ -190,6 +190,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
             //Verifica que el carrito no esté vacío
             if (carrito.isEmpty()) {
                 UtilSwing.dialogoAlerta(this, "El carrito está vacío");
+                return;
             }
             
             //Procesa la venta

@@ -56,10 +56,8 @@ public class CoordinadorNegocio {
      */
     public void procesarVenta(List<DetallesVentaDTO> carrito, IObservador observador) {
         
-        //Actualiza el stock por cada pieza de cada elemento del carrito directamente
-        for (DetallesVentaDTO detalle: carrito) {
-            fachadaVentas.actualizarStock(detalle);
-        }
+        //Procesa la venta directamente de la fachada
+        fachadaVentas.procesarVenta(null, carrito);
         
         //Limpia el carrito de ventas
         CoordinadorEstados.singleton().limpiarCarritoVenta();

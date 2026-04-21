@@ -29,24 +29,6 @@ public interface IFachadaVentas {
     void actualizarStock(DetallesVentaDTO detalle);
     
     /**
-     * Crea una venta en el sistma
-     * 
-     * @param cliente que compró las piezas
-     * @param detalles de la venta
-     * 
-     * @return la ventaDTO
-     */
-    VentaDTO registrarVenta(ClienteDTO cliente, List<DetallesVentaDTO> detalles);
-    
-    /**
-     * Utiliza el método actualizarStock iterando sobre la lista
-     * de detalles para actualizar todos las piezas
-     * 
-     * @param detalles de la venta y el stock se debe actualizar
-     */
-    void actualizarStockTrasVenta(List<DetallesVentaDTO> detalles);
-    
-    /**
      * Orquesta la lógica de procesar una venta (registro de
      * la venta, actualización de stock)
      * 

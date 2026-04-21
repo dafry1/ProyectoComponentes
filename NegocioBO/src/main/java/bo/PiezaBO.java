@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * @author Andre
  */
 public class PiezaBO implements IPiezaBO {
-   private static final Logger LOG = Logger.getLogger(PiezaBO.class.getName());
+    private static final Logger LOG = Logger.getLogger(PiezaBO.class.getName());
     
     private static List<PiezaDTO> PIEZAS = new ArrayList<>();
     
@@ -77,9 +77,9 @@ public class PiezaBO implements IPiezaBO {
                 
                 if (stockActual >= cantidadVendida) {
                     pieza.setStockPieza(stockActual - cantidadVendida);
-                   LOG.info("Stock actualizado: " + pieza.getNombre() + " ahora tiene " + pieza.getStockPieza());
+                   LOG.info(() -> "Stock actualizado: " + pieza.getNombre() + " ahora tiene " + pieza.getStockPieza());
                 } else {
-                    LOG.warning("Error: No hay suficiente stock para " + pieza.getNombre());
+                    LOG.warning(() -> "Error: No hay suficiente stock para " + pieza.getNombre());
                 }
                 return;
             }

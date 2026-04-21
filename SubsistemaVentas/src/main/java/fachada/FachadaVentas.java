@@ -39,43 +39,14 @@ public class FachadaVentas implements IFachadaVentas {
     /**
      * Cambia el stock actual de la pieza correspondiente
      * al detalle ingresado como parámetro, restando la
-     * cantidad de dicha venta
+     * cantidad de dicha venta. Público porque podría
+     * quererse hacer atómicamente, aunque lo dudo...
      * 
      * @param detalle de la pieza para restarle stock 
      */
     @Override
     public void actualizarStock(DetallesVentaDTO detalle) {
         piezaBO.actualizarStock(detalle);
-    }
-    
-    
-    
-    /**
-     * Utiliza el método actualizarStock iterando sobre la lista
-     * de detalles para actualizar todos las piezas
-     * 
-     * @param detalles de la venta y el stock se debe actualizar
-     */
-    @Override
-    public void actualizarStockTrasVenta(List<DetallesVentaDTO> detalles) {
-        for (DetallesVentaDTO detalle: detalles) {
-            actualizarStock(detalle);
-        }
-    }
-    
-    
-    
-    /**
-     * Crea una venta en el sistma
-     * 
-     * @param cliente que compró las piezas
-     * @param detalles de la venta
-     * 
-     * @return la ventaDTO
-     */
-    @Override
-    public VentaDTO registrarVenta(ClienteDTO cliente, List<DetallesVentaDTO> detalles) {
-        return ventaBO.registrarVenta(cliente, detalles);
     }
     
     
@@ -95,4 +66,17 @@ public class FachadaVentas implements IFachadaVentas {
         return ventaBO.registrarVenta(cliente, detalles);
     }
     
+    
+    
+    /**
+     * Utiliza el método actualizarStock iterando sobre la lista
+     * de detalles para actualizar todos las piezas
+     * 
+     * @param detalles de la venta y el stock se debe actualizar
+     */
+    private void actualizarStockTrasVenta(List<DetallesVentaDTO> detalles) {
+        for (DetallesVentaDTO detalle: detalles) {
+            actualizarStock(detalle);
+        }
+    }
 }

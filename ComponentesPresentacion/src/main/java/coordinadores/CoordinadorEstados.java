@@ -42,8 +42,17 @@ public class CoordinadorEstados {
         //TODO lógica
     }
     
+    /** Indica si la sesión actual le pertenece a un administrador */
+    public boolean esAdministrador() {
+        //TODO lógica
+        return true; //FIXME: ES TEMPORAL
+    }
     
-    //----- MÉTODOS DEL CARRITO -----//
+    
+    
+    
+    
+    //----- MÉTODOS DEL CARRITO DE VENTAS -----//
     //Carrito actual
     private List<DetallesVentaDTO> carritoVenta = new ArrayList<>();
     
@@ -75,5 +84,21 @@ public class CoordinadorEstados {
     /** Encapsula la lógica de limpiar el carrito */
     public void limpiarCarritoVenta() {
         carritoVenta.clear();
+    }
+    
+    /**
+     * Calcula el stock disponible de cierta pieza aún en medio proceso
+     * de la venta. Sirve para validaciones rápidas y lógica de experiencia
+     * de usuario. Aunque existan 20 piezas en la BD, si ya elegiste 10, y 
+     * quieres otras 15, no podrás elegirlas
+     * 
+     * @param id de la pieza a calcular stock antes de la venta
+     * 
+     * @return cantidad de stock de dicha pieza
+     */
+    public int calcularStockAntesVenta(Long id) {
+        return carritoVenta.stream()
+                            .filter(d -> d.getPieza().getId().equals(id))
+                            .mapToInt(DetallesVentaDTO::getCantidad).sum();
     }
 }
