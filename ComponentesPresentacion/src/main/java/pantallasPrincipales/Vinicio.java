@@ -6,6 +6,7 @@ package pantallasPrincipales;
 
 import DTOS.PiezaDTO;
 import bo.PiezaBO;
+import coordinadores.CoordinadorNegocio;
 import coordinadores.CoordinadorPresentacion;
 import java.awt.BorderLayout;
 import java.awt.*;
@@ -99,8 +100,7 @@ public class Vinicio extends JFrame {
         private JPanel panelCartas;
         private JPanel panelPuntos;
         private int indiceActual = 0;
-        private PiezaBO boPieza = new PiezaBO();
-        private final int TOTAL_PRODUCTOS = boPieza.consultarPiezas().size();
+        private final int TOTAL_PRODUCTOS = CoordinadorNegocio.getInstance().consultarPiezas().size();
 
         public TarjetaCarrusel(String titulo) {
             super(45, new Color(0, 95, 255));
@@ -116,7 +116,7 @@ public class Vinicio extends JFrame {
             panelCartas = new JPanel(navegadorCartas);
             panelCartas.setOpaque(false);
 
-            for (PiezaDTO pieza : boPieza.consultarPiezas()) {
+            for (PiezaDTO pieza : CoordinadorNegocio.getInstance().consultarPiezas()) {
                 panelCartas.add(generarContenidoProducto(pieza));
             }
 
