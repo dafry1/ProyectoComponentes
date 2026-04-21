@@ -138,7 +138,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         p.setOpaque(false);
 
         //Encabezado
-        JLabel titulo = new JLabel("Piezas", SwingConstants.CENTER);
+        JLabel titulo = new JLabel("Carrito", SwingConstants.CENTER);
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
         titulo.setBorder(new EmptyBorder(0, 0, 15, 0));
         p.add(titulo, BorderLayout.NORTH);

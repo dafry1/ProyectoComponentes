@@ -3,6 +3,7 @@ package coordinadores;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
+import DTOS.VentaDTO;
 import bo.EmpleadoBO;
 import fachada.FachadaVentas;
 import interfaces.IFachadaVentas;
@@ -59,7 +60,22 @@ public class CoordinadorNegocio {
     public void procesarVenta(List<DetallesVentaDTO> carrito, IObservador observador) {
         
         //Procesa la venta directamente de la fachada
-        fachadaVentas.procesarVenta(null, carrito);
+        VentaDTO venta = fachadaVentas.procesarVenta(null, carrito);
+        int numPieza = 1;
+
+        System.out.println("================ Venta registrada ================");
+        System.out.println("Cliente: " + venta.getCliente().getNombre());
+        System.out.println("Detalles: ");
+        for (DetallesVentaDTO detalle : venta.getDetalles()) {
+            System.out.println("-------- Pieza #" + numPieza + " --------");
+            System.out.println("-> Pieza: " + detalle.getPieza().getNombre());
+            System.out.println("-> Cantidad: " + detalle.getCantidad());
+            System.out.println("-> Subtotal: " + detalle.getSubtotal());
+            numPieza++;
+        }
+        System.out.println("Fecha y hora; " + venta.getFechaHora());
+        System.out.println("Folio; " + venta.getFolio());
+        System.out.println("==================================================");
         
         //Limpia el carrito de ventas
         CoordinadorEstados.singleton().limpiarCarritoVenta();

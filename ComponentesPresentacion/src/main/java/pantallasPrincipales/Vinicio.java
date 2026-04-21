@@ -4,6 +4,8 @@
  */
 package pantallasPrincipales;
 
+import DTOS.PiezaDTO;
+import bo.PiezaBO;
 import coordinadores.CoordinadorPresentacion;
 import java.awt.BorderLayout;
 import java.awt.*;
@@ -97,7 +99,8 @@ public class Vinicio extends JFrame {
         private JPanel panelCartas;
         private JPanel panelPuntos;
         private int indiceActual = 0;
-        private final int TOTAL_PRODUCTOS = 3;
+        private PiezaBO boPieza = new PiezaBO();
+        private final int TOTAL_PRODUCTOS = boPieza.consultarPiezas().size();
 
         public TarjetaCarrusel(String titulo) {
             super(45, new Color(0, 95, 255));
@@ -113,9 +116,9 @@ public class Vinicio extends JFrame {
             panelCartas = new JPanel(navegadorCartas);
             panelCartas.setOpaque(false);
 
-            panelCartas.add(generarContenidoProducto("Intel i5 - 1102", "Procesador", "$2,000"), "p0");
-            panelCartas.add(generarContenidoProducto("AMD Ryzen 9", "Procesador", "$5,200"), "p1");
-            panelCartas.add(generarContenidoProducto("Nvidia RTX 4070", "GPU", "$12,000"), "p2");
+            for (PiezaDTO pieza : boPieza.consultarPiezas()) {
+                panelCartas.add(generarContenidoProducto(pieza));
+            }
 
             add(panelCartas, BorderLayout.CENTER);
 
@@ -138,7 +141,7 @@ public class Vinicio extends JFrame {
             }
         }
 
-        private JPanel generarContenidoProducto(String nombre, String tipo, String precio) {
+        private JPanel generarContenidoProducto(PiezaDTO pieza) {
             JPanel p = new JPanel(new GridBagLayout());
             p.setOpaque(false);
             GridBagConstraints g = new GridBagConstraints();
@@ -154,15 +157,15 @@ public class Vinicio extends JFrame {
             infoBox.setLayout(new BoxLayout(infoBox, BoxLayout.Y_AXIS));
             infoBox.setBorder(new EmptyBorder(15, 20, 15, 20));
 
-            JLabel n = new JLabel(nombre);
+            JLabel n = new JLabel(pieza.getNombre());
             n.setFont(new Font("Serif", Font.BOLD, 24));
             n.setForeground(Color.WHITE);
 
-            JLabel t = new JLabel(tipo);
+            JLabel t = new JLabel(pieza.getCategoria());
             t.setFont(new Font("Serif", Font.ITALIC, 19));
             t.setForeground(new Color(200, 200, 200));
 
-            JLabel pr = new JLabel(precio);
+            JLabel pr = new JLabel(String.valueOf(pieza.getCostoPieza()));
             pr.setFont(new Font("SansSerif", Font.BOLD, 22));
             pr.setForeground(new Color(0, 255, 100));
 
