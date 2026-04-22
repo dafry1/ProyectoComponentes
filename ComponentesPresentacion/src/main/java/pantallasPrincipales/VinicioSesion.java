@@ -5,15 +5,18 @@
 package pantallasPrincipales;
 
 import DTOS.EmpleadoDTO;
-import bo.EmpleadoBO;
 import coordinadores.CoordinadorEstados;
 import coordinadores.CoordinadorNegocio;
 import coordinadores.CoordinadorPresentacion;
+import coordinadores.ICoordinadorNegocio;
+import coordinadores.ICoordinadorPresentacion;
 import java.awt.Color;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import utilPresentacion.UtilBoton;
+import utilPresentacion.UtilGeneral;
 
 /**
  *
@@ -21,7 +24,7 @@ import javax.swing.border.EmptyBorder;
  */
 public class VinicioSesion extends JFrame {
 
-    public VinicioSesion(CoordinadorPresentacion coordinador, CoordinadorNegocio coordinadorNegocio, CoordinadorEstados coordinadorEstados) {
+    public VinicioSesion(ICoordinadorPresentacion coordinador, ICoordinadorNegocio coordinadorNegocio, CoordinadorEstados coordinadorEstados) {
         setTitle("Technoware - Inicio de Sesión");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 650);
@@ -62,11 +65,7 @@ public class VinicioSesion extends JFrame {
         lblUser.setForeground(labelColor);
         lblUser.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JTextField txtUser = new JTextField("");
-        txtUser.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-        txtUser.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(218, 220, 224)),
-                new EmptyBorder(5, 10, 5, 10)));
+        JTextField txtUser = UtilGeneral.crearCampoTexto();
 
         JLabel lblPass = new JLabel("Contraseña");
         lblPass.setFont(labelFont);
@@ -79,12 +78,21 @@ public class VinicioSesion extends JFrame {
                 BorderFactory.createLineBorder(new Color(218, 220, 224)),
                 new EmptyBorder(5, 10, 5, 10)));
 
-        JButton btnIngresar = new JButton("Ingresar");
-        btnIngresar.setBackground(new Color(0, 95, 255));
+        JButton btnIngresar = UtilBoton.crearBoton("Ingresar");
+        
+        
+        /**
+         * btnIngresar.setBackground(new Color(0, 95, 255));
         btnIngresar.setForeground(Color.WHITE);
         btnIngresar.setFocusPainted(false);
         btnIngresar.setBorderPainted(false);
-        btnIngresar.setFont(new Font("SansSerif", Font.BOLD, 16));
+        btnIngresar.setFont(new Font("SansSerif", Font.BOLD, 16)); 
+         * 
+         * 
+         */
+        
+        
+        
         btnIngresar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnIngresar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
         btnIngresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -99,7 +107,7 @@ public class VinicioSesion extends JFrame {
             }
 
             try {
-                EmpleadoDTO empleado = coordinadorNegocio.autenticar(user, pass);
+                EmpleadoDTO empleado = coordinadorNegocio.iniciarSesion(user, pass);
 
             if (empleado != null) {
                 coordinadorEstados.singleton().establecerSesion(empleado);

@@ -4,6 +4,8 @@ import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import coordinadores.CoordinadorEstados;
 import coordinadores.CoordinadorNegocio;
+import coordinadores.ICoordinadorEstados;
+import coordinadores.ICoordinadorNegocio;
 import coordinadores.ICoordinadorPresentacion;
 import java.awt.*;
 import java.util.HashMap;
@@ -31,8 +33,10 @@ public class ViniciarVenta extends JFrame implements IObservador {
     private JPanel contenedorListaPiezas;
     private JPanel contenedorListaDetalles;
     
-    //CoordinadorPresentacion que mueve pantallas
-    private ICoordinadorPresentacion coordinador;
+    //Coordinadores
+    private ICoordinadorPresentacion coordinadorPresentacion;
+    private ICoordinadorNegocio coordinadorNegocio;
+    private ICoordinadorEstados coordinadorEstados;
     
     //Mapa que contiene los campos de búsqueda para recuperarlos después
     Map<String, JTextField> mapaCampos = new HashMap<>();
@@ -52,16 +56,19 @@ public class ViniciarVenta extends JFrame implements IObservador {
     /**
      * Constructor donde se ensambla toda el frame
      * 
-     * @param coordinador que navegará entre pantallas
+     * @param coordinadorPresentacion que navegará entre pantallas
+     * @param coordinadorNegocio para lógica de procesos
      */
-    public ViniciarVenta(ICoordinadorPresentacion coordinador) {
-        this.coordinador = coordinador;
+    public ViniciarVenta(ICoordinadorPresentacion coordinadorPresentacion, ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados) {
+        this.coordinadorPresentacion = coordinadorPresentacion;
+        this.coordinadorNegocio = coordinadorNegocio;
+        this.coordinadorEstados = coordinadorEstados;
         
         //Configuración general
         UtilSwing.configurarFrame("Iniciar venta", this);
 
         //Añade el panel posterior
-        add(UtilBuild.crearNavegacion(this, coordinador), BorderLayout.NORTH);
+        add(UtilBuild.crearNavegacion(this, coordinadorPresentacion), BorderLayout.NORTH);
 
         //Crea el panel principal que contiene lo importante
         JPanel contenido = new JPanel(new GridBagLayout()); 
@@ -77,7 +84,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         g.gridx = 0; g.weightx = 0.10; g.weighty = 1.0; contenido.add(crearPanelBusqueda(), g);
         
         //Agrega los paneles
-        JPanel panelSeccionCentral = crearSeccionCentral(CoordinadorNegocio.getInstance().consultarPiezas());
+        JPanel panelSeccionCentral = crearSeccionCentral(coordinadorNegocio.consultarPiezas());
         g.gridx = 1; g.weightx = 0.30; contenido.add(panelSeccionCentral, g);
         g.gridx = 2; g.weightx = 0.30; contenido.add(crearPanelCarrito(), g);
         
@@ -177,24 +184,21 @@ public class ViniciarVenta extends JFrame implements IObservador {
         
         //Crea el botón de regreso
         JButton botonRegresar = UtilBoton.crearBotonRegresar();
-        botonRegresar.addActionListener(e -> coordinador.mostrarVentanaInicio());
+        botonRegresar.addActionListener(e -> coordinadorPresentacion.mostrarVentanaInicio());
 
         //Creaa el botón de continuar y le agrega navegación
         JButton botonContinuar = UtilBoton.crearBoton("Continuar");
         botonContinuar.setPreferredSize(new Dimension(200, 50));
         botonContinuar.addActionListener(e -> {
             
-            //Obtiene el carrito del CoordinadorEstados
-            List<DetallesVentaDTO> carrito = CoordinadorEstados.singleton().getCarritoVenta();
-            
             //Verifica que el carrito no esté vacío
-            if (carrito.isEmpty()) {
+            if (coordinadorEstados.getCarritoVenta().isEmpty()) {
                 UtilSwing.dialogoAlerta(this, "El carrito está vacío");
                 return;
             }
             
             //Procesa la venta
-            CoordinadorNegocio.getInstance().procesarVenta(carrito, ViniciarVenta.this);
+            coordinadorNegocio.procesarVenta(coordinadorEstados, ViniciarVenta.this);
         });
 
         //Agrega los botones al panel
@@ -316,7 +320,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
             
             //Agrega funcionalidad al botón de mostrarInfo
             botonInfo.addActionListener(e -> {
-                coordinador.abrirDialogo(() -> new InfoDetalle(ViniciarVenta.this, botonInfo.getDTO()));
+                coordinadorPresentacion.abrirDialogo(() -> new InfoDetalle(ViniciarVenta.this, botonInfo.getDTO()));
             });
             
             //Agrega al panel principal
@@ -388,7 +392,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
 
             //Agrega funcionalidad al botón de mostrarInfo
             botonInfo.addActionListener(e -> {
-                coordinador.abrirDialogo(() -> new InfoPieza(ViniciarVenta.this, botonInfo.getDTO()));
+                coordinadorPresentacion.abrirDialogo(() -> new InfoPieza(ViniciarVenta.this, botonInfo.getDTO()));
             });
 
             //Agrega al panel principal

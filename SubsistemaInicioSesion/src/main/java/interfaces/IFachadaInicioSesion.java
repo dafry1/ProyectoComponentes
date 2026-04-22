@@ -12,8 +12,8 @@ import java.util.List;
  * @author Andre
  */
 public interface IFachadaInicioSesion {
-    public List<EmpleadoDTO> consultarEmpleados();
+    List<EmpleadoDTO> consultarEmpleados();
     
-    public EmpleadoDTO login(String usuario, String contra);
+    EmpleadoDTO verificarEmpleado(String usuario, String contra);
     
 }

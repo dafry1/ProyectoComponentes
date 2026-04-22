@@ -1,7 +1,5 @@
 package coordinadores;
 
-import DTOS.EmpleadoDTO;
-import bo.EmpleadoBO;
 import pantallasPrincipales.VinicioSesion;
 import pantallasPrincipales.Vinicio;
 import pantallasVentas.VhistorialSolicitudes;
@@ -21,7 +19,14 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
 
     private JFrame ventanaActual;
     private boolean administrador = false;
-    public CoordinadorPresentacion() {
+    
+    private ICoordinadorNegocio coordinadorNegocio;
+    private ICoordinadorEstados coordinadorEstados;
+    
+    /** Constructor */
+    public CoordinadorPresentacion(ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados) {
+        this.coordinadorNegocio = coordinadorNegocio;
+        this.coordinadorEstados = coordinadorEstados;
     }
 
     /**
@@ -29,7 +34,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
      */
     @Override
     public void mostrarVentanaVenta() {
-        abrirNuevaVentana(() -> new ViniciarVenta(this));
+        abrirNuevaVentana(() -> new ViniciarVenta(this, coordinadorNegocio, coordinadorEstados));
     }
 
     /**
@@ -45,7 +50,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
      */
     @Override
     public void mostrarVentanaInicio() {
-        abrirNuevaVentana(() -> new Vinicio(this));
+        abrirNuevaVentana(() -> new Vinicio(this, coordinadorNegocio));
     }
 
     /**
@@ -53,7 +58,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
      */
     @Override
     public void mostrarVentanaInicioSesion() {
-        abrirNuevaVentana(() -> new VinicioSesion(this, CoordinadorNegocio.getInstance(),CoordinadorEstados.singleton()));
+        abrirNuevaVentana(() -> new VinicioSesion(this, coordinadorNegocio, CoordinadorEstados.singleton()));
     }
 
     /**
@@ -76,8 +81,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
      * Método privado para centralizar la lógica de cerrar la anterior y abrir
      * la nueva.
      */
-    @Override
-    public void abrirNuevaVentana(Supplier<JFrame> creadorVentana) {
+    private void abrirNuevaVentana(Supplier<JFrame> creadorVentana) {
         if (ventanaActual != null) {
             ventanaActual.dispose();
         }

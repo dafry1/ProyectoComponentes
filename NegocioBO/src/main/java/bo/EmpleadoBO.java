@@ -1,28 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package bo;
 
 import DTOS.EmpleadoDTO;
-import DTOS.PiezaDTO;
+import excepciones.NegocioException;
 import interfaces.IEmpleadoBO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 /**
- *
+ * BO de un empleado
+ * 
  * @author DANIEL
  */
 public class EmpleadoBO implements IEmpleadoBO {
-
     private static final Logger LOG = Logger.getLogger(EmpleadoBO.class.getName());
-    private static EmpleadoBO empleadoBO;
+    private static final String CAMPOS_VACIOS = "No se puede iniciar sesión con campos faltantes";
+    private static final String EMPLEADO_INEXISTENTE = "No existe el empleado en el sistema";
+    
     private static final List<EmpleadoDTO> EMPLEADOS = new ArrayList<>();
 
-    public EmpleadoBO() {
-    }
+    public EmpleadoBO() {}
 
     static {
         EmpleadoDTO empleado1 = new EmpleadoDTO();
@@ -30,7 +27,7 @@ public class EmpleadoBO implements IEmpleadoBO {
         empleado1.setContrasenia("12345");
         EMPLEADOS.add(empleado1);
     }
-
+    
     /**
      * Extrae todos los empleados de la BD
      *
@@ -41,37 +38,41 @@ public class EmpleadoBO implements IEmpleadoBO {
         return EMPLEADOS;
     }
 
+    
+    
+    //-> FIXME: OBVIAMENTE ASÍ NO FUNCIONARÁ EN EL PROGRAMA COMPLETO
     /**
-     * Obtenemos la instancia de EmpleadoBO.
-     *
-     * @return EmpleadoBO.
+     * Consulta en la BD al empleado con los datos especificados
+     * 
+     * @param nombreUsuario del empleado
+     * @param password contraseña del empleado
+     * 
+     * @return el empleado encontrado
      */
-    public static EmpleadoBO getInstanceEmpleadoBO() {
-        if (empleadoBO == null) {
-            empleadoBO = new EmpleadoBO();
-        }
-        return empleadoBO;
-    }
-
     @Override
-    public EmpleadoDTO login(String usuario, String password) {
-    if (usuario == null || usuario.trim().isEmpty() || password == null) {
-        LOG.warning("Se intentó un login con campos nulos o vacíos.");
-        return null; 
-    }
+    public EmpleadoDTO verificarEmpleado(String nombreUsuario, String password) {
+        
+        //Excepción si los campos están vacíos
+        if (nombreUsuario == null || nombreUsuario.trim().isEmpty() || password == null) {
+            LOG.warning(">> " + CAMPOS_VACIOS);
+            throw new NegocioException(CAMPOS_VACIOS);
+        }
 
-    for (EmpleadoDTO emp : EMPLEADOS) {
-        if (emp.getNombreUsuario().equals(usuario)) {
-            if (emp.getContrasenia().equals(password)) {
-                LOG.info("Login exitoso: " + usuario);
-                return emp;
-            } else {
-                LOG.warning("Contraseña incorrecta para el usuario: " + usuario);
-                return null; 
+        //Itera y valida en la lista de empleados
+        for (EmpleadoDTO empleado: consultarEmpleados()) {
+            if (datosCoincidentes(empleado, nombreUsuario, password)) {
+                LOG.warning(">> Empleado encontrado: " + nombreUsuario + ", " + password);
+                return empleado;
             }
         }
+        LOG.warning("El usuario '" + nombreUsuario + "' no existe en el sistema.");
+        throw new NegocioException("El usuario no existe");
     }
-    LOG.warning("El usuario '" + usuario + "' no existe en el sistema.");
-    return null;
-}
+    
+    //AUXILAIR TEMPORAL NOMAS MIENTRAS ENCHUFAMOS EL DAO OE
+    private boolean datosCoincidentes(EmpleadoDTO empleado, String usuario, String contra) {
+        String nombre = empleado.getNombreUsuario();
+        String con = empleado.getContrasenia();
+        return empleado.getNombreUsuario().equals(usuario) && empleado.getContrasenia().equals(contra);
+    }
 }

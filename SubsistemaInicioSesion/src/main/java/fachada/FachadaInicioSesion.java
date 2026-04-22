@@ -1,34 +1,38 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fachada;
 
 import DTOS.EmpleadoDTO;
-import bo.EmpleadoBO;
-import interfaces.IEmpleadoBO;
+import controles.ControlInicioSesion;
 import interfaces.IFachadaInicioSesion;
 import java.util.List;
 
 /**
- *
+ * Fachada del subsistema de iniciar sesión
+ * 
  * @author Andre
  */
 public class FachadaInicioSesion implements IFachadaInicioSesion {
+    private ControlInicioSesion controlInicioSesion = new ControlInicioSesion();
     
     
-    private IEmpleadoBO empleadoBO = new EmpleadoBO();
-    
-    
+    /**
+     * Consulta todos los empleados de la BD
+     * 
+     * @return 
+     */
     @Override
     public List<EmpleadoDTO> consultarEmpleados() {
-        return empleadoBO.consultarEmpleados();
+        return controlInicioSesion.consultarEmpleados();
     }
     
+    /**
+     * Verifica la existencia de un empleado
+     * 
+     * @param usuario
+     * @param contra
+     * @return 
+     */
     @Override
-    public EmpleadoDTO login(String usuario, String contra) {
-        return empleadoBO.login(usuario, contra);
+    public EmpleadoDTO verificarEmpleado(String usuario, String contra) {
+        return controlInicioSesion.verificarEmpleado(usuario, contra);
     }
-    
-    
 }

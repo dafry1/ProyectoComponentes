@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Andre
  */
-public class CoordinadorEstados {
+public class CoordinadorEstados implements ICoordinadorEstados {
 
     //Instancia de sí mismo
     private static CoordinadorEstados instancia = null;
@@ -33,6 +33,11 @@ public class CoordinadorEstados {
     }
 
     //----- MÉTODOS DE TRABAJADORES -----//
+    /**
+     * Guarda el empleado actual de manera global
+     * 
+     * @param empleado dueño de la sesión
+     */
     public void establecerSesion(EmpleadoDTO empleado) {
         this.usuarioLogueado = empleado;
         if (empleado != null && empleado.getId() != null) {
@@ -104,6 +109,15 @@ public class CoordinadorEstados {
      */
     public double totalCarritoVenta() {
         return carritoVenta.stream().mapToDouble(DetallesVentaDTO::getSubtotal).sum();
+    }
+    
+    /**
+     * Determina si el carrito de venta está vacío
+     * 
+     * @return true si está vacío, false de lo contrario
+     */
+    public boolean carritoVentaVacio() {
+        return carritoVenta.isEmpty();
     }
 
     /**

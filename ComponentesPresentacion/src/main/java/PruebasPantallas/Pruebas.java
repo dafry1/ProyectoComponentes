@@ -1,6 +1,10 @@
 package PruebasPantallas;
+import coordinadores.CoordinadorEstados;
+import coordinadores.CoordinadorNegocio;
 import coordinadores.CoordinadorPresentacion;
-
+import coordinadores.ICoordinadorEstados;
+import coordinadores.ICoordinadorNegocio;
+import coordinadores.ICoordinadorPresentacion;
 /**
  *
  * @author Andre
@@ -8,7 +12,11 @@ import coordinadores.CoordinadorPresentacion;
 public class Pruebas {
 
     public static void main(String[] args) {
-        CoordinadorPresentacion coordinador = new CoordinadorPresentacion();
-        coordinador.mostrarVentanaInicioSesion();
+        
+   
+        ICoordinadorEstados coordiandorEstados = CoordinadorEstados.singleton();
+        ICoordinadorNegocio coordinadorNegocio = new CoordinadorNegocio();
+        ICoordinadorPresentacion coordinadorPresentacion = new CoordinadorPresentacion(coordinadorNegocio, coordiandorEstados);
+        coordinadorPresentacion.mostrarVentanaInicioSesion();
     }
 }

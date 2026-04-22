@@ -1,29 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package pantallasPrincipales;
 
 import DTOS.PiezaDTO;
-import bo.PiezaBO;
 import coordinadores.CoordinadorNegocio;
 import coordinadores.CoordinadorPresentacion;
+import coordinadores.ICoordinadorNegocio;
+import coordinadores.ICoordinadorPresentacion;
 import java.awt.BorderLayout;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.*;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import utilEstilos.UtilBuild;
+import utilPresentacion.UtilPanel;
 
 /**
  *
  * @author DANIEL
  */
 public class Vinicio extends JFrame {
-    private CoordinadorPresentacion coordinador;
+    private ICoordinadorPresentacion coordinadorPresentacion;
+    private ICoordinadorNegocio coordinadorNegocio;
 
-    public Vinicio(CoordinadorPresentacion coordinador) {
-        this.coordinador = coordinador;
+    public Vinicio(ICoordinadorPresentacion coordinadorPresentacion, ICoordinadorNegocio coordinadorNegocio) {
+        this.coordinadorPresentacion = coordinadorPresentacion;
+        this.coordinadorNegocio = coordinadorNegocio;
         initComponents();
     }
 
@@ -36,7 +37,7 @@ public class Vinicio extends JFrame {
         getContentPane().setBackground(Color.WHITE);
         setLayout(new BorderLayout());
 
-        add(crearNavegacion(), BorderLayout.NORTH);
+        add(UtilBuild.crearNavegacion(this, coordinadorPresentacion), BorderLayout.NORTH);
 
 
         JPanel gridContenedor = new JPanel(new GridLayout(2, 2, 25, 25));
@@ -50,49 +51,8 @@ public class Vinicio extends JFrame {
 
         add(gridContenedor, BorderLayout.CENTER);
     }
-
-    private JPanel crearNavegacion() {
-        JPanel nav = new JPanel(new GridLayout(1, 5));
-        nav.setPreferredSize(new Dimension(0, 65));
-        nav.setBackground(new Color(0, 95, 255));
-
-        String[] botones = {"Inicio", "Iniciar venta", "Iniciar solicitud", "Historial de ventas", "Historial de solicitudes"};
-
-        for (String texto : botones) {
-            JButton btn = new JButton(texto);
-            btn.setForeground(Color.WHITE);
-            btn.setBackground(new Color(0, 95, 255));
-            btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
-            btn.setFocusPainted(false);
-            btn.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.WHITE));
-            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-
-            btn.addActionListener(e -> {
-                switch (texto) {
-                    case "Inicio":
-
-                        coordinador.mostrarVentanaInicio();
-                        break;
-                    case "Iniciar venta":
-                        coordinador.mostrarVentanaVenta();
-                        break;
-                    case "Iniciar solicitud":
-                        coordinador.mostrarVentanaSolicitud();
-                        break;
-                    case "Historial de ventas":
-                        coordinador.mostrarHistorialVentas();
-                        break;
-                    case "Historial de solicitudes":
-                        coordinador.mostrarHistorialSolicitudes();
-                        break;
-                }
-            });
-
-            nav.add(btn);
-        }
-        return nav;
-    }
+    
+    
 
     class TarjetaCarrusel extends PanelRedondeado {
 
@@ -100,7 +60,7 @@ public class Vinicio extends JFrame {
         private JPanel panelCartas;
         private JPanel panelPuntos;
         private int indiceActual = 0;
-        private final int TOTAL_PRODUCTOS = CoordinadorNegocio.getInstance().consultarPiezas().size();
+        private final int TOTAL_PRODUCTOS = coordinadorNegocio.totalProductos();
 
         public TarjetaCarrusel(String titulo) {
             super(45, new Color(0, 95, 255));
@@ -116,7 +76,7 @@ public class Vinicio extends JFrame {
             panelCartas = new JPanel(navegadorCartas);
             panelCartas.setOpaque(false);
 
-            for (PiezaDTO pieza : CoordinadorNegocio.getInstance().consultarPiezas()) {
+            for (PiezaDTO pieza: coordinadorNegocio.consultarPiezas()) {
                 panelCartas.add(generarContenidoProducto(pieza));
             }
 

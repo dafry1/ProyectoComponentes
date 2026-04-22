@@ -39,12 +39,6 @@ public interface ICoordinadorPresentacion {
      * Muestra la pantalla de Historial de solicitudes.
      */
     void mostrarHistorialSolicitudes();
-
-    /**
-     * Método privado para centralizar la lógica de cerrar la anterior y abrir
-     * la nueva.
-     */
-    void abrirNuevaVentana(Supplier<JFrame> creadorVentana);
     
     /**
      * Abre un diálogo

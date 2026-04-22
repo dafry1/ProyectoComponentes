@@ -4,6 +4,8 @@ import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.VentaDTO;
 import interfaces.IVentaBO;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -26,7 +28,7 @@ public class VentaBO implements IVentaBO {
         VentaDTO venta = new VentaDTO();
         venta.setCliente(cliente);
         venta.setDetalles(detalles);
-        venta.setFechaHora("Hoy xd");
+        generarFecha(venta); //-> FIXME: ESTO ES TEMPORAL TAMBIEN
         generarFolio(venta); //-> FIXME: DE IGUAL FORMA ES UNA IMPLEMENTACIÓN TEMPORAL
         return venta;
     }
@@ -41,5 +43,21 @@ public class VentaBO implements IVentaBO {
     private void generarFolio(VentaDTO venta) {
         String PREFIJO = "TW-";
         venta.setFolio(PREFIJO + venta.contador);
+    }
+    
+    
+    /**
+     * Auxiliar obtiene la fecha
+     * 
+     * @param venta 
+     */
+    private void generarFecha(VentaDTO venta) {
+        LocalDateTime fechaHoraRegistro = LocalDateTime.now();
+        
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        
+        String stringFechaHora = fechaHoraRegistro.format(formato);
+        
+        venta.setFechaHora(stringFechaHora);
     }
 }

@@ -13,5 +13,5 @@ import java.util.List;
  */
 public interface IEmpleadoBO {
     public List<EmpleadoDTO> consultarEmpleados();
-    public EmpleadoDTO login(String usuario, String password);
+    public EmpleadoDTO verificarEmpleado(String usuario, String password);
 }

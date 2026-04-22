@@ -4,9 +4,10 @@ import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
 import DTOS.VentaDTO;
-import bo.EmpleadoBO;
+import excepciones.PresentacionException;
+import excepciones.NegocioException;
 import fachada.FachadaInicioSesion;
-import fachada.FachadaVentas;
+import fachadas.FachadaVentas;
 import interfaces.IFachadaInicioSesion;
 import interfaces.IFachadaVentas;
 import java.util.List;
@@ -18,27 +19,19 @@ import observadores.IObservador;
  * 
  * @author Andre
  */
-public class CoordinadorNegocio {
-    //Instancia singleton
-    private static CoordinadorNegocio instancia;
+public class CoordinadorNegocio implements ICoordinadorNegocio {
+    private static final System.Logger LOG = System.getLogger(CoordinadorNegocio.class.getName());
     
     //Instancia de la fachada del subsistema de las ventas
+    //Ya lo creo a la brava porque ya me cansé de tanta fábrica :( TODO: FÁBRICA DE FACHADAS
     private IFachadaVentas fachadaVentas = new FachadaVentas();
     private IFachadaInicioSesion fachadaInicioSesion = new FachadaInicioSesion();
     
-    /**
-     * Crea la instancia única del coordiandor
-     * 
-     * @return la instancia única
-     */
-    public static CoordinadorNegocio getInstance() {
-        if (instancia == null) {
-            instancia = new CoordinadorNegocio();
-        }
-        return instancia;
-    }
-    
-    
+    //Constructor
+    public CoordinadorNegocio() {
+        //this.fachadaVentas = fachadaVentas;
+        //this.fachadaInicioSesion = fachadaInicioSesion;
+    };
     
     /**
      * Regresa todas las piezas del sistema, dadas directamente
@@ -46,8 +39,21 @@ public class CoordinadorNegocio {
      * 
      * @return lista de PiezaDTO
      */
+    @Override
     public List<PiezaDTO> consultarPiezas() {
         return fachadaVentas.consultarPiezas();
+    }
+    
+    /**
+     * Regresa la cantidad de piezas individuales. No de productos
+     * en total, sino de cada tipo de pieza en stock. Se ve como
+     * un wrapper simple, pero es importante no meter mano en
+     * lógica de negocio como la lista directamente
+     * 
+     * @return la cantidad de tipos de piezas en específico
+     */
+    public int totalProductos() {
+        return fachadaVentas.consultarPiezas().size();
     }
     
     
@@ -57,40 +63,58 @@ public class CoordinadorNegocio {
      * cabo una venta dentro del sistema. Actualiza stock,
      * limpia el carrito, etc.
      * 
-     * @param carrito para la venta. No puede ser null
+     * @param coordinadorEstados
      * @param observador si se necesita actualizar algo. Puede ser null
      */
-    public void procesarVenta(List<DetallesVentaDTO> carrito, IObservador observador) {
+    @Override
+    public VentaDTO procesarVenta(ICoordinadorEstados coordinadorEstados, IObservador observador) {
+        
+        List<DetallesVentaDTO> carrito = coordinadorEstados.getCarritoVenta();
+        
+        //Excepción si la lista está vacía o el carrito es null
+        if (carrito == null || carrito.isEmpty()) {
+            throw new PresentacionException("El carrito está vacío");
+        }
         
         //Procesa la venta directamente de la fachada
         VentaDTO venta = fachadaVentas.procesarVenta(null, carrito);
-        int numPieza = 1;
-
-        //FIXME: PRINTS TEMPORALES
-        System.out.println("================ Venta registrada ================");
-        System.out.println("Cliente: " + venta.getCliente().getNombre());
-        System.out.println("Detalles: ");
-        for (DetallesVentaDTO detalle : venta.getDetalles()) {
-            System.out.println("-------- Pieza #" + numPieza + " --------");
-            System.out.println("-> Pieza: " + detalle.getPieza().getNombre());
-            System.out.println("-> Cantidad: " + detalle.getCantidad());
-            System.out.println("-> Subtotal: " + detalle.getSubtotal());
-            numPieza++;
-        }
-        System.out.println("Fecha y hora; " + venta.getFechaHora());
-        System.out.println("Folio; " + venta.getFolio());
-        System.out.println("==================================================");
         
         //Limpia el carrito de ventas
-        CoordinadorEstados.singleton().limpiarCarritoVenta();
+        coordinadorEstados.limpiarCarritoVenta();
         
         //Activa al observador si existe
         if (observador != null) {
             observador.observar();
         }
+        
+        //Regresa la venta
+        return venta;
     }
     
-    public EmpleadoDTO autenticar(String user, String pass) {
-        return fachadaInicioSesion.login(user, pass);
+    
+    
+    /**
+     * Valida que el usuario con los datos ingresados
+     * exista dentro del sistema y en caso de éxito lo
+     * almacena en el CoordinadorEstados
+     * 
+     * @param nombreUsuario que quier acceder al sistema
+     * @param contra del usuario
+     * 
+     * @return el empleado DTO en caso de que exista 
+     */
+    @Override
+    public EmpleadoDTO iniciarSesion(String nombreUsuario, String contra) {
+        EmpleadoDTO empleado;
+        
+        //-> FIXME? TAL VEZ CUANDO EXISTA PERSISTENCIA NO SE IMPLEMENTE ASÍ
+        try {
+            empleado = fachadaInicioSesion.verificarEmpleado(nombreUsuario, contra);
+            CoordinadorEstados.singleton().establecerSesion(empleado);
+            LOG.log(System.Logger.Level.INFO, ">> Sesión iniciada con éxito; " + nombreUsuario); 
+            return empleado;
+        } catch (NegocioException e){
+            throw new PresentacionException("No existe el empleado");
+        }
     }
 }

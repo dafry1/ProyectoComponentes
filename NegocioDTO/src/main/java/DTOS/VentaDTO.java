@@ -17,10 +17,10 @@ public class VentaDTO extends DTO {
     private String fechaHora;
     private String folio;
     
-    public static int contador; //FIXME: LÓGICA QUE POR MIENTRAS GENERARÁ EL FOLIO
+    public static int contador = 0; //FIXME: LÓGICA QUE POR MIENTRAS GENERARÁ EL FOLIO
 
     /** Constructor vacío */
-    public VentaDTO() {}
+    public VentaDTO() {}  
     
     /**
      * Constructor completo

@@ -141,7 +141,7 @@ public class PantallaResumen extends JFrame implements IObservador {
             }
             
             //Procesa la venta
-            CoordinadorNegocio.getInstance().procesarVenta(carrito, PantallaResumen.this);
+            //CoordinadorNegocio.getInstance().procesarVenta(carrito, PantallaResumen.this);
         });
 
         //Agrega los botones al panel
