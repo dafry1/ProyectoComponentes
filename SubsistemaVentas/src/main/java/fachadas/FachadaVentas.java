@@ -76,6 +76,16 @@ public class FachadaVentas implements IFachadaVentas {
     }
     
     /**
+     * Consulta todas las ventas del sistema
+     *
+     * @return lista de VentaDTO
+     */
+    @Override
+    public List<VentaDTO> consultarVentas() {
+        return controlVentas.consultarVentas();
+    }
+    
+    /**
      * Orquesta la lógica de procesar una venta (registro de
      * la venta, actualización de stock)
      * 

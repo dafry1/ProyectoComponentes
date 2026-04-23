@@ -102,6 +102,17 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
     }
     
     /**
+     * Regresa todas las ventas del sistema, dadas directamente por el
+     * IFachadaVentas
+     *
+     * @return lista de VentaDTO
+     */
+    @Override
+    public List<VentaDTO> consultarVentas() {
+        return fachadaVentas.consultarVentas();
+    }
+    
+    /**
      * Orquesta todos los métodos necesarios para llevar a
      * cabo una venta dentro del sistema. Actualiza stock,
      * limpia el carrito, etc.

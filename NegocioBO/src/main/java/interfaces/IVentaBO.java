@@ -13,6 +13,13 @@ import java.util.List;
 public interface IVentaBO {
     
     /**
+     * Extrae todas las ventas de la BD
+     *
+     * @return lista de VentaDTO mapeadas
+     */
+    List<VentaDTO> consultarVentas();
+    
+    /**
      * Registra una venta en el sistema
      * 
      * @param cliente que compró las piezas

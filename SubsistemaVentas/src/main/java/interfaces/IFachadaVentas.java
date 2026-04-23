@@ -50,6 +50,13 @@ public interface IFachadaVentas {
     List<PiezaDTO> consultarTopTodoPiezas();
     
     /**
+     * Consulta todas las ventas del sistema
+     *
+     * @return lista de VentaDTO
+     */
+    List<VentaDTO> consultarVentas();
+    
+    /**
      * Orquesta la lógica de procesar una venta (registro de
      * la venta, actualización de stock)
      * 

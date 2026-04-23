@@ -96,6 +96,18 @@ public class ControlVentas implements IControlVentas {
     }
     
     /**
+     * Consulta las ventas de su BO respectivo
+     *
+     * @return lista de tipo VentaDTO
+     */
+    @Override
+    public List<VentaDTO> consultarVentas() {
+        List<VentaDTO> ventas = ventaBO.consultarVentas();
+        LOG.log(System.Logger.Level.INFO, ">> Ventas consultadas con éxito: " + ventas.size());
+        return ventas;
+    }
+    
+    /**
      * Actualiza el stock de PiezaBO y registra
      * la venta en la VentaBO
      * 

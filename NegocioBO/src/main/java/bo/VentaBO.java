@@ -6,14 +6,27 @@ import DTOS.VentaDTO;
 import interfaces.IVentaBO;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * BO par la entidad venta
+ * BO para la entidad venta
  * 
  * @author Andre
  */
 public class VentaBO implements IVentaBO {
+    
+    private static List<VentaDTO> VENTAS = new ArrayList<>();
+    
+    /**
+     * Extrae todas las ventas de la BD
+     *
+     * @return lista de VentaDTO mapeadas
+     */
+    @Override
+    public List<VentaDTO> consultarVentas() {
+        return VENTAS;
+    }
     
     /**
      * Registra una venta en el sistema
@@ -30,6 +43,7 @@ public class VentaBO implements IVentaBO {
         venta.setDetalles(detalles);
         generarFecha(venta); //-> FIXME: ESTO ES TEMPORAL TAMBIEN
         generarFolio(venta); //-> FIXME: DE IGUAL FORMA ES UNA IMPLEMENTACIÓN TEMPORAL
+        VENTAS.add(venta);
         return venta;
     }
     

@@ -51,6 +51,13 @@ public interface IControlVentas {
     List<PiezaDTO> consultarTopTodoPiezas();
     
     /**
+     * Consulta las ventas de su BO respectivo
+     *
+     * @return lista de tipo VentaDTO
+     */
+    List<VentaDTO> consultarVentas();
+    
+    /**
      * Hace todo el proceso de llevar a cabo una venta
      * 
      * @param cliente
