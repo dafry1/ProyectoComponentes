@@ -73,6 +73,6 @@ public class EmpleadoBO implements IEmpleadoBO {
     private boolean datosCoincidentes(EmpleadoDTO empleado, String usuario, String contra) {
         String nombre = empleado.getNombreUsuario();
         String con = empleado.getContrasenia();
-        return empleado.getNombreUsuario().equals(usuario) && empleado.getContrasenia().equals(contra);
+        return nombre.equals(usuario) && con.equals(contra);
     }
 }

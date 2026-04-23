@@ -5,6 +5,8 @@ import coordinadores.CoordinadorPresentacion;
 import coordinadores.ICoordinadorEstados;
 import coordinadores.ICoordinadorNegocio;
 import coordinadores.ICoordinadorPresentacion;
+import ensambladores.EnsambladorDTO;
+import ensambladores.IEnsambladorDTO;
 /**
  *
  * @author Andre
@@ -16,7 +18,9 @@ public class Pruebas {
    
         ICoordinadorEstados coordiandorEstados = CoordinadorEstados.singleton();
         ICoordinadorNegocio coordinadorNegocio = new CoordinadorNegocio();
-        ICoordinadorPresentacion coordinadorPresentacion = new CoordinadorPresentacion(coordinadorNegocio, coordiandorEstados);
+        IEnsambladorDTO ensamladorDTO = new EnsambladorDTO();
+        
+        ICoordinadorPresentacion coordinadorPresentacion = new CoordinadorPresentacion(coordinadorNegocio, coordiandorEstados, ensamladorDTO);
         coordinadorPresentacion.mostrarVentanaInicioSesion();
     }
 }

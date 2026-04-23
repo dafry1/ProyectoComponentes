@@ -1,5 +1,7 @@
 package coordinadores;
 
+import DTOS.DTO;
+import ensambladores.IEnsambladorDTO;
 import pantallasPrincipales.VinicioSesion;
 import pantallasPrincipales.Vinicio;
 import pantallasVentas.VhistorialSolicitudes;
@@ -10,6 +12,8 @@ import java.util.function.Supplier;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import observadores.IObservador;
+import pantallasVentas.InfoPieza;
+import pantallasVentas.PantallaResumen;
 
 /**
  * Clase que coordina el flujo entre pantallas También guarda el tipo de client
@@ -23,10 +27,13 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     private ICoordinadorNegocio coordinadorNegocio;
     private ICoordinadorEstados coordinadorEstados;
     
+    private IEnsambladorDTO ensambladorDTO;
+    
     /** Constructor */
-    public CoordinadorPresentacion(ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados) {
+    public CoordinadorPresentacion(ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados, IEnsambladorDTO ensambladorDTO) {
         this.coordinadorNegocio = coordinadorNegocio;
         this.coordinadorEstados = coordinadorEstados;
+        this.ensambladorDTO  = ensambladorDTO;
     }
 
     /**
@@ -111,6 +118,22 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     @Override
     public void arrancar() {
         mostrarVentanaVenta();
+    }
+
+    
+    @Override
+    public void abrirResumenVenta() {
+        abrirNuevaVentana(() -> new PantallaResumen(this, coordinadorNegocio, coordinadorEstados));
+    }
+
+    @Override
+    public void abrirInfoPieza(IObservador observador, DTO dto) {
+        abrirDialogo(() -> new InfoPieza(coordinadorEstados, observador, dto, ensambladorDTO));
+    }
+
+    @Override
+    public void abrirInfoDetalle() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 

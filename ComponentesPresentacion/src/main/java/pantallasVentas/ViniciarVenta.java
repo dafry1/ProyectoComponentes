@@ -2,6 +2,7 @@ package pantallasVentas;
 
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
+import DTOS.VentaDTO;
 import coordinadores.CoordinadorEstados;
 import coordinadores.CoordinadorNegocio;
 import coordinadores.ICoordinadorEstados;
@@ -198,8 +199,12 @@ public class ViniciarVenta extends JFrame implements IObservador {
                 return;
             }
             
+            coordinadorPresentacion.abrirResumenVenta();
+            
+            
             //Procesa la venta
-            coordinadorNegocio.procesarVenta(coordinadorEstados, ViniciarVenta.this);
+            //VentaDTO venta = coordinadorNegocio.procesarVenta(coordinadorEstados, ViniciarVenta.this);
+            //UtilSwing.dialogoAviso(this, "Venta registrada exitosamente");
         });
 
         //Agrega los botones al panel
@@ -393,7 +398,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
 
             //Agrega funcionalidad al botón de mostrarInfo
             botonInfo.addActionListener(e -> {
-                coordinadorPresentacion.abrirDialogo(() -> new InfoPieza(coordinadorEstados, ViniciarVenta.this, botonInfo.getDTO()));
+                coordinadorPresentacion.abrirInfoPieza(this, pieza);
             });
 
             //Agrega al panel principal

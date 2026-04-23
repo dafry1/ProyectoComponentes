@@ -5,6 +5,7 @@ import DTOS.PiezaDTO;
 import coordinadores.CoordinadorEstados;
 import coordinadores.CoordinadorNegocio;
 import coordinadores.ICoordinadorEstados;
+import coordinadores.ICoordinadorNegocio;
 import coordinadores.ICoordinadorPresentacion;
 import java.awt.*;
 import java.util.HashMap;
@@ -34,6 +35,8 @@ public class PantallaResumen extends JFrame implements IObservador {
     
     //CoordinadorPresentacion que mueve pantallas
     private ICoordinadorPresentacion coordinadorPresentacion;
+    private ICoordinadorNegocio coordinadorNegocio;
+    private ICoordinadorEstados coordinadorEstados;
     
     //Siempre actualizado desde el CoordiandorEstados
     private double totalCarrito = CoordinadorEstados.singleton().totalCarritoVenta();
@@ -46,8 +49,10 @@ public class PantallaResumen extends JFrame implements IObservador {
      * 
      * @param coordinadorPresentacion que navegará entre pantallas
      */
-    public PantallaResumen(ICoordinadorPresentacion coordinadorPresentacion, ICoordinadorEstados coordinadorEstados) {
+    public PantallaResumen(ICoordinadorPresentacion coordinadorPresentacion, ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados) {
         this.coordinadorPresentacion = coordinadorPresentacion;
+        this.coordinadorNegocio = coordinadorNegocio;
+        this.coordinadorEstados = coordinadorEstados;
         
         //Configuración general
         UtilSwing.configurarFrame("Iniciar venta", this);
@@ -142,7 +147,8 @@ public class PantallaResumen extends JFrame implements IObservador {
             }
             
             //Procesa la venta
-            //CoordinadorNegocio.getInstance().procesarVenta(carrito, PantallaResumen.this);
+            coordinadorNegocio.procesarVenta(coordinadorEstados, PantallaResumen.this);
+            UtilSwing.dialogoAviso(this, "Venta registrada exitosamente");
         });
 
         //Agrega los botones al panel

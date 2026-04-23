@@ -5,6 +5,8 @@ import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import coordinadores.CoordinadorEstados;
 import coordinadores.ICoordinadorEstados;
+import ensambladores.EnsambladorDTO;
+import ensambladores.IEnsambladorDTO;
 import java.awt.Component;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -26,7 +28,14 @@ import utilPresentacion.UtilGeneral;
  */
 public class InfoPieza extends JDialog {
     
-    public InfoPieza(ICoordinadorEstados coordinadorEstados, IObservador observador, DTO dto) {
+    //Atributos
+    String nombre;
+    String categoria;
+    String marca;
+    String modelo;
+    double costo;
+    
+    public InfoPieza(ICoordinadorEstados coordinadorEstados, IObservador observador, DTO dto, IEnsambladorDTO ensambladorDTO) {
         // Configuración inicial  
         this.setModal(false);
         this.setResizable(true);
@@ -37,18 +46,17 @@ public class InfoPieza extends JDialog {
         PiezaDTO pieza = (PiezaDTO) dto;
         
         //Extrae la información
-        Long id = pieza.getId();
-        String nombre = pieza.getNombre();
-        String categoria = pieza.getCategoria();
-        String marca = pieza.getMarcaPieza();
-        String modelo = pieza.getModeloPieza();
-        double costo = pieza.getCostoPieza();
+        nombre = pieza.getNombre();
+        categoria = pieza.getCategoria();
+        marca = pieza.getMarcaPieza();
+        modelo = pieza.getModeloPieza();
+        costo = pieza.getCostoPieza();
         
         //Stock real, de la BD
         int stock = pieza.getStockPieza();
         
         //Stock que se está manejando actualmente
-        int stockCarito = CoordinadorEstados.singleton().calcularStockAntesVenta(id);
+        int stockCarito = coordinadorEstados.calcularStockAntesVenta(pieza.getId());
         
         //Recalcula y usa este valor, considerando las piezas ya ingresadas al carrito
         int stockDisponible = stock - stockCarito;
@@ -61,7 +69,6 @@ public class InfoPieza extends JDialog {
         
         //Crea un arreglo de Strings con base en la información de la pieza
         String[] info = {
-            "ID de la pieza: " + id,
             "Nombre: " + nombre,
             "Categoría: " + categoria,
             "Marca: " + marca,
@@ -120,16 +127,12 @@ public class InfoPieza extends JDialog {
                     UtilSwing.dialogoAlerta(InfoPieza.this, cantidad + " excede el stock actual (" + stockDisponible + ")");
                     return;
                 }
-                
+
                 //Crea el detalle
-                DetallesVentaDTO detalle = new DetallesVentaDTO();
-                detalle.setPieza(pieza);
-                detalle.setCantidad(cantidad);
-                detalle.setCosto(costo);
-                detalle.setSubtotal(cantidad*costo);
+                DetallesVentaDTO detalle = ensambladorDTO.ensamblarDetalleVentaDTO(cantidad, pieza);
                 
                 //Agrega el detalle al carrito y notifica al observador
-                CoordinadorEstados.singleton().agregarCarritoVenta(detalle);
+                coordinadorEstados.agregarCarritoVenta(detalle);
                 observador.observar();
                 UtilSwing.dialogoAviso(this, "Se agregaron " + cantidad + " de la pieza " + nombre);
                 this.dispose();

@@ -1,8 +1,10 @@
 package coordinadores;
+import DTOS.DTO;
 import DTOS.EmpleadoDTO;
 import java.util.function.Supplier;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import observadores.IObservador;
 
 /**
  * Interfaz de un coordiandor que navega entre frames
@@ -45,7 +47,15 @@ public interface ICoordinadorPresentacion {
      */
     void abrirDialogo(Supplier<? extends JDialog> formulario);
     
-
+    /** Abre la ventana del resumen de una venta (carrito) */
+    void abrirResumenVenta();
+    
+    
+    public void abrirInfoPieza(IObservador observador, DTO dto);
+    
+    void abrirInfoDetalle();
+    
+    
     void navegar(JFrame actual, Supplier<JFrame> siguiente);
     
     void arrancar();
