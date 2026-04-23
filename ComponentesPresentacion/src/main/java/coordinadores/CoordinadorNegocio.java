@@ -52,11 +52,54 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
      * 
      * @return la cantidad de tipos de piezas en específico
      */
+    @Override
     public int totalProductos() {
         return fachadaVentas.consultarPiezas().size();
     }
     
-    
+    /**
+     * Regresa las piezas más vendidas al día en el sistema, dadas directamente
+     * por el IFachadaVentas
+     *
+     * @return lista de PiezaDTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopDiaPiezas() {
+        return fachadaVentas.consultarTopDiaPiezas();
+    }
+
+    /**
+     * Regresa las piezas más vendidas a la semana en el sistema, dadas
+     * directamente por el IFachadaVentas
+     *
+     * @return lista de PiezaDTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopSemanaPiezas() {
+        return fachadaVentas.consultarTopSemanaPiezas();
+    }
+
+    /**
+     * Regresa las piezas más vendidas al mes en el sistema, dadas directamente
+     * por el IFachadaVentas
+     *
+     * @return lista de PiezaDTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopMesPiezas() {
+        return fachadaVentas.consultarTopMesPiezas();
+    }
+
+    /**
+     * Regresa las piezas más vendidas en todo el tiempo en el sistema, dadas
+     * directamente por el IFachadaVentas
+     *
+     * @return lista de PiezaDTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopTodoPiezas() {
+        return fachadaVentas.consultarTopTodoPiezas();
+    }
     
     /**
      * Orquesta todos los métodos necesarios para llevar a

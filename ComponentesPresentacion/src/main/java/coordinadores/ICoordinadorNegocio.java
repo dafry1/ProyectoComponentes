@@ -34,6 +34,38 @@ public interface ICoordinadorNegocio {
     public int totalProductos();
     
     /**
+     * Regresa las piezas más vendidas al día en el sistema, dadas directamente
+     * por el IFachadaVentas
+     *
+     * @return lista de PiezaDTO
+     */
+    public List<PiezaDTO> consultarTopDiaPiezas();
+
+    /**
+     * Regresa las piezas más vendidas a la semana en el sistema, dadas
+     * directamente por el IFachadaVentas
+     *
+     * @return lista de PiezaDTO
+     */
+    public List<PiezaDTO> consultarTopSemanaPiezas();
+
+    /**
+     * Regresa las piezas más vendidas al mes en el sistema, dadas directamente
+     * por el IFachadaVentas
+     *
+     * @return lista de PiezaDTO
+     */
+    public List<PiezaDTO> consultarTopMesPiezas();
+
+    /**
+     * Regresa las piezas más vendidas en todo el tiempo en el sistema, dadas
+     * directamente por el IFachadaVentas
+     *
+     * @return lista de PiezaDTO
+     */
+    public List<PiezaDTO> consultarTopTodoPiezas();
+    
+    /**
      * Orquesta todos los métodos necesarios para llevar a
      * cabo una venta dentro del sistema. Actualiza stock,
      * limpia el carrito, etc.

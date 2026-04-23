@@ -36,6 +36,46 @@ public class FachadaVentas implements IFachadaVentas {
     }
 
     /**
+     * Consulta las piezas más vendidas en el día del sistema
+     *
+     * @return lista de PiezaDTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopDiaPiezas() {
+        return controlVentas.consultarPiezas();
+    }
+
+    /**
+     * Consulta las piezas más vendidas en la semana del sistema
+     *
+     * @return lista de PiezaDTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopSemanaPiezas() {
+        return controlVentas.consultarPiezas();
+    }
+
+    /**
+     * Consulta las piezas más vendidas en el mes del sistema
+     *
+     * @return lista de PiezaDTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopMesPiezas() {
+        return controlVentas.consultarPiezas();
+    }
+
+    /**
+     * Consulta las piezas más vendidas en todo el tiempo del sistema
+     *
+     * @return lista de PiezaDTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopTodoPiezas() {
+        return controlVentas.consultarPiezas();
+    }
+    
+    /**
      * Orquesta la lógica de procesar una venta (registro de
      * la venta, actualización de stock)
      * 

@@ -60,7 +60,7 @@ public class Vinicio extends JFrame {
         private JPanel panelCartas;
         private JPanel panelPuntos;
         private int indiceActual = 0;
-        private final int TOTAL_PRODUCTOS = coordinadorNegocio.totalProductos();
+        private int TOTAL_PRODUCTOS;
 
         public TarjetaCarrusel(String titulo) {
             super(45, new Color(0, 95, 255));
@@ -79,6 +79,33 @@ public class Vinicio extends JFrame {
             for (PiezaDTO pieza: coordinadorNegocio.consultarPiezas()) {
                 panelCartas.add(generarContenidoProducto(pieza));
             }
+            
+            /*
+            if (titulo.equals("Piezas más vendidas (día)")) {
+                for (PiezaDTO pieza : CoordinadorNegocio.getInstance().consultarTopDiaPiezas()) {
+                    panelCartas.add(generarContenidoProducto(pieza));
+                }
+                TOTAL_PRODUCTOS = CoordinadorNegocio.getInstance().consultarTopDiaPiezas().size();
+            }
+            if (titulo.equals("Piezas más vendidas (semana)")) {
+                for (PiezaDTO pieza : CoordinadorNegocio.getInstance().consultarTopSemanaPiezas()) {
+                    panelCartas.add(generarContenidoProducto(pieza));
+                }
+                TOTAL_PRODUCTOS = CoordinadorNegocio.getInstance().consultarTopSemanaPiezas().size();
+            }
+            if (titulo.equals("Piezas más vendidas (mes)")) {
+                for (PiezaDTO pieza : CoordinadorNegocio.getInstance().consultarTopMesPiezas()) {
+                    panelCartas.add(generarContenidoProducto(pieza));
+                }
+                TOTAL_PRODUCTOS = CoordinadorNegocio.getInstance().consultarTopMesPiezas().size();
+            }
+            if (titulo.equals("Piezas más vendidas (todo el tiempo)")) {
+                for (PiezaDTO pieza : CoordinadorNegocio.getInstance().consultarTopTodoPiezas()) {
+                    panelCartas.add(generarContenidoProducto(pieza));
+                }
+                TOTAL_PRODUCTOS = CoordinadorNegocio.getInstance().consultarTopTodoPiezas().size();
+            }
+             */
 
             add(panelCartas, BorderLayout.CENTER);
 
