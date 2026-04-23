@@ -40,13 +40,60 @@ public class ControlVentas implements IControlVentas {
      * 
      * @return lista de tipo PiezaDTO
      */
+    @Override
     public List<PiezaDTO> consultarPiezas() {
         List<PiezaDTO> piezas = piezaBO.consultarPiezas();
         LOG.log(System.Logger.Level.INFO, ">> Piezas consultadas con éxito: " + piezas.size());
         return piezas;
     }
     
+    /**
+     * Consulta las piezas más vendidas en el día del sistema
+     *
+     * @return lista de PiezaDTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopDiaPiezas() {
+        List<PiezaDTO> piezasTopDia = piezaBO.consultarTopDiaPiezas();
+        LOG.log(System.Logger.Level.INFO, ">> Piezas consultadas con éxito: " + piezasTopDia.size());
+        return piezasTopDia;
+    }
     
+    /**
+     * Consulta las piezas más vendidas en la semana del sistema
+     *
+     * @return lista de PiezaDTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopSemanaPiezas() {
+        List<PiezaDTO> piezasTopSemana = piezaBO.consultarTopSemanaPiezas();
+        LOG.log(System.Logger.Level.INFO, ">> Piezas consultadas con éxito: " + piezasTopSemana.size());
+        return piezasTopSemana;
+    }
+    
+    /**
+     * Consulta las piezas más vendidas en el mes del sistema
+     *
+     * @return lista de PiezaDTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopMesPiezas() {
+        List<PiezaDTO> piezasTopMes = piezaBO.consultarTopMesPiezas();
+        LOG.log(System.Logger.Level.INFO, ">> Piezas consultadas con éxito: " + piezasTopMes.size());
+        return piezasTopMes;
+    }
+    
+    /**
+     * Consulta las piezas más vendidas en todo el tiempo del sistema
+     *
+     * @return lista de PiezaDTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopTodoPiezas() {
+        List<PiezaDTO> piezasTopTodo = piezaBO.consultarTopTodoPiezas();
+        LOG.log(System.Logger.Level.INFO, ">> Piezas consultadas con éxito: " + piezasTopTodo.size());
+        return piezasTopTodo;
+    }
     
     /**
      * Actualiza el stock de PiezaBO y registra
@@ -57,6 +104,7 @@ public class ControlVentas implements IControlVentas {
      * 
      * @return la venta registrada
      */
+    @Override
     public VentaDTO procesarVenta(ClienteDTO cliente, List<DetallesVentaDTO> detalles) {
         
         //Excepción si la lista está vacía o es null

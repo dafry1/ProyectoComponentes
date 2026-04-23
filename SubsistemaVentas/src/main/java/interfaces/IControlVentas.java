@@ -23,6 +23,34 @@ public interface IControlVentas {
     List<PiezaDTO> consultarPiezas();
     
     /**
+     * Consulta las piezas más vendidas en el día del sistema
+     *
+     * @return lista de PiezaDTO
+     */
+    List<PiezaDTO> consultarTopDiaPiezas();
+    
+    /**
+     * Consulta las piezas más vendidas en la semana del sistema
+     *
+     * @return lista de PiezaDTO
+     */
+    List<PiezaDTO> consultarTopSemanaPiezas();
+    
+    /**
+     * Consulta las piezas más vendidas en el mes del sistema
+     *
+     * @return lista de PiezaDTO
+     */
+    List<PiezaDTO> consultarTopMesPiezas();
+    
+    /**
+     * Consulta las piezas más vendidas en todo el tiempo del sistema
+     *
+     * @return lista de PiezaDTO
+     */
+    List<PiezaDTO> consultarTopTodoPiezas();
+    
+    /**
      * Hace todo el proceso de llevar a cabo una venta
      * 
      * @param cliente

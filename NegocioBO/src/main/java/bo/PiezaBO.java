@@ -63,7 +63,46 @@ public class PiezaBO implements IPiezaBO {
         return PIEZAS;
     }
     
+    /**
+     * Consulta las piezas más vendidas al día registradas en el sistema
+     * 
+     * @return la lista de piezas en DTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopDiaPiezas(){
+        return PIEZAS;
+    }
     
+    /**
+     * Consulta las piezas más vendidas a la semana registradas en el sistema
+     * 
+     * @return la lista de piezas en DTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopSemanaPiezas(){
+        return PIEZAS;
+    }
+    
+    /**
+     * Consulta las piezas más vendidas al mes registradas en el sistema
+     * 
+     * @return la lista de piezas en DTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopMesPiezas(){
+        return PIEZAS;
+    }
+    
+    /**
+     * Consulta las piezas más vendidas en todo el tiempo registradas en
+     * el sistema
+     * 
+     * @return la lista de piezas en DTO
+     */
+    @Override
+    public List<PiezaDTO> consultarTopTodoPiezas(){
+        return PIEZAS;
+    }
     
     /**
      * Busca la pieza del detalle para actualizar el stock de esa pieza

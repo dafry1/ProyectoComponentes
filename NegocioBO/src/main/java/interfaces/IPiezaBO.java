@@ -20,6 +20,35 @@ public interface IPiezaBO {
     List<PiezaDTO> consultarPiezas();
     
     /**
+     * Consulta las piezas más vendidas al día registradas en el sistema
+     * 
+     * @return la lista de piezas en DTO
+     */
+    List<PiezaDTO> consultarTopDiaPiezas();
+    
+    /**
+     * Consulta las piezas más vendidas a la semana registradas en el sistema
+     * 
+     * @return la lista de piezas en DTO
+     */
+    List<PiezaDTO> consultarTopSemanaPiezas();
+    
+    /**
+     * Consulta las piezas más vendidas al mes registradas en el sistema
+     * 
+     * @return la lista de piezas en DTO
+     */
+    List<PiezaDTO> consultarTopMesPiezas();
+    
+    /**
+     * Consulta las piezas más vendidas en todo el tiempo registradas en
+     * el sistema
+     * 
+     * @return la lista de piezas en DTO
+     */
+    List<PiezaDTO> consultarTopTodoPiezas();
+    
+    /**
      * Actualiza el stock de una pieza en específica basándose
      * en un DetallesVentaDTO en específico
      * 
