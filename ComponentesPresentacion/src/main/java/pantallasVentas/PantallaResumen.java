@@ -4,6 +4,7 @@ import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import coordinadores.CoordinadorEstados;
 import coordinadores.CoordinadorNegocio;
+import coordinadores.ICoordinadorEstados;
 import coordinadores.ICoordinadorPresentacion;
 import java.awt.*;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class PantallaResumen extends JFrame implements IObservador {
     private JPanel contenedorListaDetalles;
     
     //CoordinadorPresentacion que mueve pantallas
-    private ICoordinadorPresentacion coordinador;
+    private ICoordinadorPresentacion coordinadorPresentacion;
     
     //Siempre actualizado desde el CoordiandorEstados
     private double totalCarrito = CoordinadorEstados.singleton().totalCarritoVenta();
@@ -43,16 +44,16 @@ public class PantallaResumen extends JFrame implements IObservador {
     /**
      * Constructor donde se ensambla toda el frame
      * 
-     * @param coordinador que navegará entre pantallas
+     * @param coordinadorPresentacion que navegará entre pantallas
      */
-    public PantallaResumen(ICoordinadorPresentacion coordinador) {
-        this.coordinador = coordinador;
+    public PantallaResumen(ICoordinadorPresentacion coordinadorPresentacion, ICoordinadorEstados coordinadorEstados) {
+        this.coordinadorPresentacion = coordinadorPresentacion;
         
         //Configuración general
         UtilSwing.configurarFrame("Iniciar venta", this);
 
         //Añade el panel posterior
-        add(UtilBuild.crearNavegacion(this, coordinador), BorderLayout.NORTH);
+        add(UtilBuild.crearNavegacion(this, coordinadorPresentacion), BorderLayout.NORTH);
 
         //Crea el panel principal que contiene lo importante
         JPanel contenido = new JPanel(new GridBagLayout()); 
@@ -124,7 +125,7 @@ public class PantallaResumen extends JFrame implements IObservador {
         
         //Crea el botón de regreso
         JButton botonRegresar = UtilBoton.crearBotonRegresar();
-        botonRegresar.addActionListener(e -> coordinador.mostrarVentanaInicio());
+        botonRegresar.addActionListener(e -> coordinadorPresentacion.mostrarVentanaInicio());
 
         //Creaa el botón de continuar y le agrega navegación
         JButton botonContinuar = UtilBoton.crearBoton("Continuar");

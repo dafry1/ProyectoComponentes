@@ -4,6 +4,7 @@ import DTOS.DTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import coordinadores.CoordinadorEstados;
+import coordinadores.ICoordinadorEstados;
 import java.awt.Component;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -24,13 +25,9 @@ import utilPresentacion.UtilGeneral;
  * @author Andre
  */
 public class InfoPieza extends JDialog {
-
-    //Observa la pieza elegida
-    private IObservador observador;
-
-    public InfoPieza(IObservador observador, DTO dto) {
-        // Configuración inicial
-        this.observador = observador;   
+    
+    public InfoPieza(ICoordinadorEstados coordinadorEstados, IObservador observador, DTO dto) {
+        // Configuración inicial  
         this.setModal(false);
         this.setResizable(true);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

@@ -14,7 +14,7 @@ import interfaces.IVentaBO;
  * necesarios en forma de contratos de interfaces. También
  * está respaldada por una interfaz ya para que amarre 🚬
  * 
- * @author Andre
+ * @author Andre-
  */
 public class FabricaBO implements IFabricaBO {
     private static IFabricaBO instancia;

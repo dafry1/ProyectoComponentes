@@ -58,6 +58,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
      * 
      * @param coordinadorPresentacion que navegará entre pantallas
      * @param coordinadorNegocio para lógica de procesos
+     * @param coordinadorEstados
      */
     public ViniciarVenta(ICoordinadorPresentacion coordinadorPresentacion, ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados) {
         this.coordinadorPresentacion = coordinadorPresentacion;
@@ -392,7 +393,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
 
             //Agrega funcionalidad al botón de mostrarInfo
             botonInfo.addActionListener(e -> {
-                coordinadorPresentacion.abrirDialogo(() -> new InfoPieza(ViniciarVenta.this, botonInfo.getDTO()));
+                coordinadorPresentacion.abrirDialogo(() -> new InfoPieza(coordinadorEstados, ViniciarVenta.this, botonInfo.getDTO()));
             });
 
             //Agrega al panel principal
@@ -416,7 +417,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
      */
     @Override
     public void observar() {
-        totalCarrito = CoordinadorEstados.singleton().totalCarritoVenta();
+        totalCarrito = coordinadorEstados.totalCarritoVenta();
         labelTotal.setText("Total: $ " + totalCarrito);
         contenedorListaDetalles.removeAll();
         dibujarTarjetasCarrito();
