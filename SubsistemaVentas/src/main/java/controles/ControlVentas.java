@@ -6,7 +6,6 @@ import DTOS.PiezaDTO;
 import DTOS.VentaDTO;
 import excepciones.NegocioException;
 import fabricas.FabricaBO;
-import interfaces.IControlVentas;
 import interfaces.IFabricaBO;
 import interfaces.IPiezaBO;
 import interfaces.IVentaBO;
@@ -19,7 +18,7 @@ import java.util.List;
  * 
  * @author Andre
  */
-public class ControlVentas implements IControlVentas {
+public class ControlVentas{
     private static final System.Logger LOG = System.getLogger(ControlVentas.class.getName());
     private static final String CARRITO_VACIO = "No se puede procesar una venta con un carrito vacío";
     private static final String SIN_CLIENTE = "No se asignó un cliente para la venta";
@@ -40,10 +39,9 @@ public class ControlVentas implements IControlVentas {
      * 
      * @return lista de tipo PiezaDTO
      */
-    @Override
     public List<PiezaDTO> consultarPiezas() {
         List<PiezaDTO> piezas = piezaBO.consultarPiezas();
-        LOG.log(System.Logger.Level.INFO, ">> Piezas consultadas con éxito: " + piezas.size());
+        LOG.log(System.Logger.Level.INFO, () -> ">> Piezas consultadas con éxito: " + piezas.size());
         return piezas;
     }
     
@@ -52,10 +50,9 @@ public class ControlVentas implements IControlVentas {
      *
      * @return lista de PiezaDTO
      */
-    @Override
     public List<PiezaDTO> consultarTopDiaPiezas() {
         List<PiezaDTO> piezasTopDia = piezaBO.consultarTopDiaPiezas();
-        LOG.log(System.Logger.Level.INFO, ">> Piezas consultadas con éxito: " + piezasTopDia.size());
+        LOG.log(System.Logger.Level.INFO, () -> ">> Piezas consultadas con éxito: " + piezasTopDia.size());
         return piezasTopDia;
     }
     
@@ -64,10 +61,9 @@ public class ControlVentas implements IControlVentas {
      *
      * @return lista de PiezaDTO
      */
-    @Override
     public List<PiezaDTO> consultarTopSemanaPiezas() {
         List<PiezaDTO> piezasTopSemana = piezaBO.consultarTopSemanaPiezas();
-        LOG.log(System.Logger.Level.INFO, ">> Piezas consultadas con éxito: " + piezasTopSemana.size());
+        LOG.log(System.Logger.Level.INFO, () -> ">> Piezas consultadas con éxito: " + piezasTopSemana.size());
         return piezasTopSemana;
     }
     
@@ -76,10 +72,9 @@ public class ControlVentas implements IControlVentas {
      *
      * @return lista de PiezaDTO
      */
-    @Override
     public List<PiezaDTO> consultarTopMesPiezas() {
         List<PiezaDTO> piezasTopMes = piezaBO.consultarTopMesPiezas();
-        LOG.log(System.Logger.Level.INFO, ">> Piezas consultadas con éxito: " + piezasTopMes.size());
+        LOG.log(System.Logger.Level.INFO, () -> ">> Piezas consultadas con éxito: " + piezasTopMes.size());
         return piezasTopMes;
     }
     
@@ -88,10 +83,9 @@ public class ControlVentas implements IControlVentas {
      *
      * @return lista de PiezaDTO
      */
-    @Override
     public List<PiezaDTO> consultarTopTodoPiezas() {
         List<PiezaDTO> piezasTopTodo = piezaBO.consultarTopTodoPiezas();
-        LOG.log(System.Logger.Level.INFO, ">> Piezas consultadas con éxito: " + piezasTopTodo.size());
+        LOG.log(System.Logger.Level.INFO, () -> ">> Piezas consultadas con éxito: " + piezasTopTodo.size());
         return piezasTopTodo;
     }
     
@@ -100,10 +94,9 @@ public class ControlVentas implements IControlVentas {
      *
      * @return lista de tipo VentaDTO
      */
-    @Override
     public List<VentaDTO> consultarVentas() {
         List<VentaDTO> ventas = ventaBO.consultarVentas();
-        LOG.log(System.Logger.Level.INFO, ">> Ventas consultadas con éxito: " + ventas.size());
+        LOG.log(System.Logger.Level.INFO, () -> ">> Ventas consultadas con éxito: " + ventas.size());
         return ventas;
     }
     
@@ -116,7 +109,6 @@ public class ControlVentas implements IControlVentas {
      * 
      * @return la venta registrada
      */
-    @Override
     public VentaDTO procesarVenta(ClienteDTO cliente, List<DetallesVentaDTO> detalles) {
         
         //Excepción si la lista está vacía o es null
@@ -135,7 +127,7 @@ public class ControlVentas implements IControlVentas {
         //Actualiza stock y registra la venta
         piezaBO.actualizarStockTrasVenta(detalles);
         VentaDTO venta = ventaBO.registrarVenta(cliente, detalles);
-        LOG.log(System.Logger.Level.INFO, ">> Venta exitosa con la cantidad de: " + venta.getDetalles().size());
+        LOG.log(System.Logger.Level.INFO, () -> ">> Venta exitosa con la cantidad de: " + venta.getDetalles().size());
         return venta;
     }
 }

@@ -4,9 +4,8 @@ import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import DTOS.VentaDTO;
-import fabricas.FabricaControlesVentas;
-import interfaces.IControlVentas;
-import interfaces.IFabricaControlesVentas;
+import controles.ControlCarrito;
+import controles.ControlVentas;
 import interfaces.IFachadaVentas;
 import java.util.List;
 
@@ -18,12 +17,10 @@ import java.util.List;
 public class FachadaVentas implements IFachadaVentas {
 
     //Controles
-    IControlVentas controlVentas;
+    ControlVentas controlVentas = new ControlVentas();
+    ControlCarrito controlEstados = new ControlCarrito();
     
-    public FachadaVentas() {
-        IFabricaControlesVentas fabricaControlesVenta = FabricaControlesVentas.singleton();
-        this.controlVentas = fabricaControlesVenta.fabricarControlVentas();
-    }
+    public FachadaVentas() {}
     
     /**
      * Consulta las piezas del sistema
@@ -96,6 +93,8 @@ public class FachadaVentas implements IFachadaVentas {
      */
     @Override
     public VentaDTO procesarVenta(ClienteDTO cliente, List<DetallesVentaDTO> detalles) {
-        return controlVentas.procesarVenta(cliente, detalles);
+        VentaDTO venta = controlVentas.procesarVenta(cliente, detalles);
+        controlEstados.limpiarCarritoVenta();
+        return venta;
     }
 }

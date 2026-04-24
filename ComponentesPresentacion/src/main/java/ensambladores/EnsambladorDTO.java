@@ -6,7 +6,9 @@ import DTOS.PiezaDTO;
 /**
  * Aplica el patrón ensamblador. A diferencia de una fábrica
  * que te dice "ten esto", al ensamblador le dices "ordéname
- * en una clase los datos que aquí te traigo"
+ * en una clase los datos que aquí te traigo". No aplica para
+ * todos los DTO, naturalmente, sino para los que son creados
+ * en presentación
  * 
  * @author Andre
  */

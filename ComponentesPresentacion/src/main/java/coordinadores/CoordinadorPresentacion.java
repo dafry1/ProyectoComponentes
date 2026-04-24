@@ -22,15 +22,22 @@ import pantallasVentas.PantallaResumen;
  */
 public class CoordinadorPresentacion implements ICoordinadorPresentacion {
 
+    //Guarda el frame actual para usarlo en varios lugares
     private JFrame ventanaActual;
-    private boolean administrador = false;
     
+    //Auxiliares listos para inyectar en las pantallas necesarias
     private ICoordinadorNegocio coordinadorNegocio;
     private ICoordinadorEstados coordinadorEstados;
-    
     private IEnsambladorDTO ensambladorDTO;
     
-    /** Constructor */
+    /**
+     * Este constructor se usa en el método main, para inyectar una instancia de 
+     * las interfaces e irlas pasando a las pantallas que las ocupen
+     * 
+     * @param coordinadorNegocio
+     * @param coordinadorEstados
+     * @param ensambladorDTO 
+     */
     public CoordinadorPresentacion(ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados, IEnsambladorDTO ensambladorDTO) {
         this.coordinadorNegocio = coordinadorNegocio;
         this.coordinadorEstados = coordinadorEstados;
@@ -87,20 +94,36 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
 
     /**
      * Método privado para centralizar la lógica de cerrar la anterior y abrir
-     * la nueva.
+     * la nueva. Primero abre la ventana a navegar y luego cierra la anterior,
+     * evitando ese efecto como de parpadeo
      */
     private void abrirNuevaVentana(Supplier<JFrame> creadorVentana) {
         
-        //Anterior
-        JFrame ventanaVieja = ventanaActual;
-        if (ventanaActual != null) {
-            ventanaActual.dispose();
-        }
-
+        //Guarda el frame anterior
+        JFrame ventanaAnterior = ventanaActual;
+        
+        //Crea la nueva ventana
         ventanaActual = creadorVentana.get();
-        ventanaActual.setLocationRelativeTo(null);
+        
+        //La nueva ventana copia propiedades de la anterior
+        if (ventanaAnterior != null) {
+            ventanaActual.setBounds(ventanaAnterior.getBounds());
+            ventanaActual.setExtendedState(ventanaAnterior.getExtendedState());
+        } else {
+            ventanaActual.setLocationRelativeTo(null);
+        }
+        
+        //Muestra la ventana actual
         ventanaActual.setVisible(true);
         ventanaActual.toFront();
+
+        //Fuerza a sincronicar gráficos
+        java.awt.Toolkit.getDefaultToolkit().sync();
+        
+        //Cierra la ventana anterior
+        if (ventanaAnterior != null) {
+            ventanaAnterior.dispose();
+        }
     }
 
     @Override
@@ -111,10 +134,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
 
     @Override
     public void abrirDialogo(Supplier<? extends JDialog> formulario) {
-        // Los diálogos no cierran la ventana principal, se muestran encima
         JDialog dialogo = formulario.get();
-        dialogo.pack();
-        dialogo.setLocationRelativeTo(ventanaActual);
         dialogo.setVisible(true);
     }
 
