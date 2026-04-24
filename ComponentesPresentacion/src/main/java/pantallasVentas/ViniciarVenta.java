@@ -29,7 +29,8 @@ import utilPresentacion.UtilBoton.BotonAlmacenador;
  * @author DANIEL
  */
 public class ViniciarVenta extends JFrame implements IObservador {
-
+    JPanel panelPrincipal;
+    
     //Se usa en más de un método
     private JPanel contenedorListaPiezas;
     private JPanel contenedorListaDetalles;
@@ -53,6 +54,8 @@ public class ViniciarVenta extends JFrame implements IObservador {
     
     //Se usa en más de un método
     private JLabel labelTotal = new JLabel("Total: $ " + totalCarrito);
+    
+    
     
     /**
      * Constructor donde se ensambla toda el frame
@@ -198,13 +201,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
                 UtilSwing.dialogoAlerta(this, "El carrito está vacío");
                 return;
             }
-            
             coordinadorPresentacion.abrirResumenVenta();
-            
-            
-            //Procesa la venta
-            //VentaDTO venta = coordinadorNegocio.procesarVenta(coordinadorEstados, ViniciarVenta.this);
-            //UtilSwing.dialogoAviso(this, "Venta registrada exitosamente");
         });
 
         //Agrega los botones al panel
