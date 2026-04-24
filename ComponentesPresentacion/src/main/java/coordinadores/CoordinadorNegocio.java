@@ -23,7 +23,6 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
     private static final System.Logger LOG = System.getLogger(CoordinadorNegocio.class.getName());
     
     //Instancia de la fachada del subsistema de las ventas
-    //Ya lo creo a la brava porque ya me cansé de tanta fábrica :( TODO: FÁBRICA DE FACHADAS
     private IFachadaVentas fachadaVentas = new FachadaVentas();
     private IFachadaInicioSesion fachadaInicioSesion = new FachadaInicioSesion();
     

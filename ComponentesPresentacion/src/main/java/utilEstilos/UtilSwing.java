@@ -1,6 +1,7 @@
 package utilEstilos;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -12,17 +13,19 @@ import javax.swing.JOptionPane;
  * @author Andre
  */
 public class UtilSwing {
+    private static String ETIQUETA = Constantes.ETIQUETA_NEGOCIO;
+    
     
      /**
      * Configura el frame de donde se llame
      *
-     * @param titulo de la ventana más la etiqueta del sistema "TechnoWare"
-     * @param frame
+     * @param titulo de la ventana
+     * @param frame a configurar
      */
     public static void configurarFrame(String titulo, JFrame frame) {
-        frame.setTitle("Technoware - " + titulo);
+        frame.setTitle(ETIQUETA + titulo);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1300, 850);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLocationRelativeTo(null);
         frame.getContentPane().setBackground(Constantes.COLOR_FONDO);
         frame.setLayout(new BorderLayout()); //-> Este atrbituo puede cambiarse según se necesite
@@ -31,17 +34,14 @@ public class UtilSwing {
     
     
     /**
-     * En orden de instrucciones:
-     * -Acomoda en layout
-     * -Bloquea la pantalla de fondo
+     * Configura el diálogo
      * 
-     * @param dialogo
-     * @param esReajustable 
+     * @param dialogo 
      */
-    public static void configurarDialogoInicio(JDialog dialogo, boolean esReajustable) {
-        dialogo.setLayout(new BorderLayout());
-        dialogo.setResizable(esReajustable);
-        dialogo.setModal(true);
+    public static void configurarDialogoInicio(JDialog dialogo, String titulo) {
+        dialogo.setTitle(ETIQUETA + titulo);
+        dialogo.setResizable(true);
+        dialogo.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     }
     
     

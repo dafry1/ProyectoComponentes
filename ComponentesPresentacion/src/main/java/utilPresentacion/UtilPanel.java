@@ -64,15 +64,14 @@ public class UtilPanel {
         panel.setOpaque(true);
         
         //Establece dimensiones
-        panel.setMaximumSize(new Dimension(650, 100)); 
-        panel.setPreferredSize(new Dimension(600, 100));
+        panel.setMaximumSize(new Dimension(Short.MAX_VALUE, 120));
         
         //Posición
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.setLayout(new BorderLayout());
         
         //Borde
-        panel.setBorder(new EmptyBorder(5, 20, 5, 20));
+        panel.setBorder(new EmptyBorder(10, 25, 10, 25));
         return panel;
     }
 }

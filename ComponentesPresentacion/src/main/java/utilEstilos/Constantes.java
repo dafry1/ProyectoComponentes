@@ -9,6 +9,9 @@ import java.awt.Font;
  */
 public class Constantes {
     
+    /** Etiquetita dentro de los títutlos de las pantallas */
+    public static final String ETIQUETA_NEGOCIO = "Technoware - ";
+    
     /** Arreglo que ya define los campos de la barra superior de navegación */
     public static final String[] CAMPOS_PANEL_SUPERIOR = {
     "Inicio", "Iniciar venta", "Iniciar solicitud", "Historial de ventas", "Historial de solicitudes"};

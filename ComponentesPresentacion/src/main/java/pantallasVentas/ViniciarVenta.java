@@ -302,14 +302,15 @@ public class ViniciarVenta extends JFrame implements IObservador {
             panelInfoBasica.setOpaque(false);
             
             //Parte de ícono y descripción
-            String desc = "<html><body style='width: 120px'>" +
+            String desc = "<html><body style='width: 65%'>" +
                           "<font color='white' size='3'><b>"+nombre+"</b> ("+cantidad+")</font><br>" +
                           "<font color='white' size='2'>$ "+costo+"</font></body></html>";
             panelInfoBasica.add(new JLabel(desc));
             
             //Sección para mostrar información adicional: el precio y el botón de detalles
-            JPanel panelMostrarInfo = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 8));
+            JPanel panelMostrarInfo = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 8));
             panelMostrarInfo.setOpaque(false);
+            panelMostrarInfo.setPreferredSize(new Dimension(160, 50));
             
             //Label de precio
             JLabel lblP = new JLabel("$" + subtotal); 
@@ -362,6 +363,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         //Por cada pieza de la lista...
         for (PiezaDTO pieza: piezas) {
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
+            tarjeta.setLayout(new BorderLayout(20, 0));
         
             //Asigna valores
             nombre = pieza.getNombre();

@@ -19,7 +19,7 @@ public class EnsambladorDTO implements IEnsambladorDTO {
      * @param cantidad de la piza en específico
      * @param pieza que está en el detalle
      * 
-     * @return DTO listo
+     * @return detalle listo
      */
     @Override
     public DetallesVentaDTO ensamblarDetalleVentaDTO(int cantidad, PiezaDTO pieza) {

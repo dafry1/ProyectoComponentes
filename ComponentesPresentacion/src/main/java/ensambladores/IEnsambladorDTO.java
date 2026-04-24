@@ -6,7 +6,7 @@ import DTOS.PiezaDTO;
 /**
  * Establece el contrato para un ensamblador
  * de DTOs. Este ensamblador evitará ensuciar
- * a presentación eso de set
+ * a presentación eso de setters
  * 
  * @author Andre
  */

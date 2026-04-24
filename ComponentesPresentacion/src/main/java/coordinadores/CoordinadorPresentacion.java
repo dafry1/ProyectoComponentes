@@ -1,6 +1,7 @@
 package coordinadores;
 
 import DTOS.DTO;
+import DTOS.PiezaDTO;
 import ensambladores.IEnsambladorDTO;
 import pantallasPrincipales.VinicioSesion;
 import pantallasPrincipales.Vinicio;
@@ -89,12 +90,15 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
      * la nueva.
      */
     private void abrirNuevaVentana(Supplier<JFrame> creadorVentana) {
+        
+        //Anterior
+        JFrame ventanaVieja = ventanaActual;
         if (ventanaActual != null) {
             ventanaActual.dispose();
         }
 
         ventanaActual = creadorVentana.get();
-        ventanaActual.setLocationRelativeTo(null); // Centrar
+        ventanaActual.setLocationRelativeTo(null);
         ventanaActual.setVisible(true);
         ventanaActual.toFront();
     }
@@ -127,8 +131,8 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     }
 
     @Override
-    public void abrirInfoPieza(IObservador observador, DTO dto) {
-        abrirDialogo(() -> new InfoPieza(coordinadorEstados, observador, dto, ensambladorDTO));
+    public void abrirInfoPieza(IObservador observador, PiezaDTO pieza) {
+        abrirDialogo(() -> new InfoPieza(coordinadorEstados, observador, pieza, ensambladorDTO));
     }
 
     @Override
