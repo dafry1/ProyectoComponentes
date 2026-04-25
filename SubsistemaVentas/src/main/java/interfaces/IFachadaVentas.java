@@ -60,12 +60,11 @@ public interface IFachadaVentas {
      * Orquesta la lógica de procesar una venta (registro de
      * la venta, actualización de stock)
      * 
-     * @param cliente que compró las piezas
-     * @param detalles de la venta
+     * @param venta a procesar
      * 
      * @return la venta registrada
      */
-    VentaDTO procesarVenta(ClienteDTO cliente, List<DetallesVentaDTO> detalles);
+    VentaDTO procesarVenta(VentaDTO venta);
     
     /**
      * Regresa la lista inmutable de ventas

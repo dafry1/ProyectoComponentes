@@ -97,15 +97,14 @@ public class FachadaVentas implements IFachadaVentas {
      * Orquesta la lógica de procesar una venta (registro de
      * la venta, actualización de stock)
      * 
-     * @param cliente que compró las piezass
-     * @param detalles de la venta
+     * @param venta a procesar
      * 
      * @return la venta registrada
      */
     @Override
-    public VentaDTO procesarVenta(ClienteDTO cliente, List<DetallesVentaDTO> detalles) {
-        VentaDTO venta = controlVentas.procesarVenta(cliente, detalles);
-        controlCarrito.limpiarCarritoVenta();
+    public VentaDTO procesarVenta(VentaDTO venta) {
+        controlVentas.procesarVenta(venta);
+        limpiarCarritoVenta();
         return venta;
     }
 

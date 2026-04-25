@@ -114,25 +114,22 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
     }
     
     /**
-     * Orquesta todos los métodos necesarios para llevar a
-     * cabo una venta dentro del sistema. Actualiza stock,
-     * limpia el carrito, etc.
+     * Procesa la venta de la fachada y verifica lo que le importa
+     * de presentación: el observador
      * 
-     * @param coordinadorEstados
+     * @param venta a procesar
      * @param observador si se necesita actualizar algo. Puede ser null
      */
     @Override
-    public VentaDTO procesarVenta(ICoordinadorEstados coordinadorEstados, IObservador observador) {
+    public VentaDTO procesarVenta(VentaDTO venta, IObservador observador) {
         
-        List<DetallesVentaDTO> carrito = coordinadorEstados.getCarritoVenta();
-        
-        //Excepción si la lista está vacía o el carrito es null
-        if (carrito == null || carrito.isEmpty()) {
-            throw new PresentacionException("El carrito está vacío");
+        //Excepción si es null
+        if (venta == null) {
+            throw new PresentacionException("Venta vacía");
         }
         
         //Procesa la venta directamente de la fachada
-        VentaDTO venta = fachadaVentas.procesarVenta(null, carrito);
+        fachadaVentas.procesarVenta(venta);
 
         //Activa al observador si existe
         if (observador != null) {

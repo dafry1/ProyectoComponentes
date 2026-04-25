@@ -147,7 +147,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     
     @Override
     public void abrirResumenVenta() {
-        abrirNuevaVentana(() -> new PantallaResumen(this, coordinadorNegocio, coordinadorEstados));
+        abrirNuevaVentana(() -> new PantallaResumen(this, coordinadorNegocio, coordinadorEstados, ensambladorDTO));
     }
 
     @Override

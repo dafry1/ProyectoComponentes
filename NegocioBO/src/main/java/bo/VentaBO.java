@@ -31,16 +31,12 @@ public class VentaBO implements IVentaBO {
     /**
      * Registra una venta en el sistema
      * 
-     * @param cliente que compró las piezas
-     * @param detalles que compró el client
+     * @param venta
      * 
      * @return la venta creada
      */
     @Override
-    public VentaDTO registrarVenta(ClienteDTO cliente, List<DetallesVentaDTO> detalles) {
-        VentaDTO venta = new VentaDTO();
-        venta.setCliente(cliente);
-        venta.setDetalles(detalles);
+    public VentaDTO registrarVenta(VentaDTO venta) {
         generarFecha(venta); //-> FIXME: ESTO ES TEMPORAL TAMBIEN
         generarFolio(venta); //-> FIXME: DE IGUAL FORMA ES UNA IMPLEMENTACIÓN TEMPORAL
         VENTAS.add(venta);
