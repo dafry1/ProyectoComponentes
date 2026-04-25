@@ -2,7 +2,6 @@ package controles;
 
 import DTOS.EmpleadoDTO;
 import fabricas.FabricaBO;
-import interfaces.IControlInicioSesion;
 import interfaces.IFabricaBO;
 import interfaces.IEmpleadoBO;
 import java.util.List;
@@ -13,25 +12,18 @@ import java.util.List;
  * 
  * @author Andre
  */
-public class ControlInicioSesion implements IControlInicioSesion {
+public class ControlSesion {
     
     //BOs necesarios
     private final IEmpleadoBO empleadoBO;
     
-    /** Constructor que se autoinyecta dependencias gracias a la fábrica */
-    public ControlInicioSesion() {
-        IFabricaBO fabricaBO = FabricaBO.singleton();
-        this.empleadoBO = fabricaBO.fabricarEmpleado();
-    }
-    
     /**
-     * Llama al BO para consultar todos los empleados
+     * Constructor con fábrica inyectada
      * 
-     * @return la lista de empleados
+     * @param fabricaBO que suministra
      */
-    @Override
-    public List<EmpleadoDTO> consultarEmpleados() {
-        return empleadoBO.consultarEmpleados();
+    public ControlSesion(IFabricaBO fabricaBO) {
+        this.empleadoBO = fabricaBO.fabricarEmpleado();
     }
     
     /**
@@ -42,7 +34,6 @@ public class ControlInicioSesion implements IControlInicioSesion {
      * 
      * @return el empleado
      */
-    @Override
     public EmpleadoDTO verificarEmpleado(String nombreUsuario, String contra) {
         return empleadoBO.verificarEmpleado(nombreUsuario, contra);
     }

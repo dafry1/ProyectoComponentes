@@ -2,6 +2,10 @@ package coordinadores;
 
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
+import fachada.FachadaInicioSesion;
+import fachadas.FachadaVentas;
+import interfaces.IFachadaInicioSesion;
+import interfaces.IFachadaVentas;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +19,10 @@ import java.util.List;
  */
 public class CoordinadorEstados implements ICoordinadorEstados {
 
+    //Fachadas de las cuales necesita los métodos de estados
+    private final IFachadaInicioSesion fachadaSesion = new FachadaInicioSesion();
+    private final IFachadaVentas fachadaVentas = new FachadaVentas();
+    
     //Instancia de sí mismo
     private static CoordinadorEstados instancia = null;
     private EmpleadoDTO usuarioLogueado;
@@ -73,33 +81,34 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     }
 
     //----- MÉTODOS DEL CARRITO DE VENTAS -----//
-    //Carrito actual
-    private List<DetallesVentaDTO> carritoVenta = new ArrayList<>();
-
     /**
      * Regresa una lista inmutable del carrito. Solo el coordinador la puede
      * modificar
+     * @return 
      */
-    public List<DetallesVentaDTO> getCarritoVenta() {
-        return Collections.unmodifiableList(carritoVenta);
+    @Override
+     public List<DetallesVentaDTO> getCarritoVenta() {
+        return fachadaVentas.getCarritoVenta();
     }
 
     /**
      * Agrega una pieza al carrito sin tocar directamente la referencia a la
      * lista
+     * @param detalle
      */
+    @Override
     public void agregarCarritoVenta(DetallesVentaDTO detalle) {
-        if (detalle != null) {
-            carritoVenta.add(detalle);
-        }
+        fachadaVentas.agregarCarritoVenta(detalle);
     }
 
     /**
      * Elimina una pieza del carrito sin tocar directamente la referencia a la
      * lista
+     * @param detalle
      */
+    @Override
     public void eliminarCarritoVenta(DetallesVentaDTO detalle) {
-        carritoVenta.remove(detalle);
+        fachadaVentas.eliminarCarritoVenta(detalle);
     }
 
     /**
@@ -107,8 +116,9 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      *
      * @return total del carrito
      */
+    @Override
     public double totalCarritoVenta() {
-        return carritoVenta.stream().mapToDouble(DetallesVentaDTO::getSubtotal).sum();
+        return fachadaVentas.totalCarritoVenta();
     }
     
     /**
@@ -116,15 +126,17 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      * 
      * @return true si está vacío, false de lo contrario
      */
+    @Override
     public boolean carritoVentaVacio() {
-        return carritoVenta.isEmpty();
+        return fachadaVentas.carritoVentaVacio();
     }
 
     /**
      * Encapsula la lógica de limpiar el carrito
      */
+    @Override
     public void limpiarCarritoVenta() {
-        carritoVenta.clear();
+        fachadaVentas.limpiarCarritoVenta();
     }
 
     /**
@@ -137,10 +149,9 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      *
      * @return cantidad de stock de dicha pieza
      */
+    @Override
     public int calcularStockAntesVenta(Long id) {
-        return carritoVenta.stream()
-                .filter(d -> d.getPieza().getId().equals(id))
-                .mapToInt(DetallesVentaDTO::getCantidad).sum();
+        return fachadaVentas.calcularStockAntesVenta(id);
     }
 
 }

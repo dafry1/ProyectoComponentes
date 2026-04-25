@@ -26,6 +26,8 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
     private IFachadaVentas fachadaVentas = new FachadaVentas();
     private IFachadaInicioSesion fachadaInicioSesion = new FachadaInicioSesion();
     
+    //Coordinador auxiliar
+    
     //Constructor
     public CoordinadorNegocio() {
         //this.fachadaVentas = fachadaVentas;
@@ -131,10 +133,7 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
         
         //Procesa la venta directamente de la fachada
         VentaDTO venta = fachadaVentas.procesarVenta(null, carrito);
-        
-        //Limpia el carrito de ventas
-        coordinadorEstados.limpiarCarritoVenta();
-        
+
         //Activa al observador si existe
         if (observador != null) {
             observador.observar();

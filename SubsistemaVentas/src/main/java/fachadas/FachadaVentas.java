@@ -5,21 +5,32 @@ import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import DTOS.VentaDTO;
 import controles.ControlCarrito;
+import controles.ControlCatalogo;
 import controles.ControlVentas;
+import fabricas.FabricaBO;
+import interfaces.IFabricaBO;
 import interfaces.IFachadaVentas;
 import java.util.List;
 
 /**
- * Fachada que encapsula los métodos de los controles
+ * Fachada que encapsula y coordina los métodos de los controles para
+ * procesos enteros de negocio. Por ejemplo, para procesar una venta,
+ * llama a ControlVentas para registrarla y a ControlCarrito para
+ * vaciar los productos seleccionados en la sesión
  * 
  * @author Andre
  */
 public class FachadaVentas implements IFachadaVentas {
 
-    //Controles
-    ControlVentas controlVentas = new ControlVentas();
-    ControlCarrito controlEstados = new ControlCarrito();
+    //Fábrica de BO que inyecta a los controles
+    private final IFabricaBO fabricaBO = FabricaBO.singleton();
     
+    //Controles
+    private final ControlCatalogo controlCatalogo = new ControlCatalogo(fabricaBO);
+    private final ControlVentas controlVentas = new ControlVentas(fabricaBO);
+    private final ControlCarrito controlCarrito = new ControlCarrito();
+    
+    /** Constructor vacío */
     public FachadaVentas() {}
     
     /**
@@ -29,7 +40,7 @@ public class FachadaVentas implements IFachadaVentas {
      */
     @Override
     public List<PiezaDTO> consultarPiezas() {
-        return controlVentas.consultarPiezas();
+        return controlCatalogo.consultarPiezas();
     }
 
     /**
@@ -39,7 +50,7 @@ public class FachadaVentas implements IFachadaVentas {
      */
     @Override
     public List<PiezaDTO> consultarTopDiaPiezas() {
-        return controlVentas.consultarPiezas();
+        return controlCatalogo.consultarPiezas();
     }
 
     /**
@@ -49,7 +60,7 @@ public class FachadaVentas implements IFachadaVentas {
      */
     @Override
     public List<PiezaDTO> consultarTopSemanaPiezas() {
-        return controlVentas.consultarPiezas();
+        return controlCatalogo.consultarPiezas();
     }
 
     /**
@@ -59,7 +70,7 @@ public class FachadaVentas implements IFachadaVentas {
      */
     @Override
     public List<PiezaDTO> consultarTopMesPiezas() {
-        return controlVentas.consultarPiezas();
+        return controlCatalogo.consultarPiezas();
     }
 
     /**
@@ -69,7 +80,7 @@ public class FachadaVentas implements IFachadaVentas {
      */
     @Override
     public List<PiezaDTO> consultarTopTodoPiezas() {
-        return controlVentas.consultarPiezas();
+        return controlCatalogo.consultarPiezas();
     }
     
     /**
@@ -94,7 +105,74 @@ public class FachadaVentas implements IFachadaVentas {
     @Override
     public VentaDTO procesarVenta(ClienteDTO cliente, List<DetallesVentaDTO> detalles) {
         VentaDTO venta = controlVentas.procesarVenta(cliente, detalles);
-        controlEstados.limpiarCarritoVenta();
+        controlCarrito.limpiarCarritoVenta();
         return venta;
     }
+
+    /**
+     * Regresa el carrito
+     * 
+     * @return lista de detalles
+     */
+    @Override
+    public List<DetallesVentaDTO> getCarritoVenta() {
+        return controlCarrito.getCarritoVenta();
+    }
+
+    /**
+     * Agrega un detalle
+     * 
+     * @param detalle 
+     */
+    @Override
+    public void agregarCarritoVenta(DetallesVentaDTO detalle) {
+        controlCarrito.agregarCarritoVenta(detalle);
+    }
+
+    /**
+     * Elimina un detalle
+     * 
+     * @param detalle 
+     */
+    @Override
+    public void eliminarCarritoVenta(DetallesVentaDTO detalle) {
+        controlCarrito.eliminarCarritoVenta(detalle);
+    }
+
+    /** Regresa el total */
+    @Override
+    public double totalCarritoVenta() {
+        return controlCarrito.totalCarritoVenta();
+    }
+
+    /**
+     * Determina si está vacío el carrito
+     * 
+     * @return true o false
+     */
+    @Override
+    public boolean carritoVentaVacio() {
+        return controlCarrito.carritoVentaVacio();
+    }
+
+    //Vacía el carrito
+    @Override
+    public void limpiarCarritoVenta() {
+        controlCarrito.limpiarCarritoVenta();
+    }
+
+    /**
+     * Calcula el stock disponible de cierta pieza aún en medio proceso de la
+     * venta. Sirve para validaciones rápidas y lógica de experiencia de
+     * usuario. Aunque existan 20 piezas en la BD, si ya elegiste 10, y quieres
+     * otras 15, no podrás elegirlas
+     *
+     * @param id de la pieza a calcular stock antes de la venta
+     *
+     * @return cantidad de stock de dicha pieza
+     */
+    @Override
+    public int calcularStockAntesVenta(Long id) {
+        return controlCarrito.calcularStockAntesVenta(id);
+    } 
 }

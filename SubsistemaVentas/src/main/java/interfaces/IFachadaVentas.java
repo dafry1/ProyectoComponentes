@@ -66,4 +66,54 @@ public interface IFachadaVentas {
      * @return la venta registrada
      */
     VentaDTO procesarVenta(ClienteDTO cliente, List<DetallesVentaDTO> detalles);
+    
+    /**
+     * Regresa la lista inmutable de ventas
+     * 
+     * @return 
+     */
+    List<DetallesVentaDTO> getCarritoVenta();
+
+    /**
+     * Agrega un detalle al carrito de ventas
+     * 
+     * @param detalle a agregar
+     */
+    void agregarCarritoVenta(DetallesVentaDTO detalle);
+
+    /**
+     * Elimina un detalle del carrito de ventas
+     * 
+     * @param detalle a eliminar
+     */
+    void eliminarCarritoVenta(DetallesVentaDTO detalle);
+    
+    /**
+     * Calcula el total del carrito
+     * 
+     * @return la suma del subtotal de todos los detalles
+     */
+    double totalCarritoVenta();
+    
+    /**
+     * Determina si el carrito está vacío
+     * 
+     * @return true o false
+     */
+    public boolean carritoVentaVacio();
+
+    /** Encapsula la lógica de limpiar el carrito */
+    void limpiarCarritoVenta();
+    
+    /**
+     * Calcula el stock disponible de cierta pieza aún en medio proceso de la
+     * venta. Sirve para validaciones rápidas y lógica de experiencia de
+     * usuario. Aunque existan 20 piezas en la BD, si ya elegiste 10, y quieres
+     * otras 15, no podrás elegirlas
+     *
+     * @param id de la pieza a calcular stock antes de la venta
+     *
+     * @return cantidad de stock de dicha pieza
+     */
+    int calcularStockAntesVenta(Long id);
 }

@@ -81,7 +81,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
      */
     @Override
     public void mostrarHistorialVentas() {
-        abrirNuevaVentana(() -> new VhistorialVentas(this));
+        abrirNuevaVentana(() -> new VhistorialVentas(this, coordinadorNegocio, coordinadorEstados));
     }
 
     /**

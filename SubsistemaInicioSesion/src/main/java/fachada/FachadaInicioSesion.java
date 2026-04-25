@@ -1,7 +1,10 @@
 package fachada;
 
 import DTOS.EmpleadoDTO;
-import controles.ControlInicioSesion;
+import controles.ControlEmpleados;
+import controles.ControlSesion;
+import fabricas.FabricaBO;
+import interfaces.IFabricaBO;
 import interfaces.IFachadaInicioSesion;
 import java.util.List;
 
@@ -11,7 +14,13 @@ import java.util.List;
  * @author Andre
  */
 public class FachadaInicioSesion implements IFachadaInicioSesion {
-    private ControlInicioSesion controlInicioSesion = new ControlInicioSesion();
+    
+    //Fábrica que inyecta a los controles
+    IFabricaBO fabricaBO = FabricaBO.singleton();
+    
+    //Controles
+    private ControlSesion controlSesion = new ControlSesion(fabricaBO);
+    private ControlEmpleados controlEmpleados = new ControlEmpleados(fabricaBO);
     
     
     /**
@@ -21,7 +30,7 @@ public class FachadaInicioSesion implements IFachadaInicioSesion {
      */
     @Override
     public List<EmpleadoDTO> consultarEmpleados() {
-        return controlInicioSesion.consultarEmpleados();
+        return controlEmpleados.consultarEmpleados();
     }
     
     /**
@@ -33,6 +42,6 @@ public class FachadaInicioSesion implements IFachadaInicioSesion {
      */
     @Override
     public EmpleadoDTO verificarEmpleado(String usuario, String contra) {
-        return controlInicioSesion.verificarEmpleado(usuario, contra);
+        return controlSesion.verificarEmpleado(usuario, contra);
     }
 }

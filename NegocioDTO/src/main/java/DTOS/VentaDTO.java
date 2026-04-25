@@ -59,6 +59,10 @@ public class VentaDTO extends DTO {
     }
 
     public double getTotal() {
+        double total = 0;
+        for (DetallesVentaDTO detalle: detalles) {
+            total += detalle.getSubtotal();
+        }
         return total;
     }
 
