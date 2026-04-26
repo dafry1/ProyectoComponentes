@@ -87,4 +87,15 @@ public interface ICoordinadorEstados {
      * @return cantidad de stock de dicha pieza
      */
     int calcularStockAntesVenta(Long id);
+    
+
+    
+        /**
+     * Verifica la existencia de un empleado
+     * 
+     * @param usuario
+     * @param contra
+     * @return 
+     */
+    public List<EmpleadoDTO> verificarEmpleado(String usuario, String contra);
 }

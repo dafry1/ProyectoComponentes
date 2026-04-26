@@ -169,4 +169,14 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
             throw new PresentacionException("No existe el empleado");
         }
     }
+    
+    /**
+     * Consulta todos los empleados de la BD
+     * 
+     * @return 
+     */
+    @Override
+    public List<EmpleadoDTO> consultarEmpleados() {
+        return fachadaInicioSesion.consultarEmpleados();
+    }
 }

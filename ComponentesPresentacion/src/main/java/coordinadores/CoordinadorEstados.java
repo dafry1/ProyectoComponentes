@@ -46,6 +46,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      * 
      * @param empleado dueño de la sesión
      */
+    @Override
     public void establecerSesion(EmpleadoDTO empleado) {
         this.usuarioLogueado = empleado;
         if (empleado != null && empleado.getId() != null) {
@@ -58,6 +59,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      *
      * @return
      */
+    @Override
     public EmpleadoDTO getUsuarioLogueado() {
         return usuarioLogueado;
     }
@@ -67,6 +69,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      *
      * @return
      */
+    @Override
     public boolean esAdministrador() {
         return administrador;
     }
@@ -74,6 +77,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     /**
      * Cierra la sesión limpiando los datos
      */
+    @Override
     public void cerrarSesion() {
         this.usuarioLogueado = null;
         this.administrador = false;
@@ -154,4 +158,19 @@ public class CoordinadorEstados implements ICoordinadorEstados {
         return fachadaVentas.calcularStockAntesVenta(id);
     }
 
+    //----- MÉTODOS INICIO SESION -----//
+
+    
+    /**
+     * Verifica la existencia de un empleado
+     * 
+     * @param usuario
+     * @param contra
+     * @return 
+     */
+    @Override
+    public List<EmpleadoDTO> verificarEmpleado(String usuario, String contra) {
+        return fachadaSesion.consultarEmpleados();
+    }
+    
 }

@@ -95,4 +95,11 @@ public interface ICoordinadorNegocio {
      * @return el empleado DTO en caso de que exista 
      */
     EmpleadoDTO iniciarSesion(String nombreUsuario, String contra);
+    
+    /**
+     * Consulta todos los empleados de la BD
+     * 
+     * @return 
+     */
+    public List<EmpleadoDTO> consultarEmpleados();
 }
