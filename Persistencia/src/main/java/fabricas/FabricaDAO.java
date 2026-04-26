@@ -1,6 +1,7 @@
 package fabricas;
 
 import daos.PiezaDAO;
+import daos.VentaDAO;
 import interfaces.IEmpleadoDAO;
 import interfaces.IFabricaDAO;
 import interfaces.IPiezaDAO;
@@ -36,8 +37,7 @@ public class FabricaDAO implements IFabricaDAO {
 
     @Override
     public IVentaDAO fabricarVenta() {
-        //return new VentaDAO();
-        return null;
+        return new VentaDAO();
     }
 
     @Override

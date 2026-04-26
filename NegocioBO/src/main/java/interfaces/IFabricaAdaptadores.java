@@ -14,4 +14,10 @@ public interface IFabricaAdaptadores {
      * @return el adaptador
      */
     public IAdaptadorPieza fabricarAdaptadorPieza();  
+    
+    public IAdaptadorVenta fabricarAdaptadorVenta();
+    
+    public IAdaptadorCliente fabricarAdaptadorCliente();
+    
+    public IAdaptadorEmpleado fabricarAdaptadorEmpleado();
 }

@@ -12,12 +12,11 @@ public class VentaDTO extends DTO {
     
     //Atributos
     private ClienteDTO cliente;
+    private EmpleadoDTO empleado;
     private List<DetallesVentaDTO> detalles;
     private double total;
     private String fechaHora;
     private String folio;
-    
-    public static int contador = 0; //FIXME: LÓGICA QUE POR MIENTRAS GENERARÁ EL FOLIO
 
     /** Constructor vacío */
     public VentaDTO() {}  
@@ -26,20 +25,21 @@ public class VentaDTO extends DTO {
      * Constructor completo
      * 
      * @param id
+     * @param empleado
      * @param cliente
      * @param detalles
      * @param total
      * @param fechaHora
      * @param folio 
      */
-    public VentaDTO(Long id, ClienteDTO cliente, List<DetallesVentaDTO> detalles, double total, String fechaHora, String folio) {
+    public VentaDTO(Long id, EmpleadoDTO empleado, ClienteDTO cliente, List<DetallesVentaDTO> detalles, double total, String fechaHora, String folio) {
         super(id);
         this.cliente = cliente;
         this.detalles = detalles;
         this.total = total;
         this.fechaHora = fechaHora;
         this.folio = folio;
-        this.contador++;
+        this.empleado = empleado;
     }
 
     public ClienteDTO getCliente() {
@@ -84,5 +84,13 @@ public class VentaDTO extends DTO {
 
     public void setFolio(String folio) {
         this.folio = folio;
+    }
+
+    public EmpleadoDTO getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(EmpleadoDTO empleado) {
+        this.empleado = empleado;
     }
 }

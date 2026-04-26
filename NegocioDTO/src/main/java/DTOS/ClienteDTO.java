@@ -8,86 +8,34 @@ package DTOS;
  * 
  * @author Aaron
  */
-public class ClienteDTO extends DTO {
-    private String nombre;
-    private String apellidoPaterno;
-    private String apellidoMaterno;
-    private String direccion;
+public class ClienteDTO extends PersonaDTO {
+    private String correo;
+    private String telefono;
 
     /**
      * Constructor vacio de la clase ClienteDTO.
      */
     public ClienteDTO(){}
+
+    public ClienteDTO(String correo, String telefono, String nombres, String apellidoPaterno, String apellidoMaterno) {
+        super(nombres, apellidoPaterno, apellidoMaterno);
+        this.correo = correo;
+        this.telefono = telefono;
+    }
     
-    /**
-     * Método para obtener el valor del nombre del cliente.
-     * 
-     * @return Valor del nombre del cliente.
-     */
-    public String getNombre() {
-        return nombre;
+    public String getCorreo() {
+        return correo;
     }
 
-    /**
-     * Método para asignar el valor del nombre al cliente.
-     * 
-     * @param nombre Valor del nombre a asignar al cliente.
-     */
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
-    /**
-     * Método para obtener el valor del apellido paterno del cliente.
-     * 
-     * @return Valor del apellido paterno del cliente.
-     */
-    public String getApellidoPaterno() {
-        return apellidoPaterno;
+    public String getTelefono() {
+        return telefono;
     }
 
-    /**
-     * Método para asignar el valor del apellido paterno al cliente.
-     * 
-     * @param apellidoPaterno Valor del apellido paterno a asignar al cliente.
-     */
-    public void setApellidoPaterno(String apellidoPaterno) {
-        this.apellidoPaterno = apellidoPaterno;
-    }
-
-    /**
-     * Método para obtener el valor del apellido materno del cliente.
-     * 
-     * @return Valor del apellido materno del cliente.
-     */
-    public String getApellidoMaterno() {
-        return apellidoMaterno;
-    }
-
-    /**
-     * Método para asignar el valor del apellido materno al cliente.
-     * 
-     * @param apellidoMaterno Valor del apellido materno a asignar al cliente.
-     */
-    public void setApellidoMaterno(String apellidoMaterno) {
-        this.apellidoMaterno = apellidoMaterno;
-    }
-
-    /**
-     * Método para obtener el valor de la dirección del cliente.
-     * 
-     * @return Valor de la dirección del cliente.
-     */
-    public String getDireccion() {
-        return direccion;
-    }
-
-    /**
-     * Método para asignar el valor de la dirección al cliente.
-     * 
-     * @param direccion Valor de la dirección a asignar al cliente.
-     */
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 }

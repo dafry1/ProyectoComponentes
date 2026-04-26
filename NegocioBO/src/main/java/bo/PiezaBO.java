@@ -1,13 +1,10 @@
 package bo;
 
-import DTOS.DTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import dominio.Pieza;
 import excepciones.NegocioException;
 import interfaces.IAdaptadorPieza;
-import interfaces.IFabricaAdaptadores;
-import interfaces.IFabricaDAO;
 import interfaces.IPiezaBO;
 import interfaces.IPiezaDAO;
 import java.util.List;

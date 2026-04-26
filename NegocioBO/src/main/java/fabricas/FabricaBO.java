@@ -59,7 +59,7 @@ public class FabricaBO implements IFabricaBO {
      */
     @Override
     public IVentaBO fabricarVenta() {
-        return new VentaBO();
+        return new VentaBO(fabricaDAO.fabricarVenta(), fabricaAdaptadores.fabricarAdaptadorVenta());
     }
     
     /**

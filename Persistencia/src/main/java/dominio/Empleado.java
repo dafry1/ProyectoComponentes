@@ -1,17 +1,18 @@
-package DTOS;
+package dominio;
 
 /**
  *
- * @author DANIEL
+ * @author Andre
  */
-public class EmpleadoDTO extends PersonaDTO {
+public class Empleado extends Persona {
+    
     private String nombreUsuario;
     private String contrasenia;
 
-    public EmpleadoDTO() {
+    public Empleado() {
     }
-
-    public EmpleadoDTO(String nombreUsuario, String contrasenia, String nombres, String apellidoPaterno, String apellidoMaterno) {
+    
+    public Empleado(String nombreUsuario, String contrasenia, String nombres, String apellidoPaterno, String apellidoMaterno) {
         super(nombres, apellidoPaterno, apellidoMaterno);
         this.nombreUsuario = nombreUsuario;
         this.contrasenia = contrasenia;
@@ -21,12 +22,12 @@ public class EmpleadoDTO extends PersonaDTO {
         return nombreUsuario;
     }
 
-    public String getContrasenia() {
-        return contrasenia;
-    }
-    
     public void setNombreUsuario(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
+    }
+
+    public String getContrasenia() {
+        return contrasenia;
     }
 
     public void setContrasenia(String contrasenia) {
