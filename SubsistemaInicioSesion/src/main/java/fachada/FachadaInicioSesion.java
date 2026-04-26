@@ -34,6 +34,17 @@ public class FachadaInicioSesion implements IFachadaInicioSesion {
     }
     
     /**
+     * Regresa el empleado que está usando el sistema actualmente
+     *
+     * @return
+     */
+    @Override
+    public EmpleadoDTO getUsuarioLogueado() {
+        return controlSesion.getUsuarioLogueado();
+    }
+ 
+    
+    /**
      * Verifica la existencia de un empleado
      * 
      * @param usuario
@@ -44,4 +55,30 @@ public class FachadaInicioSesion implements IFachadaInicioSesion {
     public EmpleadoDTO verificarEmpleado(String usuario, String contra) {
         return controlSesion.verificarEmpleado(usuario, contra);
     }
+    
+     /**
+     * Guarda el empleado actual de manera global
+     * 
+     * @param empleado dueño de la sesión
+     */
+    @Override
+    public void establecerSesion(EmpleadoDTO empleado) {
+        controlSesion.establecerSesion(empleado);
+    }
+    
+    @Override
+    public void cerrarSesion() {
+        controlSesion.cerrarSesion();
+    }
+    
+    /**
+     * Indica si la sesión actual le pertenece a un administrador
+     *
+     * @return
+     */
+    @Override
+    public boolean esAdministrador() {
+        return controlSesion.esAdministrador();
+    }
+    
 }

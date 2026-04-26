@@ -22,12 +22,9 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     //Fachadas de las cuales necesita los métodos de estados
     private final IFachadaInicioSesion fachadaSesion = new FachadaInicioSesion();
     private final IFachadaVentas fachadaVentas = new FachadaVentas();
-    
     //Instancia de sí mismo
     private static CoordinadorEstados instancia = null;
-    private EmpleadoDTO usuarioLogueado;
-    private boolean administrador = false;
-
+    
     /**
      * Sinleton que asegura trabajar con una única instancia
      *
@@ -48,10 +45,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      */
     @Override
     public void establecerSesion(EmpleadoDTO empleado) {
-        this.usuarioLogueado = empleado;
-        if (empleado != null && empleado.getId() != null) {
-            this.administrador = (empleado.getId() == 1L);
-        }
+        fachadaSesion.establecerSesion(empleado);
     }
 
     /**
@@ -61,7 +55,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      */
     @Override
     public EmpleadoDTO getUsuarioLogueado() {
-        return usuarioLogueado;
+        return fachadaSesion.getUsuarioLogueado();
     }
 
     /**
@@ -71,7 +65,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      */
     @Override
     public boolean esAdministrador() {
-        return administrador;
+        return fachadaSesion.esAdministrador();
     }
 
     /**
@@ -79,9 +73,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      */
     @Override
     public void cerrarSesion() {
-        this.usuarioLogueado = null;
-        this.administrador = false;
-        this.limpiarCarritoVenta();
+        fachadaSesion.cerrarSesion();
     }
 
     //----- MÉTODOS DEL CARRITO DE VENTAS -----//

@@ -2,8 +2,12 @@ package controles;
 
 import DTOS.EmpleadoDTO;
 import fabricas.FabricaBO;
+import fachada.FachadaInicioSesion;
+import fachadas.FachadaVentas;
 import interfaces.IFabricaBO;
 import interfaces.IEmpleadoBO;
+import interfaces.IFachadaInicioSesion;
+import interfaces.IFachadaVentas;
 import java.util.List;
 
 /**
@@ -16,6 +20,11 @@ public class ControlSesion {
     
     //BOs necesarios
     private final IEmpleadoBO empleadoBO;
+    private EmpleadoDTO usuarioLogueado;
+    private final IFachadaInicioSesion fachadaSesion = new FachadaInicioSesion();
+    private boolean administrador = false;
+    private final IFachadaVentas fachadaVentas = new FachadaVentas();
+
     
     /**
      * Constructor con fábrica inyectada
@@ -37,4 +46,51 @@ public class ControlSesion {
     public EmpleadoDTO verificarEmpleado(String nombreUsuario, String contra) {
         return empleadoBO.verificarEmpleado(nombreUsuario, contra);
     }
+    
+     /**
+     * Regresa el empleado que está usando el sistema actualmente
+     *
+     * @return
+     */
+    public EmpleadoDTO getUsuarioLogueado() {
+        return usuarioLogueado;
+    }
+
+    /**
+     * Guarda el empleado actual de manera global
+     * 
+     * @param empleado dueño de la sesión
+     */
+    public void establecerSesion(EmpleadoDTO empleado) {
+        this.usuarioLogueado = empleado;
+        if (empleado != null && empleado.getId() != null) {
+            this.administrador = (empleado.getId() == 1L);
+        }
+    }
+    
+    /**
+     * Cierra la sesión limpiando los datos
+     */
+    public void cerrarSesion() {
+        this.usuarioLogueado = null;
+        this.administrador = false;
+        this.limpiarCarritoVenta();
+    }
+    
+     /**
+     * Encapsula la lógica de limpiar el carrito
+     */
+    public void limpiarCarritoVenta() {
+        fachadaVentas.limpiarCarritoVenta();
+    }
+    
+    /**
+     * Indica si la sesión actual le pertenece a un administrador
+     *
+     * @return
+     */
+    public boolean esAdministrador() {
+        return administrador;
+    }
+    
 }

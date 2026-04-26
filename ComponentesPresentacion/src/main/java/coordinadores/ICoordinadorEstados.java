@@ -12,20 +12,7 @@ import java.util.List;
 public interface ICoordinadorEstados {
 
     //----- MÉTODOS DE TRABAJADORES -----//
-    /**
-     * Guarda el empleado actual de manera global
-     * 
-     * @param empleado dueño de la sesión
-     */
-    void establecerSesion(EmpleadoDTO empleado);
-
-    /**
-     * Regresa el empleado que está usando el sistema actualmente
-     *
-     * @return
-     */
-    EmpleadoDTO getUsuarioLogueado();
-
+    
     /**
      * Indica si la sesión actual le pertenece a un administrador
      *
@@ -98,4 +85,18 @@ public interface ICoordinadorEstados {
      * @return 
      */
     public List<EmpleadoDTO> verificarEmpleado(String usuario, String contra);
+    
+    /**
+     * Guarda el empleado actual de manera global
+     * 
+     * @param empleado dueño de la sesión
+     */
+    public void establecerSesion(EmpleadoDTO empleado);
+    
+    /**
+     * Regresa el empleado que está usando el sistema actualmente
+     *
+     * @return
+     */
+    public EmpleadoDTO getUsuarioLogueado();
 }
