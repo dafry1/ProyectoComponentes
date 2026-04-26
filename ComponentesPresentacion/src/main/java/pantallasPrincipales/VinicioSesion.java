@@ -107,11 +107,12 @@ public class VinicioSesion extends JFrame {
             }
 
             try {
+                CoordinadorEstados.singleton().verificarEmpleado(user, pass);
                 EmpleadoDTO empleado = coordinadorNegocio.iniciarSesion(user, pass);
 
+                
             if (empleado != null) {
                 coordinadorEstados.singleton().establecerSesion(empleado);
-                CoordinadorEstados.singleton().verificarEmpleado(user, pass);
 
                 JOptionPane.showMessageDialog(this, "Bienvenido " + empleado.getNombreUsuario());
                 coordinador.mostrarVentanaInicio();
