@@ -1,10 +1,15 @@
 package bo;
 
+import DTOS.DTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
+import dominio.Pieza;
 import excepciones.NegocioException;
+import interfaces.IAdaptadorPieza;
+import interfaces.IFabricaAdaptadores;
+import interfaces.IFabricaDAO;
 import interfaces.IPiezaBO;
-import java.util.ArrayList;
+import interfaces.IPiezaDAO;
 import java.util.List;
 
 /**
@@ -14,44 +19,28 @@ import java.util.List;
  * @author Andre
  */
 public class PiezaBO implements IPiezaBO {
-    private static final System.Logger LOG = System.getLogger(VentaBO.class.getName());
+    private static final System.Logger LOG = System.getLogger(PiezaBO.class.getName());
     private static String CARRITO_VACIO = "No se puede procesar una venta con un carrito vacío";
     
-    private static List<PiezaDTO> PIEZAS = new ArrayList<>();
+    //Atributos
+    private IPiezaDAO piezaDAO;
+    private IAdaptadorPieza adaptadorPieza;
     
-    static {
-        PiezaDTO pieza1 = new PiezaDTO();
-        pieza1.setId(1L);
-        pieza1.setNombre("Ryzen 5 9600X");
-        pieza1.setCategoria("Procesador");
-        pieza1.setMarcaPieza("AMD");
-        pieza1.setModeloPieza("Zen 5");
-        pieza1.setCostoPieza(2500.0);
-        pieza1.setStockPieza(50);
-        PIEZAS.add(pieza1);
-        
-        PiezaDTO pieza2 = new PiezaDTO();
-        pieza2.setId(2L);
-        pieza2.setNombre("Core i9-14900K");
-        pieza2.setCategoria("Procesador");
-        pieza2.setMarcaPieza("Intel");
-        pieza2.setModeloPieza("Raptor Lake");
-        pieza2.setCostoPieza(5500.0);
-        pieza2.setStockPieza(40);
-        PIEZAS.add(pieza2);
-        
-        PiezaDTO pieza3 = new PiezaDTO();
-        pieza3.setId(3L);
-        pieza3.setNombre("Trident Z5 RGB");
-        pieza3.setCategoria("RAM");
-        pieza3.setMarcaPieza("G.Skill");
-        pieza3.setModeloPieza("DDR5-6400");
-        pieza3.setCostoPieza(1800.0);
-        pieza3.setStockPieza(30);
-        PIEZAS.add(pieza3);
+    /**
+     * Constructor que inyecta DAO y adaptador
+     * 
+     * @param piezaDAO
+     * @param adaptadorPieza 
+     */
+    public PiezaBO(IPiezaDAO piezaDAO, IAdaptadorPieza adaptadorPieza) {
+        this.piezaDAO = piezaDAO;
+        this.adaptadorPieza = adaptadorPieza;
     }
     
-    
+    /** Centraliza la forma en la que se adaptan las piezas de Entidad a DTO */
+    private List<PiezaDTO> adaptarPiezasInternamente(List<Pieza> piezas) {
+        return adaptadorPieza.listaDTO(piezas);
+    }
     
     /**
      * Extrae todas las piezas de la BD
@@ -60,7 +49,7 @@ public class PiezaBO implements IPiezaBO {
      */
     @Override
     public List<PiezaDTO> consultarPiezas() {
-        return PIEZAS;
+        return adaptarPiezasInternamente(piezaDAO.consultarPiezas());
     }
     
     /**
@@ -70,7 +59,7 @@ public class PiezaBO implements IPiezaBO {
      */
     @Override
     public List<PiezaDTO> consultarTopDiaPiezas(){
-        return PIEZAS;
+        return adaptarPiezasInternamente(piezaDAO.consultarTopDiaPiezas());
     }
     
     /**
@@ -80,7 +69,7 @@ public class PiezaBO implements IPiezaBO {
      */
     @Override
     public List<PiezaDTO> consultarTopSemanaPiezas(){
-        return PIEZAS;
+        return adaptarPiezasInternamente(piezaDAO.consultarTopSemanaPiezas());
     }
     
     /**
@@ -90,7 +79,7 @@ public class PiezaBO implements IPiezaBO {
      */
     @Override
     public List<PiezaDTO> consultarTopMesPiezas(){
-        return PIEZAS;
+        return adaptarPiezasInternamente(piezaDAO.consultarTopMesPiezas());
     }
     
     /**
@@ -101,7 +90,7 @@ public class PiezaBO implements IPiezaBO {
      */
     @Override
     public List<PiezaDTO> consultarTopTodoPiezas(){
-        return PIEZAS;
+        return adaptarPiezasInternamente(piezaDAO.consultarTopTodoPiezas());
     }
     
     /**
@@ -112,7 +101,7 @@ public class PiezaBO implements IPiezaBO {
     @Override
     public void actualizarStock(DetallesVentaDTO detalle) { //-> FIXME: ESTO DEBE CONSULTAR DIRECTO AL DAO
         
-        for (PiezaDTO pieza: PIEZAS) {
+        for (PiezaDTO pieza: adaptarPiezasInternamente(piezaDAO.consultarPiezas())) {
             
             if (pieza.equals(detalle.getPieza())) {
                 int stockActual = pieza.getStockPieza();

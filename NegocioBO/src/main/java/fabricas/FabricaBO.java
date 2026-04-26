@@ -1,10 +1,14 @@
 package fabricas;
 
+import adaptadores.AdaptadorPieza;
 import interfaces.IFabricaBO;
 import bo.EmpleadoBO;
 import bo.PiezaBO;
 import bo.VentaBO;
+import interfaces.IAdaptadorPieza;
 import interfaces.IEmpleadoBO;
+import interfaces.IFabricaAdaptadores;
+import interfaces.IFabricaDAO;
 import interfaces.IPiezaBO;
 import interfaces.IVentaBO;
 
@@ -14,11 +18,17 @@ import interfaces.IVentaBO;
  * necesarios en forma de contratos de interfaces. También
  * está respaldada por una interfaz ya para que amarre 🚬
  * 
- * @author Andre-
+ * @author Andre
  */
 public class FabricaBO implements IFabricaBO {
     private static IFabricaBO instancia;
     private FabricaBO() {}
+    
+    //Fábrica que suministra los DAO
+    private IFabricaDAO fabricaDAO = FabricaDAO.singleton();
+    
+    //Fábrica que suministra los adaptadores
+    private IFabricaAdaptadores fabricaAdaptadores = FabricaAdaptadores.singleton();
     
     /**
      * Singleton de la fábrica
@@ -39,7 +49,7 @@ public class FabricaBO implements IFabricaBO {
      */
     @Override
     public IPiezaBO fabricarPieza() {
-        return new PiezaBO();
+        return new PiezaBO(fabricaDAO.fabricarPieza(), fabricaAdaptadores.fabricarAdaptadorPieza());
     }
     
     /**

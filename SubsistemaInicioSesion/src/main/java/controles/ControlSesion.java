@@ -21,9 +21,7 @@ public class ControlSesion {
     //BOs necesarios
     private final IEmpleadoBO empleadoBO;
     private EmpleadoDTO usuarioLogueado;
-    private final IFachadaInicioSesion fachadaSesion = new FachadaInicioSesion();
     private boolean administrador = false;
-    private final IFachadaVentas fachadaVentas = new FachadaVentas();
 
     
     /**
@@ -74,14 +72,6 @@ public class ControlSesion {
     public void cerrarSesion() {
         this.usuarioLogueado = null;
         this.administrador = false;
-        this.limpiarCarritoVenta();
-    }
-    
-     /**
-     * Encapsula la lógica de limpiar el carrito
-     */
-    public void limpiarCarritoVenta() {
-        fachadaVentas.limpiarCarritoVenta();
     }
     
     /**

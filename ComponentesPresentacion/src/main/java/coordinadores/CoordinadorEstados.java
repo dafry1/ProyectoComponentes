@@ -74,6 +74,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     @Override
     public void cerrarSesion() {
         fachadaSesion.cerrarSesion();
+        fachadaVentas.limpiarCarritoVenta();
     }
 
     //----- MÉTODOS DEL CARRITO DE VENTAS -----//

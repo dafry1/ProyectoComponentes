@@ -6,22 +6,10 @@
         <artifactId>ProyectoComponentes</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>NegocioBO</artifactId>
+    <artifactId>Persistencia</artifactId>
     <packaging>jar</packaging>
-    <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>NegocioDTO</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>Persistencia</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
-        <exec.mainClass>com.mycompany.negociobo.NegocioBO</exec.mainClass>
+        <exec.mainClass>com.mycompany.persistencia.Persistencia</exec.mainClass>
     </properties>
 </project>
