@@ -1,7 +1,10 @@
 package ensambladores;
 
 import DTOS.DetallesVentaDTO;
+import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
+import DTOS.VentaDTO;
+import java.util.List;
 
 /**
  * Establece el contrato para un ensamblador
@@ -22,4 +25,16 @@ public interface IEnsambladorDTO {
      * @return DTO listo
      */
     DetallesVentaDTO ensamblarDetalleVentaDTO(int cantidad, PiezaDTO pieza);
+    
+    /**
+     * Asigna atributos básicos de una venta, para que después sea
+     * mandada a Negocio para terminar su empaquetado (folio,
+     * fecha y hora)
+     * 
+     * @param empleado que realizó la venta
+     * @param carrito con los detalles de la venta
+     * 
+     * @return la venta lista para procesarse en negocio
+     */
+    VentaDTO ensamblarVentaDTO(EmpleadoDTO empleado, List<DetallesVentaDTO> carrito);
 }

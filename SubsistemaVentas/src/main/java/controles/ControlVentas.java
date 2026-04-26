@@ -49,29 +49,15 @@ public class ControlVentas {
      * Actualiza el stock de PiezaBO y registra
      * la venta en la VentaBO
      * 
-     * @param cliente que compró las piezass
-     * @param detalles de la venta
+     * @param venta a procesar
      * 
      * @return la venta registrada
      */
-    public VentaDTO procesarVenta(ClienteDTO cliente, List<DetallesVentaDTO> detalles) {
-        
-        //Excepción si la lista está vacía o es null
-        if (detalles == null || detalles.isEmpty()) {
-            LOG.log(System.Logger.Level.ERROR, CARRITO_VACIO);
-            throw new NegocioException(CARRITO_VACIO);
-        }
-        
-        //Excepción si es null
-        if (cliente == null) {
-            cliente = new ClienteDTO(); //-> FIXME: LO CREA A LA AHÍ SE VA XD LUEGO DEBE VALIDAR BIEN
-            //LOG.log(System.Logger.Level.ERROR, SIN_CLIENTE);
-            //throw new NegocioException(SIN_CLIENTE);
-        } 
+    public VentaDTO procesarVenta(VentaDTO venta) {
         
         //Actualiza stock y registra la venta
-        piezaBO.actualizarStockTrasVenta(detalles);
-        VentaDTO venta = ventaBO.registrarVenta(cliente, detalles);
+        piezaBO.actualizarStockTrasVenta(venta.getDetalles());
+        ventaBO.registrarVenta(venta);
         LOG.log(System.Logger.Level.INFO, () -> ">> Venta exitosa con la cantidad de: " + venta.getDetalles().size());
         return venta;
     }

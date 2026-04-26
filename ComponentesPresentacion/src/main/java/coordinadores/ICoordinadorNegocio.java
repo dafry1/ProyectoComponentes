@@ -78,12 +78,12 @@ public interface ICoordinadorNegocio {
      * cabo una venta dentro del sistema. Actualiza stock,
      * limpia el carrito, etc.
      * 
-     * @param coordinadorEstados con las piezas a vender
+     * @param venta a procesar
      * @param observador si se necesita actualizar algo. Puede ser null
      * 
      * @return la venta procesadas
      */
-    VentaDTO procesarVenta(ICoordinadorEstados coordinadorEstados, IObservador observador);
+    VentaDTO procesarVenta(VentaDTO venta, IObservador observador);
     
     /**
      * Valida que el usuario con los datos ingresados

@@ -1,7 +1,10 @@
 package ensambladores;
 
 import DTOS.DetallesVentaDTO;
+import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
+import DTOS.VentaDTO;
+import java.util.List;
 
 /**
  * Aplica el patrón ensamblador. A diferencia de una fábrica
@@ -32,5 +35,25 @@ public class EnsambladorDTO implements IEnsambladorDTO {
         detalle.setPieza(pieza);
         detalle.setSubtotal(costo*cantidad);
         return detalle;
+    }
+
+    /**
+     * Asigna atributos básicos de una venta, para que después sea
+     * mandada a Negocio para terminar su empaquetado (folio,
+     * fecha y hora)
+     * 
+     * @param empleado que realizó la venta
+     * @param carrito con los detalles de la venta
+     * @param cliente que compró los productos
+     * 
+     * @return la venta lista para procesarse en negocio
+     */
+    @Override
+    public VentaDTO ensamblarVentaDTO(EmpleadoDTO empleado, List<DetallesVentaDTO> carrito) {
+        VentaDTO venta = new VentaDTO();
+        venta.setDetalles(carrito);
+        //venta.setEmpleado(empleado);
+        //venta.setCliente(cliente);
+        return venta;
     }
 }
