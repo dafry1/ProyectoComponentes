@@ -25,6 +25,9 @@ public class EmpleadoBO implements IEmpleadoBO {
         EmpleadoDTO empleado1 = new EmpleadoDTO();
         empleado1.setNombreUsuario("juanperes1");
         empleado1.setContrasenia("12345");
+        empleado1.setNombres("Daniel");
+        empleado1.setApellidoPaterno("Ruiz");
+        empleado1.setApellidoMaterno("Jocobi");
         EMPLEADOS.add(empleado1);
     }
     

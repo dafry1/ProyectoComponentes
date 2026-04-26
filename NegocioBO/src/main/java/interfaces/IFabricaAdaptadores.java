@@ -13,11 +13,13 @@ public interface IFabricaAdaptadores {
      * 
      * @return el adaptador
      */
-    public IAdaptadorPieza fabricarAdaptadorPieza();  
+     IAdaptadorPieza fabricarAdaptadorPieza();  
     
-    public IAdaptadorVenta fabricarAdaptadorVenta();
+     IAdaptadorVenta fabricarAdaptadorVenta();
     
-    public IAdaptadorCliente fabricarAdaptadorCliente();
+     IAdaptadorCliente fabricarAdaptadorCliente();
     
-    public IAdaptadorEmpleado fabricarAdaptadorEmpleado();
+     IAdaptadorEmpleado fabricarAdaptadorEmpleado();
+    
+    IAdaptadorDetallesVenta fabricarAdaptadorDetallesVenta();
 }

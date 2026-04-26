@@ -38,4 +38,8 @@ public class ClienteDTO extends PersonaDTO {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+    
+    public ClienteDTO build() {
+        return new ClienteDTO();
+    }
 }

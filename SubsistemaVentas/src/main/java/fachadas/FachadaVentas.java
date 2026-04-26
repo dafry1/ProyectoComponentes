@@ -104,7 +104,7 @@ public class FachadaVentas implements IFachadaVentas {
     @Override
     public VentaDTO procesarVenta(VentaDTO venta) {
         controlVentas.procesarVenta(venta);
-        limpiarCarritoVenta();
+        controlCarrito.limpiarCarritoVenta();
         return venta;
     }
 

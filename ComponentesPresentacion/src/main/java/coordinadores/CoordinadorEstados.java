@@ -1,5 +1,6 @@
 package coordinadores;
 
+import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import fachada.FachadaInicioSesion;
@@ -24,6 +25,21 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     private final IFachadaVentas fachadaVentas = new FachadaVentas();
     //Instancia de sí mismo
     private static CoordinadorEstados instancia = null;
+    
+    
+    /**
+     * IMPLEMENTACION SUPERULTRAMEGAHIPER TEMPORAL SOLO PARA QUE
+     * FUNCIONE AHORITITITA EL RESTO DE ESTADOS VOLÁTILES COMO
+     * EL CARRITO O EL EMPLEADO SE MANEJA EN NEGOCIO
+     */
+    private static ClienteDTO clienteActual = null;
+    public void setCliente(ClienteDTO c) {
+        this.clienteActual = c;
+    }
+    public ClienteDTO getCliente() {
+        return clienteActual;
+    }
+    
     
     /**
      * Sinleton que asegura trabajar con una única instancia

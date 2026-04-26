@@ -131,12 +131,16 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
         //Procesa la venta directamente de la fachada
         fachadaVentas.procesarVenta(venta);
 
+        //TEMPORAL LIMPIA EL CARRITO!!
+        CoordinadorEstados.singleton().limpiarCarritoVenta();
+        
         //Activa al observador si existe
         if (observador != null) {
             observador.observar();
         }
         
         //Regresa la venta
+        System.out.println("Venta" + venta.getDetalles().size());
         return venta;
     }
     

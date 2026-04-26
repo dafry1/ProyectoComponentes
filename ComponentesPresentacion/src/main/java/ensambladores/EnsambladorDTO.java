@@ -1,5 +1,6 @@
 package ensambladores;
 
+import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
@@ -49,11 +50,36 @@ public class EnsambladorDTO implements IEnsambladorDTO {
      * @return la venta lista para procesarse en negocio
      */
     @Override
-    public VentaDTO ensamblarVentaDTO(EmpleadoDTO empleado, List<DetallesVentaDTO> carrito) {
+    public VentaDTO ensamblarVentaDTO(ClienteDTO cliente, EmpleadoDTO empleado, List<DetallesVentaDTO> carrito) {
         VentaDTO venta = new VentaDTO();
         venta.setDetalles(carrito);
-        //venta.setEmpleado(empleado);
-        //venta.setCliente(cliente);
+        venta.setEmpleado(empleado);
+        venta.setCliente(cliente);
         return venta;
+    }
+    
+    /**
+     * Obtiene información necesaria para crear el DTO de
+     * un cliente para la venta. No es una entidad independiente
+     * ni se guarda, solo es puntual, y realmente no se administran
+     * clientes dentro del sistema
+     * 
+     * @param nombres
+     * @param apellidoPaterno
+     * @param apellidoMaterno
+     * @param correo
+     * @param telefono
+     * 
+     * @return el clienteDTO ensamblado
+     */
+    @Override
+    public ClienteDTO ensamblarClienteDTO(String nombres, String apellidoPaterno, String apellidoMaterno, String correo, String telefono) {
+        ClienteDTO cliente = new ClienteDTO();
+        cliente.setNombres(nombres);
+        cliente.setApellidoPaterno(apellidoPaterno);
+        cliente.setApellidoMaterno(apellidoMaterno);
+        cliente.setCorreo(correo);
+        cliente.setTelefono(telefono);
+        return cliente;
     }
 }

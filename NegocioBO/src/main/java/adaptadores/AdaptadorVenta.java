@@ -3,6 +3,7 @@ package adaptadores;
 import DTOS.VentaDTO;
 import dominio.Venta;
 import interfaces.IAdaptadorCliente;
+import interfaces.IAdaptadorDetallesVenta;
 import interfaces.IAdaptadorEmpleado;
 import interfaces.IAdaptadorVenta;
 import java.util.List;
@@ -15,9 +16,11 @@ import java.util.stream.Collectors;
 public class AdaptadorVenta implements IAdaptadorVenta { 
     private IAdaptadorEmpleado adaptadorEmpleado;
     private IAdaptadorCliente adaptadorCliente;
-    public AdaptadorVenta(IAdaptadorEmpleado adaptadorEmpleado, IAdaptadorCliente adaptadorCliente){
+    private IAdaptadorDetallesVenta adaptadorDetallesVenta;
+    public AdaptadorVenta(IAdaptadorEmpleado adaptadorEmpleado, IAdaptadorCliente adaptadorCliente, IAdaptadorDetallesVenta adaptadorDetallesVenta){
         this.adaptadorEmpleado = adaptadorEmpleado;
         this.adaptadorCliente = adaptadorCliente;
+        this.adaptadorDetallesVenta = adaptadorDetallesVenta;
     }
     
     @Override
@@ -28,6 +31,7 @@ public class AdaptadorVenta implements IAdaptadorVenta {
         entidad.setTotal(dto.getTotal());
         entidad.setFechaHora(dto.getFechaHora());
         entidad.setFolio(dto.getFolio());
+        entidad.setDetalles(adaptadorDetallesVenta.listaEntidad(dto.getDetalles()));
         return entidad;
     }
 
@@ -44,6 +48,7 @@ public class AdaptadorVenta implements IAdaptadorVenta {
         dto.setTotal(entidad.getTotal());
         dto.setFechaHora(entidad.getFechaHora());
         dto.setFolio(entidad.getFolio());
+        dto.setDetalles(adaptadorDetallesVenta.listaDTO(entidad.getDetalles()));
         return dto;
     }
 

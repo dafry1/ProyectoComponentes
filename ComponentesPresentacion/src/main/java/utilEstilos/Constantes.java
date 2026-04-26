@@ -28,6 +28,17 @@ public class Constantes {
     /** Constante que protege el texto que pide el precio máximo */
     public static final String PIEZA_PRECIOMAX = "Precio máximo";
     
+    
+    
+    public static final String CLIENTE_NOMBRE = "Nombre del cliente";
+    public static final String CLIENTE_APELLIDOP = "Apellido paterno del cliente";
+    public static final String CLIENTE_APELLIDOM = "Apellido materno del cliente";
+    public static final String CLIENTE_CORREO = "Correo del cliente";
+    public static final String CLIENTE_TELEFONO = "Telefono del cliente";
+    
+    
+    
+    
     /** Azul (37, 99, 235) */
     public static final Color COLOR_BOTONES = new Color(37, 99, 235);
     

@@ -395,7 +395,7 @@ public class VhistorialVentas extends JFrame implements IObservador {
 
             //Agrega funcionalidad al botón de mostrarInfo
             botonInfo.addActionListener(e -> {
-                UtilSwing.dialogoAviso(VhistorialVentas.this, "Aguanta we xd");
+                UtilSwing.dialogoAviso(VhistorialVentas.this, "En proceso...");
             });
 
             //Agrega al panel principal

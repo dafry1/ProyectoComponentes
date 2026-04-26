@@ -1,10 +1,12 @@
 package fabricas;
 
 import adaptadores.AdaptadorCliente;
+import adaptadores.AdaptadorDetallesVenta;
 import adaptadores.AdaptadorEmpleado;
 import adaptadores.AdaptadorPieza;
 import adaptadores.AdaptadorVenta;
 import interfaces.IAdaptadorCliente;
+import interfaces.IAdaptadorDetallesVenta;
 import interfaces.IAdaptadorEmpleado;
 import interfaces.IAdaptadorPieza;
 import interfaces.IAdaptadorVenta;
@@ -52,7 +54,7 @@ public class FabricaAdaptadores implements IFabricaAdaptadores {
     @Override
     public IAdaptadorVenta fabricarAdaptadorVenta() {
         if (instanciaVenta == null) {
-            instanciaVenta = new AdaptadorVenta(fabricarAdaptadorEmpleado(), fabricarAdaptadorCliente());
+            instanciaVenta = new AdaptadorVenta(fabricarAdaptadorEmpleado(), fabricarAdaptadorCliente(), fabricarAdaptadorDetallesVenta());
         }
         return instanciaVenta;
     }
@@ -65,5 +67,10 @@ public class FabricaAdaptadores implements IFabricaAdaptadores {
     @Override
     public IAdaptadorEmpleado fabricarAdaptadorEmpleado() {
         return AdaptadorEmpleado.singleton();
+    }
+    
+    @Override
+    public IAdaptadorDetallesVenta fabricarAdaptadorDetallesVenta() {
+        return new AdaptadorDetallesVenta(fabricarAdaptadorPieza());
     }
 }

@@ -1,5 +1,6 @@
 package pantallasVentas;
 
+import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
@@ -178,7 +179,10 @@ public class PantallaResumen extends JFrame implements IObservador {
         //Crea la venta
         EmpleadoDTO empleado = coordinadorEstados.getUsuarioLogueado();
         List<DetallesVentaDTO> carrito = coordinadorEstados.getCarritoVenta();
-        VentaDTO venta = ensambladorDTO.ensamblarVentaDTO(empleado, carrito);
+        
+        ClienteDTO cliente = new ClienteDTO("Andre", "Vega", "Romero", "andre@gmail.com", "123456789");
+        
+        VentaDTO venta = ensambladorDTO.ensamblarVentaDTO(cliente, empleado, carrito);
         
         //Manda la venta al coordinador
         coordinadorNegocio.procesarVenta(venta, this);
