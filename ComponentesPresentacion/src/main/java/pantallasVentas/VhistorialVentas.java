@@ -23,41 +23,40 @@ import utilPresentacion.UtilBoton.BotonAlmacenador;
 
 /**
  * Pantalla donde se eligen piezas para el carrito
- * 
+ *
  * @author Andre
  */
 public class VhistorialVentas extends JFrame implements IObservador {
+
     JPanel panelPrincipal;
-    
+
     //Se usa en más de un método
     private JPanel contenedorListaPiezas;
     private JPanel contenedorListaDetalles;
-    
+
     //Coordinadores
     private ICoordinadorPresentacion coordinadorPresentacion;
     private ICoordinadorNegocio coordinadorNegocio;
     private ICoordinadorEstados coordinadorEstados;
-    
+
     //Mapa que contiene los campos de búsqueda para recuperarlos después
     Map<String, JTextField> mapaCampos = new HashMap<>();
-    
+
     //Botón de buscar como atributo para usarlo en más de un método
     JButton botonBuscar = UtilBoton.crearBoton("Buscar");
-    
+
     //Arreglo de constantes ya definidas para los campos de texto y así no pelearnos con strings sueltos
     private String[] campos = {Constantes.PIEZA_NOMBRE, Constantes.PIEZA_CATEGORIA, Constantes.PIEZA_MARCA, Constantes.PIEZA_PRECIOMAX};
-    
+
     //Siempre actualizado desde el CoordiandorEstados
     private double totalCarrito = CoordinadorEstados.singleton().totalCarritoVenta();
-    
+
     //Se usa en más de un método
     private JLabel labelTotal = new JLabel("Total: $ " + totalCarrito);
-    
-    
-    
+
     /**
      * Constructor donde se ensambla toda el frame
-     * 
+     *
      * @param coordinadorPresentacion que navegará entre pantallas
      * @param coordinadorNegocio para lógica de procesos
      * @param coordinadorEstados
@@ -66,7 +65,7 @@ public class VhistorialVentas extends JFrame implements IObservador {
         this.coordinadorPresentacion = coordinadorPresentacion;
         this.coordinadorNegocio = coordinadorNegocio;
         this.coordinadorEstados = coordinadorEstados;
-        
+
         //Configuración general
         UtilSwing.configurarFrame("Historial de ventas", this);
 
@@ -74,7 +73,7 @@ public class VhistorialVentas extends JFrame implements IObservador {
         add(UtilBuild.crearNavegacion(this, coordinadorPresentacion), BorderLayout.NORTH);
 
         //Crea el panel principal que contiene lo importante
-        JPanel contenido = new JPanel(new GridBagLayout()); 
+        JPanel contenido = new JPanel(new GridBagLayout());
         contenido.setBackground(Constantes.COLOR_FONDO);
         contenido.setBorder(new EmptyBorder(20, 20, 20, 20));
 
@@ -85,24 +84,25 @@ public class VhistorialVentas extends JFrame implements IObservador {
 
         //Agrega a dicho panel
         //g.gridx = 0; g.weightx = 0.10; g.weighty = 1.0; contenido.add(crearPanelBusqueda(), g);
-        
         //Agrega los paneles
         JPanel panelSeccionCentral = crearSeccionCentral(coordinadorNegocio.consultarVentas());
-        g.gridx = 1; g.weightx = 0.30; contenido.add(panelSeccionCentral, g);
-        g.gridx = 2; g.weightx = 0.30; contenido.add(crearPanelCarrito(), g);
-        
+        g.gridx = 1;
+        g.weightx = 0.30;
+        contenido.add(panelSeccionCentral, g);
+        g.gridx = 2;
+        g.weightx = 0.30;
+        contenido.add(crearPanelCarrito(), g);
+
         //Añade al frame
         add(contenido, BorderLayout.CENTER);
         add(crearPanelInferior(), BorderLayout.SOUTH);
     }
-    
-    
-    
+
     /**
      * Crea la sección central, donde aparecen las tarjetas de todas las ventas
-     * 
+     *
      * @param piezas en una lista
-     * 
+     *
      * @return el panel listo
      */
     private JPanel crearSeccionCentral(List<VentaDTO> ventas) {
@@ -119,10 +119,10 @@ public class VhistorialVentas extends JFrame implements IObservador {
         contenedorListaPiezas = new JPanel();
         contenedorListaPiezas.setLayout(new BoxLayout(contenedorListaPiezas, BoxLayout.Y_AXIS));
         contenedorListaPiezas.setBackground(Color.WHITE);
-        
+
         //Dibuja un campo por cada pieza
         dibujarTarjetasVentas(ventas);
-        
+
         //Crea y configura un scroll por si son varios
         JScrollPane scroll = new JScrollPane(contenedorListaPiezas);
         scroll.setBorder(null);
@@ -130,20 +130,18 @@ public class VhistorialVentas extends JFrame implements IObservador {
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroll.getVerticalScrollBar().setUnitIncrement(16);
         p.add(scroll, BorderLayout.CENTER);
-        
+
         //Regresa el panel
         return p;
     }
-    
-    
-    
+
     /**
-     * Crea el panel derecho que contiene gráficamente a
-     * los elementos del carrito
-     * 
+     * Crea el panel derecho que contiene gráficamente a los elementos del
+     * carrito
+     *
      * @return panel del del carrito
      */
-    private JPanel crearPanelCarrito () {
+    private JPanel crearPanelCarrito() {
         JPanel p = new JPanel(new BorderLayout());
         p.setOpaque(false);
 
@@ -152,7 +150,7 @@ public class VhistorialVentas extends JFrame implements IObservador {
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
         titulo.setBorder(new EmptyBorder(0, 0, 15, 0));
         p.add(titulo, BorderLayout.NORTH);
-        
+
         //Llena el atributo del contenedor de detalles
         contenedorListaDetalles = new JPanel();
         contenedorListaDetalles.setLayout(new BoxLayout(contenedorListaDetalles, BoxLayout.Y_AXIS));
@@ -168,7 +166,7 @@ public class VhistorialVentas extends JFrame implements IObservador {
         scrollD.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollD.getVerticalScrollBar().setUnitIncrement(16);
         p.add(scrollD, BorderLayout.CENTER);
-        
+
         //Total
         labelTotal.setFont(new Font("Segoe UI", Font.BOLD, 18));
         labelTotal.setHorizontalAlignment(SwingConstants.CENTER);
@@ -176,15 +174,15 @@ public class VhistorialVentas extends JFrame implements IObservador {
         p.add(labelTotal, BorderLayout.SOUTH);
         return p;
     }
-    
-    
-    
-    /**  Crea la barra inferior para continuar y regresar */
+
+    /**
+     * Crea la barra inferior para continuar y regresar
+     */
     private JPanel crearPanelInferior() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBackground(Color.WHITE);
         p.setBorder(new EmptyBorder(10, 30, 20, 30));
-        
+
         //Crea el botón de regreso
         JButton botonRegresar = UtilBoton.crearBotonRegresar();
         botonRegresar.addActionListener(e -> coordinadorPresentacion.mostrarVentanaInicio());
@@ -193,7 +191,7 @@ public class VhistorialVentas extends JFrame implements IObservador {
         JButton botonContinuar = UtilBoton.crearBoton("Continuar");
         botonContinuar.setPreferredSize(new Dimension(200, 50));
         botonContinuar.addActionListener(e -> {
-            
+
             //Verifica que el carrito no esté vacío
             if (coordinadorEstados.getCarritoVenta().isEmpty()) {
                 UtilSwing.dialogoAlerta(this, "El carrito está vacío");
@@ -203,128 +201,124 @@ public class VhistorialVentas extends JFrame implements IObservador {
         });
 
         //Agrega los botones al panel
-        p.add(botonRegresar, BorderLayout.WEST); 
+        p.add(botonRegresar, BorderLayout.WEST);
         p.add(botonContinuar, BorderLayout.EAST);
         return p;
     }
-    
-    
-    
+
     /**
-     * Crea el panel izquiero de búsqueda
-     * Utiliza un arreglo para crear los campos de busqueda
-     * 
-     * @return 
+     * Crea el panel izquiero de búsqueda Utiliza un arreglo para crear los
+     * campos de busqueda
+     *
+     * @return
      */
     private JPanel crearPanelBusqueda() {
-        
+
         //Configura el panel
         JPanel p = UtilPanel.crearPanel();
         p.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(15, 20, 15, 20); 
+        gbc.insets = new Insets(15, 20, 15, 20);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
 
         //Encabezado del panel 
         JLabel titulo = new JLabel("Buscar", SwingConstants.CENTER);
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        gbc.gridy = 0; gbc.weighty = 0.1;
+        gbc.gridy = 0;
+        gbc.weighty = 0.1;
         p.add(titulo, gbc);
-        
+
         //Va guardando la posición que tiene cada elemento verticalmente
         int ordenGbc = 1;
-        
+
         /**
-         * Empieza a iterar sobre el arreglo de campos
-         * Por cada iteración, crea el label de indicaciones y el campo para ingresar información
-         * Al final, lo agrega al campo para que no quede aislado
+         * Empieza a iterar sobre el arreglo de campos Por cada iteración, crea
+         * el label de indicaciones y el campo para ingresar información Al
+         * final, lo agrega al campo para que no quede aislado
          */
-        for (String stringCampo: campos) {
-            
+        for (String stringCampo : campos) {
+
             //Crea un label con indicaciones del campo respectivo
             JLabel label = new JLabel(stringCampo);
             label.setFont(Constantes.FUENTE);
             gbc.gridy = ordenGbc++;
             gbc.insets = new Insets(5, 20, 0, 20);
             p.add(label, gbc);
-            
+
             //Crea el campo de búsqueda
             gbc.gridy = ordenGbc++;
             gbc.insets = new Insets(3, 20, 10, 20);
             JTextField campoBuscar = UtilGeneral.crearCampoTexto();
             p.add(campoBuscar, gbc);
-            
+
             //Lo agrega al mapa para poder rescatarlo
             mapaCampos.put(stringCampo, campoBuscar);
         }
-        
+
         //Configura el botón de búsqueda
         botonBuscar.setPreferredSize(new Dimension(0, 45));
-        gbc.gridy = ordenGbc++; 
-        gbc.weighty = 0.1; 
+        gbc.gridy = ordenGbc++;
+        gbc.weighty = 0.1;
         gbc.insets = new Insets(10, 20, 30, 20);
         p.add(botonBuscar, gbc);
         return p;
     }
-    
-    
-    
+
     /**
-     * En un bucle for por cada detalle del carrito crea
-     * una tarjeta nueva con información específica y un
-     * botón almacenador para un diálogo de info
+     * En un bucle for por cada detalle del carrito crea una tarjeta nueva con
+     * información específica y un botón almacenador para un diálogo de info
      */
     private void dibujarTarjetasCarrito() {
-        
+
         //Declara variables
         String nombre;
         int cantidad;
         double costo;
         double subtotal;
-        
-        for (DetallesVentaDTO detalle: CoordinadorEstados.singleton().getCarritoVenta()) {
+
+        for (DetallesVentaDTO detalle : CoordinadorEstados.singleton().getCarritoVenta()) {
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
-            
+
             //Asigna valores
             nombre = detalle.getPieza().getNombre();
             cantidad = detalle.getCantidad();
             costo = detalle.getCosto();
             subtotal = detalle.getSubtotal();
-            
+
             //Crea el panel de información básica
             JPanel panelInfoBasica = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
             panelInfoBasica.setOpaque(false);
-            
+
             //Parte de ícono y descripción
-            String desc = "<html><body style='width: 65%'>" +
-                          "<font color='white' size='3'><b>"+nombre+"</b> ("+cantidad+")</font><br>" +
-                          "<font color='white' size='2'>$ "+costo+"</font></body></html>";
+            String desc = "<html><body style='width: 65%'>"
+                    + "<font color='white' size='3'><b>" + nombre + "</b> (" + cantidad + ")</font><br>"
+                    + "<font color='white' size='2'>$ " + costo + "</font></body></html>";
             panelInfoBasica.add(new JLabel(desc));
-            
+
             //Sección para mostrar información adicional: el precio y el botón de detalles
             JPanel panelMostrarInfo = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 8));
             panelMostrarInfo.setOpaque(false);
             panelMostrarInfo.setPreferredSize(new Dimension(160, 50));
-            
+
             //Label de precio
-            JLabel lblP = new JLabel("$" + subtotal); 
+            JLabel lblP = new JLabel("$" + subtotal);
             lblP.setForeground(new Color(50, 255, 100));
             lblP.setFont(new Font("Segoe UI", Font.BOLD, 18));
             panelMostrarInfo.add(lblP);
-            
+
             //Crea un botón de información adicional
             Color colorBoton = new Color(50, 255, 100);
             UtilBoton.BotonAlmacenador botonInfo = new BotonAlmacenador("Info", detalle);
             botonInfo.setBackground(colorBoton);
             UtilBoton.asignarHoverBoton(botonInfo, colorBoton.darker());
             panelMostrarInfo.add(botonInfo);
-            
+
             //Agrega funcionalidad al botón de mostrarInfo
             botonInfo.addActionListener(e -> {
                 coordinadorPresentacion.abrirDialogo(() -> new InfoDetalle(VhistorialVentas.this, botonInfo.getDTO()));
             });
-            
+
             //Agrega al panel principal
             tarjeta.add(panelInfoBasica, BorderLayout.WEST);
             tarjeta.add(panelMostrarInfo, BorderLayout.EAST);
@@ -334,21 +328,17 @@ public class VhistorialVentas extends JFrame implements IObservador {
             contenedorListaDetalles.add(Box.createVerticalStrut(15));
         }
     }
-    
-    
-    
+
     /**
      * Dibuja y habita cada tarjeta que le corresponde una pieza en específico
-     * Crea la tarjeta de UtilPanel
-     * Extrae los datos de la pieza
-     * Configura cómo se plasma la información
-     * Crea el BotonAlmacenador mostrarInfo
-     * Esa información del DTO se manda a un diálogo
-     * 
+     * Crea la tarjeta de UtilPanel Extrae los datos de la pieza Configura cómo
+     * se plasma la información Crea el BotonAlmacenador mostrarInfo Esa
+     * información del DTO se manda a un diálogo
+     *
      * @param pieza específica
      */
     private void dibujarTarjetasVentas(List<VentaDTO> ventas) {
-        
+
         //Declara variables
         double total;
         String fechaHora;
@@ -356,32 +346,32 @@ public class VhistorialVentas extends JFrame implements IObservador {
         int cantidadDetalles; //-> FIXME: ES TEMPORAL PARA PROBAR RAPIDAMENTE QUE SI SE PASAN LOS DETALLES
 
         //Por cada venta de la lista...
-        for (VentaDTO venta: ventas) {
+        for (VentaDTO venta : ventas) {
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
             tarjeta.setLayout(new BorderLayout(20, 0));
-        
+
             //Asigna valores
             total = venta.getTotal();
             fechaHora = venta.getFechaHora();
             folio = venta.getFolio();
             cantidadDetalles = venta.getDetalles().size();
-            
+
             //Crea el panel de información básica
             JPanel panelInfoBasica = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
             panelInfoBasica.setOpaque(false);
-            
+
             //Parte de ícono y descripción
-            String desc = "<html><body style='width: 120px'>" +
-                          "<font color='white' size='3'><b>"+folio+"</b> ("+cantidadDetalles+")</font><br>" +
-                          "<font color='white' size='2'>$ "+fechaHora+"</font></body></html>";
+            String desc = "<html><body style='width: 120px'>"
+                    + "<font color='white' size='3'><b>" + folio + "</b> (" + cantidadDetalles + ")</font><br>"
+                    + "<font color='white' size='2'>$ " + fechaHora + "</font></body></html>";
             panelInfoBasica.add(new JLabel(desc));
 
             //Sección para mostrar información adicional: el precio y el botón de detalles
             JPanel panelMostrarInfo = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 8));
             panelMostrarInfo.setOpaque(false);
-            
+
             //Label de precio
-            JLabel lblP = new JLabel("$" + total); 
+            JLabel lblP = new JLabel("$" + total);
             lblP.setForeground(new Color(50, 255, 100));
             lblP.setFont(new Font("Segoe UI", Font.BOLD, 22));
 
@@ -390,12 +380,17 @@ public class VhistorialVentas extends JFrame implements IObservador {
             UtilBoton.BotonAlmacenador botonInfo = new BotonAlmacenador("Info", venta);
             botonInfo.setBackground(colorBoton);
             UtilBoton.asignarHoverBoton(botonInfo, colorBoton.darker());
-            panelMostrarInfo.add(lblP); 
+            panelMostrarInfo.add(lblP);
             panelMostrarInfo.add(botonInfo);
 
-            //Agrega funcionalidad al botón de mostrarInfo
+// Agrega funcionalidad al botón de mostrarInfo
             botonInfo.addActionListener(e -> {
-                UtilSwing.dialogoAviso(VhistorialVentas.this, "En proceso...");
+                // 1. Recuperamos la venta almacenada en el botón
+                VentaDTO ventaSeleccionada = (VentaDTO) botonInfo.getDTO();
+
+                // 2. Le pedimos al coordinador que abra el detalle
+                // Nota: El coordinador ya se encarga de hacer el .setVisible(true)
+                coordinadorPresentacion.abrirDetalleVenta(ventaSeleccionada);
             });
 
             //Agrega al panel principal
@@ -407,15 +402,11 @@ public class VhistorialVentas extends JFrame implements IObservador {
             contenedorListaPiezas.add(Box.createVerticalStrut(15));
         }
     }
-    
-    
-    
+
     /**
-     * En orden: 
-     * 1. Obtiene el nuevo total del CoordinadorEstados
-     * 2. Actualiza el label con ese nuevo total
-     * 3. Vacía la lista de detalles del frame
-     * 4. Recalcula y redibuja el panel
+     * En orden: 1. Obtiene el nuevo total del CoordinadorEstados 2. Actualiza
+     * el label con ese nuevo total 3. Vacía la lista de detalles del frame 4.
+     * Recalcula y redibuja el panel
      */
     @Override
     public void observar() {

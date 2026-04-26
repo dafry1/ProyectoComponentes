@@ -2,6 +2,7 @@ package coordinadores;
 import DTOS.DTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
+import DTOS.VentaDTO;
 import java.util.function.Supplier;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -52,13 +53,13 @@ public interface ICoordinadorPresentacion {
     void abrirResumenVenta();
     
     
-    void abrirInfoPieza(IObservador observador, PiezaDTO pieza);
-    
-    void abrirInfoDetalle();
-    
+    void abrirInfoPieza(IObservador observador, PiezaDTO pieza);    
     
     void navegar(JFrame actual, Supplier<JFrame> siguiente);
     
     void arrancar();
-    
+        
+    void abrirInfoDetalle(IObservador observador, DTO detalleDTO);
+        
+    void abrirDetalleVenta(VentaDTO venta);
 }

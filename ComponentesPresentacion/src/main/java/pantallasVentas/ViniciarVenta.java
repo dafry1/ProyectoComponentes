@@ -427,5 +427,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         dibujarTarjetasCarrito();
         contenedorListaDetalles.revalidate();
         contenedorListaDetalles.repaint();
+        labelTotal.revalidate();
+        labelTotal.repaint();
     }
 }

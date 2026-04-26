@@ -2,6 +2,7 @@ package coordinadores;
 
 import DTOS.DTO;
 import DTOS.PiezaDTO;
+import DTOS.VentaDTO;
 import ensambladores.IEnsambladorDTO;
 import pantallasPrincipales.VinicioSesion;
 import pantallasPrincipales.Vinicio;
@@ -13,6 +14,8 @@ import java.util.function.Supplier;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import observadores.IObservador;
+import pantallasVentas.DetalleVenta;
+import pantallasVentas.InfoDetalle;
 import pantallasVentas.InfoPieza;
 import pantallasVentas.PantallaResumen;
 
@@ -76,6 +79,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
         abrirNuevaVentana(() -> new VinicioSesion(this, coordinadorNegocio, CoordinadorEstados.singleton()));
     }
 
+    
     /**
      * Muestra la pantalla de Historial de ventas.
      */
@@ -155,10 +159,20 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
         abrirDialogo(() -> new InfoPieza(coordinadorEstados, observador, pieza, ensambladorDTO));
     }
 
-    @Override
-    public void abrirInfoDetalle() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+@Override
+    public void abrirDetalleVenta(VentaDTO venta) {
+        // Este abre el resumen de una venta ya realizada en el HISTORIAL
+        // Pasamos 'ventanaActual' para que sea el padre del diálogo
+        abrirDialogo(() -> new DetalleVenta(ventanaActual, venta));
     }
+
+    
+    @Override
+    public void abrirInfoDetalle(IObservador observador, DTO detalleDTO) {
+        // Este abre el diálogo para EDITAR la cantidad en el carrito
+        abrirDialogo(() -> new InfoDetalle(observador, detalleDTO));
+    }
+
 
 
 }

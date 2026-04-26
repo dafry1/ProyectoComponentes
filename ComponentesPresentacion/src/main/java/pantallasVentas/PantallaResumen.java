@@ -32,236 +32,173 @@ import utilPresentacion.UtilBoton.BotonAlmacenador;
  * @author Andre
  */
 public class PantallaResumen extends JFrame implements IObservador {
-    JPanel panelPrincipal;
-    
-    //Se usa en más de un método
+
     private JPanel contenedorListaDetalles;
     
-    //Coordinadores
+    // Coordinadores
     private ICoordinadorPresentacion coordinadorPresentacion;
     private ICoordinadorNegocio coordinadorNegocio;
     private ICoordinadorEstados coordinadorEstados;
-    
-    //Ensamblador
     private IEnsambladorDTO ensambladorDTO;
     
-    //Siempre actualizado desde el CoordiandorEstados
-    private double totalCarrito = CoordinadorEstados.singleton().totalCarritoVenta();
-    
-    //Se usa en más de un método
-    private JLabel labelTotal = new JLabel("Total: $ " + totalCarrito);
-    
-    
-    
-    /**
-     * Constructor donde se ensambla toda el frame
-     * 
-     * @param coordinadorPresentacion que navegará entre pantallas
-     * @param coordinadorNegocio para lógica de procesos
-     * @param coordinadorEstados
-     */
+    private double totalCarrito;
+    private JLabel labelTotal;
+
     public PantallaResumen(ICoordinadorPresentacion coordinadorPresentacion, ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados, IEnsambladorDTO ensambladorDTO) {
         this.coordinadorPresentacion = coordinadorPresentacion;
         this.coordinadorNegocio = coordinadorNegocio;
         this.coordinadorEstados = coordinadorEstados;
         this.ensambladorDTO = ensambladorDTO;
+        this.totalCarrito = coordinadorEstados.totalCarritoVenta();
+        this.labelTotal = new JLabel("Total: $ " + totalCarrito);
         
-        //Configuración general
-        UtilSwing.configurarFrame("Iniciar venta", this);
+        // Configuración general
+        UtilSwing.configurarFrame("Resumen de Venta", this);
 
-        //Añade el panel posterior
+        // Panel de navegación superior
         add(UtilBuild.crearNavegacion(this, coordinadorPresentacion), BorderLayout.NORTH);
 
-        //Crea el panel principal que contiene lo importante
+        // Panel principal de contenido
         JPanel contenido = new JPanel(new GridBagLayout()); 
         contenido.setBackground(Constantes.COLOR_FONDO);
         contenido.setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        //Configura el gbc
         GridBagConstraints g = new GridBagConstraints();
         g.fill = GridBagConstraints.BOTH;
-        g.insets = new Insets(0, 10, 0, 10);
+        g.insets = new Insets(10, 10, 10, 10);
         
-        g.gridx = 0; g.weightx = 0.30; contenido.add(crearPanelCarrito(), g);
+        g.gridx = 0; g.weightx = 1.0; g.weighty = 1.0;
+        contenido.add(crearPanelCarrito(), g);
         
-        //Añade al frame
         add(contenido, BorderLayout.CENTER);
         add(crearPanelInferior(), BorderLayout.SOUTH);
     }
-    
-    
-    
-    /**
-     * Crea el panel derecho que contiene gráficamente a
-     * los elementos del carrito
-     * 
-     * @return panel del del carrito
-     */
-    private JPanel crearPanelCarrito () {
+
+    private JPanel crearPanelCarrito() {
         JPanel p = new JPanel(new BorderLayout());
         p.setOpaque(false);
 
-        //Encabezado
-        JLabel titulo = new JLabel("Carrito", SwingConstants.CENTER);
+        JLabel titulo = new JLabel("Resumen del Carrito", SwingConstants.CENTER);
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
         titulo.setBorder(new EmptyBorder(0, 0, 15, 0));
         p.add(titulo, BorderLayout.NORTH);
         
-        //Llena el atributo del contenedor de detalles
         contenedorListaDetalles = new JPanel();
         contenedorListaDetalles.setLayout(new BoxLayout(contenedorListaDetalles, BoxLayout.Y_AXIS));
         contenedorListaDetalles.setBackground(Color.WHITE);
 
-        //Campo de los detalles
         dibujarTarjetasCarrito();
 
-        //Crea un scroll para la lista de detalles
         JScrollPane scrollD = new JScrollPane(contenedorListaDetalles);
         scrollD.setBorder(null);
-        scrollD.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollD.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollD.getVerticalScrollBar().setUnitIncrement(16);
         p.add(scrollD, BorderLayout.CENTER);
         
-        //Total
-        labelTotal.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        labelTotal.setFont(new Font("Segoe UI", Font.BOLD, 22));
         labelTotal.setHorizontalAlignment(SwingConstants.CENTER);
-        labelTotal.setBorder(new EmptyBorder(10, 0, 0, 0));
+        labelTotal.setBorder(new EmptyBorder(15, 0, 0, 0));
         p.add(labelTotal, BorderLayout.SOUTH);
+        
         return p;
     }
-    
-    
-    
-    /**  Crea la barra inferior para continuar y regresar */
+
     private JPanel crearPanelInferior() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBackground(Color.WHITE);
-        p.setBorder(new EmptyBorder(10, 30, 20, 30));
+        p.setBorder(new EmptyBorder(15, 30, 20, 30));
         
-        //Crea el botón de regreso
         JButton botonRegresar = UtilBoton.crearBotonRegresar();
         botonRegresar.addActionListener(e -> coordinadorPresentacion.mostrarVentanaInicio());
 
-        //Creaa el botón de continuar y le agrega navegación
-        JButton botonContinuar = UtilBoton.crearBoton("Continuar");
-        botonContinuar.setPreferredSize(new Dimension(200, 50));
+        JButton botonContinuar = UtilBoton.crearBoton("Finalizar Venta");
+        botonContinuar.setPreferredSize(new Dimension(220, 50));
         botonContinuar.addActionListener(e -> {
-            
-            //Verifica que el carrito no esté vacío
             if (coordinadorEstados.getCarritoVenta().isEmpty()) {
                 UtilSwing.dialogoAlerta(this, "El carrito está vacío");
                 return;
             }
             
-            //Lógica para realizar la venta
-            UtilSwing.dialogoConfirmacion(botonContinuar, "¿Desea confirmar la venta?", () -> {
+            UtilSwing.dialogoConfirmacion(this, "¿Confirmar la venta por $" + totalCarrito + "?", () -> {
                 confirmarVenta();
             });
         });
 
-        //Agrega los botones al panel
         p.add(botonRegresar, BorderLayout.WEST); 
         p.add(botonContinuar, BorderLayout.EAST);
         return p;
     }
-    
-    
-    /** Verifica que existan productos y los empaqueta en una VentaDTO */
+
     private void confirmarVenta() {
-        
-        //Verifica que el carrito no esté vacío
-        if (coordinadorEstados.carritoVentaVacio()) {
-            UtilSwing.dialogoAlerta(PantallaResumen.this, "Carrito vacío");
-            return;
+        try {
+            // Datos del contexto
+            EmpleadoDTO empleado = coordinadorEstados.getUsuarioLogueado();
+            List<DetallesVentaDTO> carrito = coordinadorEstados.getCarritoVenta();
+            
+            // Cliente HARDCODED (Requerido)
+            ClienteDTO cliente = new ClienteDTO("Andre", "Vega", "Romero", "andre@gmail.com", "123456789");
+            
+            // Ensamblar DTO
+            VentaDTO venta = ensambladorDTO.ensamblarVentaDTO(cliente, empleado, carrito);
+            
+            // Procesar en la capa de negocio
+            coordinadorNegocio.procesarVenta(venta, this);
+            
+            // Feedback y navegación final
+            UtilSwing.dialogoAviso(this, "Venta procesada con éxito.");
+            coordinadorPresentacion.mostrarVentanaInicio();
+            this.dispose();
+
+        } catch (Exception ex) {
+            UtilSwing.dialogoError(this, "Error al procesar la venta: " + ex.getMessage());
         }
-        
-        //Crea la venta
-        EmpleadoDTO empleado = coordinadorEstados.getUsuarioLogueado();
-        List<DetallesVentaDTO> carrito = coordinadorEstados.getCarritoVenta();
-        
-        ClienteDTO cliente = new ClienteDTO("Andre", "Vega", "Romero", "andre@gmail.com", "123456789");
-        
-        VentaDTO venta = ensambladorDTO.ensamblarVentaDTO(cliente, empleado, carrito);
-        
-        //Manda la venta al coordinador
-        coordinadorNegocio.procesarVenta(venta, this);
     }
-    
-    
-    
-    /**
-     * En un bucle for por cada detalle del carrito crea
-     * una tarjeta nueva con información específica y un
-     * botón almacenador para un diálogo de info
-     */
+
     private void dibujarTarjetasCarrito() {
-        
-        //Declara variables
-        String nombre;
-        int cantidad;
-        double costo;
-        double subtotal;
-        
-        for (DetallesVentaDTO detalle: CoordinadorEstados.singleton().getCarritoVenta()) {
+        for (DetallesVentaDTO detalle : coordinadorEstados.getCarritoVenta()) {
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
+            tarjeta.setLayout(new BorderLayout(10, 10));
             
-            //Asigna valores
-            nombre = detalle.getPieza().getNombre();
-            cantidad = detalle.getCantidad();
-            costo = detalle.getCosto();
-            subtotal = detalle.getSubtotal();
+            // Información del producto
+            String nombre = detalle.getPieza().getNombre();
+            int cantidad = detalle.getCantidad();
+            double costo = detalle.getCosto();
+            double subtotal = detalle.getSubtotal();
             
-            //Crea el panel de información básica
-            JPanel panelInfoBasica = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+            JPanel panelInfoBasica = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
             panelInfoBasica.setOpaque(false);
             
-            //Parte de ícono y descripción
-            String desc = "<html><body style='width: 65%'>" +
-                          "<font color='white' size='3'><b>"+nombre+"</b> ("+cantidad+")</font><br>" +
-                          "<font color='white' size='2'>$ "+costo+"</font></body></html>";
+            String desc = "<html><body style='width: 150px'>" +
+                          "<font color='white' size='4'><b>" + nombre + "</b></font><br>" +
+                          "<font color='white' size='3'>Cant: " + cantidad + " x $" + costo + "</font></body></html>";
             panelInfoBasica.add(new JLabel(desc));
             
-            //Sección para mostrar información adicional: el precio y el botón de detalles
-            JPanel panelMostrarInfo = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 8));
-            panelMostrarInfo.setOpaque(false);
-            panelMostrarInfo.setPreferredSize(new Dimension(160, 50));
+            // Precio y Botón Info
+            JPanel panelDerecho = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
+            panelDerecho.setOpaque(false);
             
-            //Label de precio
-            JLabel lblP = new JLabel("$" + subtotal); 
-            lblP.setForeground(new Color(50, 255, 100));
-            lblP.setFont(new Font("Segoe UI", Font.BOLD, 18));
-            panelMostrarInfo.add(lblP);
+            JLabel lblSubtotal = new JLabel("$" + subtotal); 
+            lblSubtotal.setForeground(new Color(50, 255, 100));
+            lblSubtotal.setFont(new Font("Segoe UI", Font.BOLD, 20));
             
-            //Crea un botón de información adicional
-            Color colorBoton = new Color(50, 255, 100);
-            UtilBoton.BotonAlmacenador botonInfo = new BotonAlmacenador("Info", detalle);
-            botonInfo.setBackground(colorBoton);
-            UtilBoton.asignarHoverBoton(botonInfo, colorBoton.darker());
-            panelMostrarInfo.add(botonInfo);
-            
-            //Agrega funcionalidad al botón de mostrarInfo
+            BotonAlmacenador botonInfo = new BotonAlmacenador("Detalles", detalle);
             botonInfo.addActionListener(e -> {
-                UtilSwing.dialogoAviso(tarjeta, "hola xd");
+                String info = "Producto: " + detalle.getPieza().getNombre() + 
+                             "\nCategoría: " + detalle.getPieza().getCategoria() +
+                             "\nSubtotal: $" + detalle.getSubtotal();
+                UtilSwing.dialogoAviso(this, info);
             });
             
-            //Agrega al panel principal
-            tarjeta.add(panelInfoBasica, BorderLayout.WEST);
-            tarjeta.add(panelMostrarInfo, BorderLayout.EAST);
+            panelDerecho.add(lblSubtotal);
+            panelDerecho.add(botonInfo);
 
-            //Agrega al panel
+            tarjeta.add(panelInfoBasica, BorderLayout.WEST);
+            tarjeta.add(panelDerecho, BorderLayout.EAST);
+
             contenedorListaDetalles.add(tarjeta);
-            contenedorListaDetalles.add(Box.createVerticalStrut(15));
+            contenedorListaDetalles.add(Box.createVerticalStrut(10));
         }
     }
-    
-    /**
-     * En orden: 
-     * 1. Obtiene el nuevo total del CoordinadorEstados
-     * 2. Actualiza el label con ese nuevo total
-     * 3. Vacía la lista de detalles del frame
-     * 4. Recalcula y redibuja el panel
-     */
+
     @Override
     public void observar() {
         totalCarrito = coordinadorEstados.totalCarritoVenta();

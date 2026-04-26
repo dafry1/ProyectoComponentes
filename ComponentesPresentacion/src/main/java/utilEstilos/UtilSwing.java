@@ -5,6 +5,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import pantallasVentas.PantallaResumen;
 
 /**
  * Configura todo lo relacionado a configuraciones visuales de las
@@ -119,4 +120,7 @@ public class UtilSwing {
             funcion.run();
         }
     }
+
+    public static void dialogoError(PantallaResumen pantalla, String mensaje) {
+        JOptionPane.showMessageDialog(pantalla, mensaje, "Error", JOptionPane.ERROR_MESSAGE);    }
 }

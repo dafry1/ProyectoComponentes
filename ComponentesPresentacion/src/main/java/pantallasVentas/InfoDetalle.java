@@ -5,12 +5,8 @@ import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import coordinadores.CoordinadorEstados;
 import java.awt.Component;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.awt.Font;
+import javax.swing.*;
 import observadores.IObservador;
 import utilEstilos.UtilFormato;
 import utilEstilos.UtilSwing;
@@ -18,120 +14,107 @@ import utilPresentacion.UtilBoton;
 import utilPresentacion.UtilGeneral;
 
 /**
- * Diálogo que muestra la información de una pieza y gestiona
- * su adición al carrito
- * 
+ * Diálogo para editar la cantidad de una pieza ya presente en el carrito
  * @author Andre
  */
 public class InfoDetalle extends JDialog {
 
-    //Observa la pieza elegida
     private IObservador observador;
 
     public InfoDetalle(IObservador observador, DTO dto) {
         // Configuración inicial
         this.observador = observador;   
-        this.setModal(false);
-        this.setResizable(true);
+        this.setModal(true); 
+        this.setResizable(false);
+        this.setTitle("Editar Detalle");
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
         
-        //Castea
+        // Casteo y extracción de datos
         DetallesVentaDTO detalle = (DetallesVentaDTO) dto;
-        
-        //Extrae la información
-        Long id = detalle.getId();
-        int cantidad = detalle.getCantidad();
-        double subtotal = detalle.getSubtotal();
         PiezaDTO pieza = detalle.getPieza();
-        String nombrePieza = pieza.getNombre();
-        int stockPieza = pieza.getStockPieza();
         
-        //Crea el panel principal
+        String nombrePieza = pieza.getNombre();
+        int stockDisponible = pieza.getStockPieza();
+        int cantidadActual = detalle.getCantidad();
+        
+        // Panel Principal
         JPanel panelPrincipal = new JPanel();
         panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
-        panelPrincipal.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 50, 30, 50));
-        panelPrincipal.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(25, 40, 25, 40));
         
-        //Crea un arreglo de Strings con base en la información de la pieza
+        // Información de la pieza
         String[] info = {
-            "ID del detalle: " + id,
-            "Nombre: " + nombrePieza,
-            "Cantidad: " + cantidad,
-            "Subtotal: " + subtotal,
+            "Producto: " + nombrePieza,
+            "Precio Unitario: $" + detalle.getCosto(),
+            "Stock en almacén: " + stockDisponible,
+            "Cantidad actual: " + cantidadActual
         };
 
-        //Crea un label por cada elemento del arreglo
-        for (String texto: info) {
+        for (String texto : info) {
             JLabel lbl = UtilGeneral.crearLabel(texto);
             lbl.setAlignmentX(Component.CENTER_ALIGNMENT);
             panelPrincipal.add(lbl);
-            panelPrincipal.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 5)));
+            // Uso de ruta completa para evitar error de import
+            panelPrincipal.add(Box.createRigidArea(new java.awt.Dimension(0, 8)));
         }
 
-        //Pequeño espacio
-        panelPrincipal.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 20)));
+        panelPrincipal.add(Box.createRigidArea(new java.awt.Dimension(0, 15)));
 
-        //Label del stock local restante de la pieza
-        JLabel labelStock = UtilGeneral.crearLabel("Cantidad de piezas: " + cantidad);
-        labelStock.setFont(labelStock.getFont().deriveFont(java.awt.Font.BOLD, 14f));
-        labelStock.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelPrincipal.add(labelStock);
+        // Sección de edición
+        JLabel labelInstruccion = UtilGeneral.crearLabel("Ingrese la nueva cantidad:");
+        labelInstruccion.setFont(labelInstruccion.getFont().deriveFont(Font.BOLD, 13f));
+        labelInstruccion.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelPrincipal.add(labelInstruccion);
         
-        //Crea un campo de texto para editar la cantidad
         JTextField campoCantidad = UtilGeneral.crearCampoTexto();
+        campoCantidad.setText(String.valueOf(cantidadActual));
+        // Ajuste de tamaño con ruta completa
+        campoCantidad.setMaximumSize(new java.awt.Dimension(120, 35));
         panelPrincipal.add(campoCantidad);
 
-        //Pequeño espacio
-        panelPrincipal.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 25)));
+        panelPrincipal.add(Box.createRigidArea(new java.awt.Dimension(0, 20)));
 
-        //Boton que selecciona la pieza
-        JButton boton = UtilBoton.crearBoton("Seleccionar");
-        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boton.addActionListener(e -> {
+        // Botón de actualización
+        JButton botonActualizar = UtilBoton.crearBoton("Actualizar");
+        botonActualizar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        botonActualizar.addActionListener(e -> {
             
-            //Lanza mensaje si el número no es válido
-            String cantidadString = campoCantidad.getText();
-            if (!UtilFormato.numeroEnteroPositivo(cantidadString)) {
-                UtilSwing.dialogoAlerta(InfoDetalle.this, "Ingrese un número entero positivo");
+            String input = campoCantidad.getText().trim();
+            
+            if (!UtilFormato.numeroEnteroPositivo(input)) {
+                UtilSwing.dialogoAlerta(this, "Por favor, ingrese un número entero válido.");
                 return;
             }
             
-            //Crea un diálogo de confirmación
-            UtilSwing.dialogoConfirmacion(boton, "¿Desea agregar esta pieza al carrito?", () -> {
-                
-                //Parsea solo si se confirma el agregado
-                int cantidadActualizar = Integer.parseInt(cantidadString);
-                
-                //FIXME: QUIZÁ ESTO PUEDE HACER QUE BORRE TODO EL DETALLE
-                if (cantidadActualizar == 0) {
-                    UtilSwing.dialogoAlerta(InfoDetalle.this, "No hay stock disponible para esta pieza. Se recomienda hacer una solicitud");
-                    return;
+            int nuevaCantidad = Integer.parseInt(input);
+
+            if (nuevaCantidad > stockDisponible) {
+                UtilSwing.dialogoAlerta(this, "Error: Solo hay " + stockDisponible + " unidades disponibles.");
+                return;
+            }
+
+            UtilSwing.dialogoConfirmacion(this, "¿Actualizar cantidad?", () -> {
+                if (nuevaCantidad == 0) {
+                    CoordinadorEstados.singleton().getCarritoVenta().remove(detalle);
+                    UtilSwing.dialogoAviso(this, "Pieza eliminada del carrito.");
+                } else {
+                    detalle.setCantidad(nuevaCantidad);
+                    UtilSwing.dialogoAviso(this, "Cantidad actualizada.");
                 }
                 
-                //Valida stock suficiente
-                if (cantidadActualizar > stockPieza) {
-                    UtilSwing.dialogoAlerta(InfoDetalle.this, cantidad + " excede el stock actual (" + stockPieza + ")");
-                    return;
+                if (observador != null) {
+                    observador.observar();
                 }
-                
-                //Actualiza el detalle y notifica al observador
-                detalle.setCantidad(cantidadActualizar);
-                observador.observar();
-                UtilSwing.dialogoAviso(this, "Se actualizaron " + cantidadActualizar + " de la pieza " + nombrePieza);
                 this.dispose();
-                
-                //TODO: AQUÍ TAMBIÉN DEBE ACTUALIZAR LA LISTA SUPONGO
             });
         });
-        panelPrincipal.add(boton);
-
-        //Agregar todo al diálogo
-        this.add(panelPrincipal);
         
-        //Configuración final
+        panelPrincipal.add(botonActualizar);
+
+        // Finalización
+        this.add(panelPrincipal);
         this.pack();
         this.setLocationRelativeTo(null);
-        this.setVisible(true);
     }
 }

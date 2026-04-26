@@ -1,26 +1,32 @@
 package DTOS;
 
 /**
- * DTO que representa una parte de un pedido de una venta
- * 
- * @author Andre
+ * DTO que representa una parte de un pedido de una venta.
+ * Se ha automatizado el cálculo del subtotal para facilitar la edición en UI.
+ * * @author Andre
  */
 public class DetallesVentaDTO extends DTO {
     
-    //Atributos
     private double costo;
     private int cantidad;
     private double subtotal;
     private PiezaDTO pieza;
 
-    //Constructores
     public DetallesVentaDTO(){}
+    
     public DetallesVentaDTO(Long id, double costo, int cantidad, double subtotal, PiezaDTO pieza) {
         super(id);
         this.costo = costo;
         this.cantidad = cantidad;
-        this.subtotal = subtotal;
         this.pieza = pieza;
+        recalcularSubtotal();
+    }
+
+    /**
+     * Calcula el subtotal basado en costo y cantidad actual
+     */
+    private void recalcularSubtotal() {
+        this.subtotal = this.costo * this.cantidad;
     }
 
     public double getCosto() {
@@ -29,6 +35,7 @@ public class DetallesVentaDTO extends DTO {
 
     public void setCosto(double costo) {
         this.costo = costo;
+        recalcularSubtotal(); 
     }
 
     public int getCantidad() {
@@ -37,6 +44,7 @@ public class DetallesVentaDTO extends DTO {
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+        recalcularSubtotal(); 
     }
 
     public double getSubtotal() {
@@ -53,5 +61,9 @@ public class DetallesVentaDTO extends DTO {
 
     public void setPieza(PiezaDTO pieza) {
         this.pieza = pieza;
+        if(pieza != null && this.costo == 0) {
+            this.costo = pieza.getCostoPieza();
+            recalcularSubtotal();
+        }
     }
 }
