@@ -114,7 +114,9 @@ public class VinicioSesion extends JFrame {
             if (empleado != null) {
                 coordinadorEstados.singleton().establecerSesion(empleado);
 
-                JOptionPane.showMessageDialog(this, "Bienvenido " + empleado.getNombreUsuario());
+                String nombreEmpleado = empleado.getNombres() + " " + empleado.getApellidoPaterno() + " " + empleado.getApellidoMaterno();
+                
+                JOptionPane.showMessageDialog(this, "Bienvenido " + nombreEmpleado + " (" + empleado.getNombreUsuario() + ")");
                 coordinador.mostrarVentanaInicio();
                 this.dispose();
 

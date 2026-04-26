@@ -1,5 +1,7 @@
 package dominio;
 
+import java.util.Objects;
+
 /**
  * Representación de una pieza en la BD
  * 
@@ -80,5 +82,24 @@ public class Pieza {
 
     public void setStockPieza(int stockPieza) {
         this.stockPieza = stockPieza;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        // 1. Verificación básica de referencia
+        if (this == o) return true;
+        
+        // 2. Verificación de nulidad y clase
+        if (o == null || getClass() != o.getClass()) return false;
+        
+        // 3. Comparación por ID
+        Pieza pieza = (Pieza) o;
+        return Objects.equals(id, pieza.id);
+    }
+
+    @Override
+    public int hashCode() {
+        // Genera el hash basado en el ID
+        return Objects.hash(id);
     }
 }

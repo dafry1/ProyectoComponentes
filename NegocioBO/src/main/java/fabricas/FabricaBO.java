@@ -49,7 +49,7 @@ public class FabricaBO implements IFabricaBO {
      */
     @Override
     public IPiezaBO fabricarPieza() {
-        return new PiezaBO(fabricaDAO.fabricarPieza(), fabricaAdaptadores.fabricarAdaptadorPieza());
+        return new PiezaBO(fabricaDAO.fabricarPieza(), fabricaAdaptadores.fabricarAdaptadorPieza(), fabricaAdaptadores.fabricarAdaptadorDetallesVenta());
     }
     
     /**
@@ -69,6 +69,6 @@ public class FabricaBO implements IFabricaBO {
      */
     @Override
     public IEmpleadoBO fabricarEmpleado() {
-        return new EmpleadoBO();
+        return new EmpleadoBO(fabricaDAO.fabricarEmpleado(), fabricaAdaptadores.fabricarAdaptadorEmpleado());
     }
 }

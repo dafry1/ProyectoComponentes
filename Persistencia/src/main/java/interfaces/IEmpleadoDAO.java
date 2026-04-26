@@ -4,10 +4,23 @@
  */
 package interfaces;
 
+import dominio.Empleado;
+import java.util.List;
+
 /**
  *
  * @author Andre
  */
 public interface IEmpleadoDAO {
+    List<Empleado> consultarEmpleados();
     
+    /**
+     * Consulta en la BD al empleado con los datos especificados
+     * 
+     * @param nombreUsuario del empleado
+     * @param password contraseña del empleado
+     * 
+     * @return el empleado encontrado
+     */
+    Empleado verificarEmpleado(String nombreUsuario, String password);
 }

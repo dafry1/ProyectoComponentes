@@ -4,6 +4,7 @@ import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import dominio.Pieza;
 import excepciones.NegocioException;
+import interfaces.IAdaptadorDetallesVenta;
 import interfaces.IAdaptadorPieza;
 import interfaces.IPiezaBO;
 import interfaces.IPiezaDAO;
@@ -22,6 +23,7 @@ public class PiezaBO implements IPiezaBO {
     //Atributos
     private IPiezaDAO piezaDAO;
     private IAdaptadorPieza adaptadorPieza;
+    private IAdaptadorDetallesVenta adaptadorDetalles;
     
     /**
      * Constructor que inyecta DAO y adaptador
@@ -29,9 +31,10 @@ public class PiezaBO implements IPiezaBO {
      * @param piezaDAO
      * @param adaptadorPieza 
      */
-    public PiezaBO(IPiezaDAO piezaDAO, IAdaptadorPieza adaptadorPieza) {
+    public PiezaBO(IPiezaDAO piezaDAO, IAdaptadorPieza adaptadorPieza, IAdaptadorDetallesVenta adaptadorDetalles) {
         this.piezaDAO = piezaDAO;
         this.adaptadorPieza = adaptadorPieza;
+        this.adaptadorDetalles = adaptadorDetalles;
     }
     
     /** Centraliza la forma en la que se adaptan las piezas de Entidad a DTO */
@@ -96,26 +99,9 @@ public class PiezaBO implements IPiezaBO {
      * @param detalle 
      */
     @Override
-    public void actualizarStock(DetallesVentaDTO detalle) { //-> FIXME: ESTO DEBE CONSULTAR DIRECTO AL DAO
-        
-        for (PiezaDTO pieza: adaptarPiezasInternamente(piezaDAO.consultarPiezas())) {
-            
-            if (pieza.equals(detalle.getPieza())) {
-                int stockActual = pieza.getStockPieza();
-                int cantidadVendida = detalle.getCantidad();
-                
-                if (stockActual >= cantidadVendida) {
-                    pieza.setStockPieza(stockActual - cantidadVendida);
-                    LOG.log(System.Logger.Level.DEBUG, "Stock actualizado: " + pieza.getNombre() + " ahora tiene " + pieza.getStockPieza());
-                } else {
-                    LOG.log(System.Logger.Level.ERROR, CARRITO_VACIO);
-                }
-                return;
-            }
-        }
+    public void actualizarStock(DetallesVentaDTO detalle) {
+        piezaDAO.actualizarStock(adaptadorDetalles.Entidad(detalle));
     }
-    
-    
     
     /**
      * Utiliza el método actualizarStock iterando sobre la lista
@@ -125,16 +111,7 @@ public class PiezaBO implements IPiezaBO {
      */
     @Override
     public void actualizarStockTrasVenta(List<DetallesVentaDTO> detalles) {
-        
-        //Excepción si la lista está vacía o es null
-        if (detalles == null || detalles.isEmpty()) {
-            LOG.log(System.Logger.Level.ERROR, CARRITO_VACIO);
-            throw new NegocioException(CARRITO_VACIO);
-        }
-        
-        //Hace la iteración propiamente dicha
-        for (DetallesVentaDTO detalle: detalles) {
-            actualizarStock(detalle);
-        }
+        LOG.log(System.Logger.Level.INFO, () -> ">> INICIANDO EL DESCUENTO DE PRODUCTOS");
+        piezaDAO.actualizarStockTrasVenta(adaptadorDetalles.listaEntidad(detalles));
     }
 }

@@ -103,6 +103,8 @@ public class PiezaDAO implements IPiezaDAO {
             throw new PersistenciaException(CARRITO_VACIO);
         }
         
+        LOG.log(System.Logger.Level.INFO, () -> ">> INICIANDO EL DESCUENTO DE STOCK A NIVEL DAO");
+        
         //Hace la iteración propiamente dicha
         for (DetallesVenta detalle: detalles) {
             actualizarStock(detalle);

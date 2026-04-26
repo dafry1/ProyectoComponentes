@@ -55,6 +55,8 @@ public class ControlVentas {
      */
     public VentaDTO procesarVenta(VentaDTO venta) {
         
+        LOG.log(System.Logger.Level.INFO, () -> ">> INICIANDO EL PROCESO DE UNA VENTA");
+        
         //Actualiza stock y registra la venta
         piezaBO.actualizarStockTrasVenta(venta.getDetalles());
         ventaBO.registrarVenta(venta);
