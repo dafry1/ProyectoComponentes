@@ -21,7 +21,7 @@ public class InfoDetalle extends JDialog {
 
     private IObservador observador;
 
-    public InfoDetalle(IObservador observador, DTO dto) {
+    public InfoDetalle(IObservador observador, DetallesVentaDTO detalle) {
         // Configuración inicial
         this.observador = observador;   
         this.setModal(true); 
@@ -30,8 +30,7 @@ public class InfoDetalle extends JDialog {
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
         
-        // Casteo y extracción de datos
-        DetallesVentaDTO detalle = (DetallesVentaDTO) dto;
+        //Extracción de datos
         PiezaDTO pieza = detalle.getPieza();
         
         String nombrePieza = pieza.getNombre();

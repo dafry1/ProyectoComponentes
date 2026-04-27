@@ -1,5 +1,6 @@
 package coordinadores;
 import DTOS.DTO;
+import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
 import DTOS.VentaDTO;
@@ -59,7 +60,7 @@ public interface ICoordinadorPresentacion {
     
     void arrancar();
         
-    void abrirInfoDetalle(IObservador observador, DTO detalleDTO);
+    void abrirInfoDetalle(IObservador observador, DetallesVentaDTO detalle);
         
     void abrirDetalleVenta(VentaDTO venta);
 }

@@ -23,9 +23,6 @@ public class VentaBO implements IVentaBO {
 
     private static final System.Logger LOG = System.getLogger(VentaBO.class.getName());
     
-    
-    private static List<VentaDTO> VENTAS = new ArrayList<>();
-    
     //Atributos
     private IVentaDAO ventaDAO;
     private IAdaptadorVenta adaptadorVenta;
@@ -70,7 +67,7 @@ public class VentaBO implements IVentaBO {
             LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
             throw new NegocioException(DEBUG);
         }
-        generarFolio(venta);
+        venta.setFolio(generarFolio());
         generarFecha(venta);
         Venta v = adaptadorVenta.Entidad(venta);
         return adaptadorVenta.DTO(ventaDAO.registrarVenta(v));
@@ -81,27 +78,19 @@ public class VentaBO implements IVentaBO {
      * 
      * @param venta FIXME: TEMPORAL, EN FUNCIÓN REAL DEBE ACUDIR AL DAO PARA CONTAR LAS QUE LLEVAN EN EL DÍA
      */
-    private void generarFolio(VentaDTO venta) {
-        if (venta != null) {
-            String PREFIJO = "TW-";
-            int contador = VENTAS.size() + 1;
-            venta.setFolio(PREFIJO + contador);
-        }
+    private String generarFolio() {
+        return "TW - " + ventaDAO.consultarVentas() + 1;
     }
-    
     
     /**
      * Auxiliar obtiene la fecha
      * 
      * @param venta 
      */
-    private void generarFecha(VentaDTO venta) {
-        if (venta != null) {
-            LocalDateTime fechaHoraRegistro = LocalDateTime.now();
-            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-            String stringFechaHora = fechaHoraRegistro.format(formato);
-            venta.setFechaHora(stringFechaHora);
-        }
+    private String generarFecha(VentaDTO venta) {
+        LocalDateTime fechaHoraRegistro = LocalDateTime.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        return fechaHoraRegistro.format(formato);
     }
 
     @Override

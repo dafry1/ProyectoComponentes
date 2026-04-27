@@ -1,6 +1,7 @@
 package coordinadores;
 
 import DTOS.DTO;
+import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import DTOS.VentaDTO;
 import ensambladores.IEnsambladorDTO;
@@ -168,9 +169,8 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
 
     
     @Override
-    public void abrirInfoDetalle(IObservador observador, DTO detalleDTO) {
-        // Este abre el diálogo para EDITAR la cantidad en el carrito
-        abrirDialogo(() -> new InfoDetalle(observador, detalleDTO));
+    public void abrirInfoDetalle(IObservador observador, DetallesVentaDTO detalle) {
+        abrirDialogo(() -> new InfoDetalle(observador, detalle));
     }
 
 
