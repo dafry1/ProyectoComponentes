@@ -110,4 +110,24 @@ public class PiezaDAO implements IPiezaDAO {
             actualizarStock(detalle);
         }
     }
+
+    @Override
+    public List<Pieza> filtrarPorNombre(String nombre) {
+        return PIEZAS;
+    }
+
+    @Override
+    public List<Pieza> filtrarPorCategoria(String categoria) {
+        return PIEZAS;
+    }
+
+    @Override
+    public List<Pieza> filtrarPorMarca(String marca) {
+        return PIEZAS;
+    }
+
+    @Override
+    public List<Pieza> filtrarPorPrecioMax(double precioMaximo) {
+        return PIEZAS;
+    }
 }

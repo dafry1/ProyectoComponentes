@@ -49,6 +49,42 @@ public interface IPiezaBO {
     List<PiezaDTO> consultarTopTodoPiezas();
     
     /**
+     * Filtra las piezas según nombre
+     * 
+     * @param nombre
+     * 
+     * @return la lista
+     */
+    List<PiezaDTO> filtrarPorNombre(String nombre);
+    
+    /**
+     * Filtra las piezas según categoria
+     * 
+     * @param categoria
+     * 
+     * @return la lista
+     */
+    List<PiezaDTO> filtrarPorCategoria(String categoria);
+    
+    /**
+     * Filtra las piezas según marca
+     * 
+     * @param marca
+     * 
+     * @return la lista
+     */
+    List<PiezaDTO> filtrarPorMarca(String marca);
+    
+    /**
+     * Filtra las piezas según precio máximo
+     * 
+     * @param precioMaximo
+     * 
+     * @return la lista
+     */
+    List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo);
+    
+    /**
      * Actualiza el stock de una pieza en específica basándose
      * en un DetallesVentaDTO en específico
      * 

@@ -2,6 +2,7 @@ package daos;
 
 import dominio.Venta;
 import interfaces.IVentaDAO;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,5 +26,20 @@ public class VentaDAO implements IVentaDAO {
         VENTAS.add(venta);
         LOG.log(System.Logger.Level.INFO, "Venta registrada exitosamente: " + venta.getCliente().getNombres() + " : " + venta.getDetalles().size());
         return venta;
+    }
+
+    @Override
+    public List<Venta> filtrarVentasFecha(LocalDate fecha) {
+        return VENTAS;
+    }
+
+    @Override
+    public List<Venta> filtrarVentasTotalMinimo(double minimo) {
+        return VENTAS;
+    }
+
+    @Override
+    public List<Venta> filtrarVentasTotalMaximo(double maximo) {
+        return VENTAS;
     }
 }

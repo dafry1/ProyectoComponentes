@@ -1,11 +1,9 @@
 package fabricas;
 
-import adaptadores.AdaptadorPieza;
 import interfaces.IFabricaBO;
 import bo.EmpleadoBO;
 import bo.PiezaBO;
 import bo.VentaBO;
-import interfaces.IAdaptadorPieza;
 import interfaces.IEmpleadoBO;
 import interfaces.IFabricaAdaptadores;
 import interfaces.IFabricaDAO;
@@ -15,8 +13,9 @@ import interfaces.IVentaBO;
 /**
  * Clase que implementa el patrón Fabrica y se encarga
  * de suministrar a toda la capa de negocio de los BO
- * necesarios en forma de contratos de interfaces. También
- * está respaldada por una interfaz ya para que amarre 🚬
+ * necesarios en forma de contratos de interfaces. Maneja
+ * el patrón singleton para los BO, cuidando de que cada
+ * uno tenga una única instancia en todo el programa
  * 
  * @author Andre
  */
@@ -29,6 +28,11 @@ public class FabricaBO implements IFabricaBO {
     
     //Fábrica que suministra los adaptadores
     private IFabricaAdaptadores fabricaAdaptadores = FabricaAdaptadores.singleton();
+    
+    //Instancias de cada BO, implementando en la práctica un singleton
+    private IPiezaBO instanciaPieza;
+    private IVentaBO instanciaVenta;
+    private IEmpleadoBO instanciaEmpleado;
     
     /**
      * Singleton de la fábrica
@@ -49,7 +53,14 @@ public class FabricaBO implements IFabricaBO {
      */
     @Override
     public IPiezaBO fabricarPieza() {
-        return new PiezaBO(fabricaDAO.fabricarPieza(), fabricaAdaptadores.fabricarAdaptadorPieza(), fabricaAdaptadores.fabricarAdaptadorDetallesVenta());
+        if (instanciaPieza == null) {
+            instanciaPieza = new PiezaBO(
+                    fabricaDAO.fabricarPieza(), 
+                    fabricaAdaptadores.fabricarAdaptadorPieza(), 
+                    fabricaAdaptadores.fabricarAdaptadorDetallesVenta()
+                );
+        }
+        return instanciaPieza;
     }
     
     /**
@@ -59,7 +70,10 @@ public class FabricaBO implements IFabricaBO {
      */
     @Override
     public IVentaBO fabricarVenta() {
-        return new VentaBO(fabricaDAO.fabricarVenta(), fabricaAdaptadores.fabricarAdaptadorVenta());
+        if (instanciaVenta == null) {
+            instanciaVenta = new VentaBO(fabricaDAO.fabricarVenta(), fabricaAdaptadores.fabricarAdaptadorVenta());
+        }
+        return instanciaVenta;
     }
     
     /**
@@ -69,6 +83,9 @@ public class FabricaBO implements IFabricaBO {
      */
     @Override
     public IEmpleadoBO fabricarEmpleado() {
-        return new EmpleadoBO(fabricaDAO.fabricarEmpleado(), fabricaAdaptadores.fabricarAdaptadorEmpleado());
+        if (instanciaEmpleado == null) {
+            instanciaEmpleado = new EmpleadoBO(fabricaDAO.fabricarEmpleado(), fabricaAdaptadores.fabricarAdaptadorEmpleado());
+        }
+        return instanciaEmpleado;
     }
 }

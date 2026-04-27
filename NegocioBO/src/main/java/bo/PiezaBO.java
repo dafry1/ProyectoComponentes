@@ -9,6 +9,7 @@ import interfaces.IAdaptadorPieza;
 import interfaces.IPiezaBO;
 import interfaces.IPiezaDAO;
 import java.util.List;
+import utilerias.UtilNegocio;
 
 /**
  * BO que se conecta directamente con la persistencia para
@@ -100,6 +101,11 @@ public class PiezaBO implements IPiezaBO {
      */
     @Override
     public void actualizarStock(DetallesVentaDTO detalle) {
+        if (detalle == null) {
+            String DEBUG = "Detalle vacío";
+            LOG.log(System.Logger.Level.ERROR, DEBUG);
+            throw new NegocioException(">>" + DEBUG);
+        }
         piezaDAO.actualizarStock(adaptadorDetalles.Entidad(detalle));
     }
     
@@ -111,7 +117,51 @@ public class PiezaBO implements IPiezaBO {
      */
     @Override
     public void actualizarStockTrasVenta(List<DetallesVentaDTO> detalles) {
-        LOG.log(System.Logger.Level.INFO, () -> ">> INICIANDO EL DESCUENTO DE PRODUCTOS");
+        if (detalles == null || detalles.isEmpty()) {
+            String DEBUG = "Lista de detalles vacía";
+            LOG.log(System.Logger.Level.ERROR, DEBUG);
+            throw new NegocioException(">>" + DEBUG);
+        }
         piezaDAO.actualizarStockTrasVenta(adaptadorDetalles.listaEntidad(detalles));
+    }
+
+    @Override 
+    public List<PiezaDTO> filtrarPorNombre(String nombre) {
+        if (nombre == null || nombre.isBlank()) {
+            String DEBUG = "Nombre vacío";
+            LOG.log(System.Logger.Level.ERROR, DEBUG);
+            throw new NegocioException(">>" + DEBUG);
+        }
+        return adaptarPiezasInternamente(piezaDAO.filtrarPorNombre(nombre));
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorCategoria(String categoria) {
+        if (categoria == null || categoria.isBlank()) {
+            String DEBUG = "Categoría vacía";
+            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+            throw new NegocioException(DEBUG);
+        }
+        return adaptarPiezasInternamente(piezaDAO.filtrarPorCategoria(categoria));
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorMarca(String marca) {
+        if (marca == null || marca.isBlank()) {
+            String DEBUG = "Marca vacía";
+            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+            throw new NegocioException(DEBUG);
+        }
+        return adaptarPiezasInternamente(piezaDAO.filtrarPorMarca(marca));
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo) {
+        if (precioMaximo <= 0) {
+            String DEBUG = "Precio igual o menor a 0";
+            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+            throw new NegocioException(DEBUG);
+        }
+        return adaptarPiezasInternamente(piezaDAO.filtrarPorPrecioMax(precioMaximo));
     }
 }

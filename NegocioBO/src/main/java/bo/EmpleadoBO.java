@@ -8,7 +8,6 @@ import interfaces.IEmpleadoBO;
 import interfaces.IEmpleadoDAO;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * BO de un empleado
@@ -16,7 +15,9 @@ import java.util.logging.Logger;
  * @author DANIEL
  */
 public class EmpleadoBO implements IEmpleadoBO {
-    private static final Logger LOG = Logger.getLogger(EmpleadoBO.class.getName());
+
+    private static final System.Logger LOG = System.getLogger(EmpleadoBO.class.getName());
+    
     private static final String CAMPOS_VACIOS = "No se puede iniciar sesión con campos faltantes";
     private static final String EMPLEADO_INEXISTENTE = "No existe el empleado en el sistema";
     private static final List<EmpleadoDTO> EMPLEADOS = new ArrayList<>();
@@ -55,6 +56,16 @@ public class EmpleadoBO implements IEmpleadoBO {
      */
     @Override
     public EmpleadoDTO verificarEmpleado(String nombreUsuario, String password) {
+        if (nombreUsuario == null || nombreUsuario.isBlank()) {
+            String DEBUG = "Nombre de usuario vacío";
+            LOG.log(System.Logger.Level.ERROR, DEBUG);
+            throw new NegocioException(">>" + DEBUG);
+        }
+        if (password == null || password.isBlank()) {
+            String DEBUG = "Contraseña vacía";
+            LOG.log(System.Logger.Level.ERROR, DEBUG);
+            throw new NegocioException(">>" + DEBUG);
+        }
         return adaptadorEmpleado.DTO(empleadoDAO.verificarEmpleado(nombreUsuario, password));
     }
 }

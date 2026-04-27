@@ -14,28 +14,28 @@ public interface IPiezaDAO {
     /**
      * Consulta todas las piezas registradas en el sistema
      * 
-     * @return la lista de piezas en DTO
+     * @return la lista de piezas 
      */
     List<Pieza> consultarPiezas();
     
     /**
      * Consulta las piezas más vendidas al día registradas en el sistema
      * 
-     * @return la lista de piezas en DTO
+     * @return la lista de piezas
      */
     List<Pieza> consultarTopDiaPiezas();
     
     /**
      * Consulta las piezas más vendidas a la semana registradas en el sistema
      * 
-     * @return la lista de piezas en DTO
+     * @return la lista de piezas
      */
     List<Pieza> consultarTopSemanaPiezas();
     
     /**
      * Consulta las piezas más vendidas al mes registradas en el sistema
      * 
-     * @return la lista de piezas en DTO
+     * @return la lista de piezas
      */
     List<Pieza> consultarTopMesPiezas();
     
@@ -43,13 +43,49 @@ public interface IPiezaDAO {
      * Consulta las piezas más vendidas en todo el tiempo registradas en
      * el sistema
      * 
-     * @return la lista de piezas en DTO
+     * @return la lista de piezas
      */
     List<Pieza> consultarTopTodoPiezas();
     
     /**
+     * Filtra las piezas según nombre
+     * 
+     * @param nombre
+     * 
+     * @return la lista
+     */
+    List<Pieza> filtrarPorNombre(String nombre);
+    
+    /**
+     * Filtra las piezas según categoria
+     * 
+     * @param categoria
+     * 
+     * @return la lista
+     */
+    List<Pieza> filtrarPorCategoria(String categoria);
+    
+    /**
+     * Filtra las piezas según marca
+     * 
+     * @param marca
+     * 
+     * @return la lista
+     */
+    List<Pieza> filtrarPorMarca(String marca);
+    
+    /**
+     * Filtra las piezas según precio máximo
+     * 
+     * @param precioMaximo
+     * 
+     * @return la lista
+     */
+    List<Pieza> filtrarPorPrecioMax(double precioMaximo);
+    
+    /**
      * Actualiza el stock de una pieza en específica basándose
-     * en un DetallesVentaDTO en específico
+     * en un DetallesVenta en específico
      * 
      * @param detalle de la pieza a actualizar el stock
      */
