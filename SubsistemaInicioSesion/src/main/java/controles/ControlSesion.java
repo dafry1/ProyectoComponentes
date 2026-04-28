@@ -22,15 +22,14 @@ public class ControlSesion {
     private final IEmpleadoBO empleadoBO;
     private EmpleadoDTO usuarioLogueado;
     private boolean administrador = false;
-
     
     /**
      * Constructor con fábrica inyectada
      * 
-     * @param fabricaBO que suministra
+     * @param empleadoBO para trabajar
      */
-    public ControlSesion(IFabricaBO fabricaBO) {
-        this.empleadoBO = fabricaBO.fabricarEmpleado();
+    public ControlSesion(IEmpleadoBO empleadoBO) {
+        this.empleadoBO = empleadoBO;
     }
     
     /**

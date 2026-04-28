@@ -184,8 +184,8 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      * @return 
      */
     @Override
-    public List<EmpleadoDTO> verificarEmpleado(String usuario, String contra) {
-        return fachadaSesion.consultarEmpleados();
+    public EmpleadoDTO verificarEmpleado(String usuario, String contra) {
+        return fachadaSesion.verificarEmpleado(usuario, contra);
     }
     
 }

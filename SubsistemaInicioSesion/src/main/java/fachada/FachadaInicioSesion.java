@@ -1,7 +1,6 @@
 package fachada;
 
 import DTOS.EmpleadoDTO;
-import controles.ControlEmpleados;
 import controles.ControlSesion;
 import fabricas.FabricaBO;
 import interfaces.IFabricaBO;
@@ -19,19 +18,7 @@ public class FachadaInicioSesion implements IFachadaInicioSesion {
     IFabricaBO fabricaBO = FabricaBO.singleton();
     
     //Controles
-    private ControlSesion controlSesion = new ControlSesion(fabricaBO);
-    private ControlEmpleados controlEmpleados = new ControlEmpleados(fabricaBO);
-    
-    
-    /**
-     * Consulta todos los empleados de la BD
-     * 
-     * @return 
-     */
-    @Override
-    public List<EmpleadoDTO> consultarEmpleados() {
-        return controlEmpleados.consultarEmpleados();
-    }
+    private ControlSesion controlSesion = new ControlSesion(fabricaBO.fabricarEmpleado());
     
     /**
      * Regresa el empleado que está usando el sistema actualmente

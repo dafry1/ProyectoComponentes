@@ -31,7 +31,7 @@ public class UtilFormato {
      * @return boolean
      */
     public static boolean validarNombre(String nombre) {
-        String regex = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ]{1,100}$";
+        String regex = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$";
         return nombre.matches(regex);
     }
     

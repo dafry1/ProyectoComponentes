@@ -119,10 +119,7 @@ public class PantallaResumen extends JFrame implements IObservador {
                 UtilSwing.dialogoAlerta(this, "El carrito está vacío");
                 return;
             }
-
-            UtilSwing.dialogoConfirmacion(this, "¿Confirmar la venta por $" + totalCarrito + "?", () -> {
-                confirmarVenta();
-            });
+            confirmarVenta();
         });
 
         p.add(botonRegresar, BorderLayout.WEST);
@@ -136,10 +133,8 @@ public class PantallaResumen extends JFrame implements IObservador {
             List<DetallesVentaDTO> carrito = coordinadorEstados.getCarritoVenta();
             ClienteDTO cliente = coordinadorEstados.getCliente();
 
-            if (cliente == null) {
-                coordinadorPresentacion.abrirDialogo(() -> new InfoCliente(coordinadorEstados, this, ensambladorDTO));
-                return;
-            }
+            coordinadorPresentacion.abrirDialogo(() -> new InfoCliente(coordinadorEstados, this, ensambladorDTO));
+
 
             VentaDTO venta = ensambladorDTO.ensamblarVentaDTO(cliente, empleado, carrito);
             coordinadorNegocio.procesarVenta(venta, this);

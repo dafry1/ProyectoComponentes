@@ -103,7 +103,6 @@ public class VentaBO implements IVentaBO {
             throw new NegocioException(DEBUG); 
         }
         
-        
         //Asigna folio y fecha y hora
         venta.setFolio(generarFolio());
         venta.setFechaHora(generarFecha());

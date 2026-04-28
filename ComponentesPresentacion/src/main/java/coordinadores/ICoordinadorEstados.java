@@ -78,14 +78,14 @@ public interface ICoordinadorEstados {
     
 
     
-        /**
+     /**
      * Verifica la existencia de un empleado
      * 
      * @param usuario
      * @param contra
      * @return 
      */
-    public List<EmpleadoDTO> verificarEmpleado(String usuario, String contra);
+    public EmpleadoDTO verificarEmpleado(String usuario, String contra);
     
     /**
      * Guarda el empleado actual de manera global
