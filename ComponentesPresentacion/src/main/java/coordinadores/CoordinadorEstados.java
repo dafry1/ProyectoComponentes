@@ -33,9 +33,13 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      * EL CARRITO O EL EMPLEADO SE MANEJA EN NEGOCIO
      */
     private static ClienteDTO clienteActual = null;
-    public void setCliente(ClienteDTO c) {
-        this.clienteActual = c;
+    
+    @Override
+    public void setCliente(ClienteDTO cliente) {
+        this.clienteActual = cliente;
     }
+    
+    @Override
     public ClienteDTO getCliente() {
         return clienteActual;
     }

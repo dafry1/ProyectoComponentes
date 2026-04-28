@@ -1,5 +1,6 @@
 package coordinadores;
 
+import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import java.util.List;
@@ -99,4 +100,8 @@ public interface ICoordinadorEstados {
      * @return
      */
     public EmpleadoDTO getUsuarioLogueado();
+    
+    public void setCliente(ClienteDTO cliente);
+    
+    public ClienteDTO getCliente();
 }

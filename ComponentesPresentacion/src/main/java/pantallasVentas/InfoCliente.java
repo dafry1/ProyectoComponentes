@@ -1,239 +1,158 @@
 package pantallasVentas;
 
 import DTOS.ClienteDTO;
-import DTOS.DTO;
-import DTOS.DetallesVentaDTO;
-import DTOS.PiezaDTO;
-import coordinadores.CoordinadorEstados;
+import Validaciones.Validaciones;
 import coordinadores.ICoordinadorEstados;
-import ensambladores.IEnsambladorDTO;
 import java.awt.Component;
+import java.awt.Font;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import observadores.IObservador;
 import utilEstilos.Constantes;
-import utilEstilos.UtilFormato;
-import utilEstilos.UtilSwing;
 import utilPresentacion.UtilBoton;
 import utilPresentacion.UtilGeneral;
+import ensambladores.IEnsambladorDTO;
+import java.awt.Dimension;
+import utilEstilos.UtilSwing;
 
-/**
- * Diálogo que muestra un formulario para capturar los datos
- * del cliente para la venta
- * 
- * @author Andre
- */
 public class InfoCliente extends JDialog {
-    JPanel panelPrincipal;
-    
-    //Sobre la pieza
-    PiezaDTO pieza;
-    String nombre;
-    String categoria;
-    String marca;
-    String modelo;
-    double costo;
-    
-    //Stock según su naturaleza
-    int stockDisponible;
-    int stock;
-    int stockCarrito;
-    
-    //Auxiliares
-    ICoordinadorEstados coordinadorEstados;
-    IEnsambladorDTO ensambladorDTO;
-    IObservador observador;
-    
-    //Mapa donde se guardan los campos
-    Map<String, JTextField> camposCliente = new HashMap<>();
-    
-    /**
-     * Constructor que coordina diferentes métodos y establece atributos
-     * 
-     * @param coordinadorEstados
-     * @param observador
-     * @param pieza
-     * @param ensambladorDTO 
-     */
-    public InfoCliente(ICoordinadorEstados coordinadorEstados, IObservador observador, PiezaDTO pieza, IEnsambladorDTO ensambladorDTO) {
-        
-        //Establece atributos
-        this.pieza = pieza;
+
+    private JPanel panelPrincipal;
+    private ICoordinadorEstados coordinadorEstados;
+    private IEnsambladorDTO ensambladorDTO;
+    private IObservador observador;
+
+    private Map<String, JTextField> camposCliente = new HashMap<>();
+
+    public InfoCliente(ICoordinadorEstados coordinadorEstados, IObservador observador, IEnsambladorDTO ensambladorDTO) {
         this.coordinadorEstados = coordinadorEstados;
         this.observador = observador;
         this.ensambladorDTO = ensambladorDTO;
-        
-        //Configuración inicial  
+
         UtilSwing.configurarDialogoInicio(this, "Capturar datos del cliente");
-        this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
-        
-        //Ensambla el diálogo
-        panelPrincipal();
-        areaSuperior();
-        espacio();
-        areaStock();
-        espacio();
-        
-        //Agregar todo al diálogo
+
+        crearPanelPrincipal();
+        crearTitulo();
+        crearFormulario();
+        crearAcciones();
+
         this.add(panelPrincipal);
-        
-        //Configuración final
+
         UtilSwing.configurarDialogoFinal(this);
     }
-    
-    
-    
-    /** Crea el panel principal */
-    private void panelPrincipal() {
+
+    private void crearPanelPrincipal() {
         this.panelPrincipal = new JPanel();
         panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
-        panelPrincipal.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 50, 30, 50));
-        panelPrincipal.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
     }
-    
-    
-    
-    /** Crea el área donde se despliega la información de la pieza */
-    private void areaSuperior() {
-        nombre = pieza.getNombre();
-        categoria = pieza.getCategoria();
-        marca = pieza.getMarcaPieza();
-        modelo = pieza.getModeloPieza();
-        costo = pieza.getCostoPieza();
-        
-        //Stock real, de la BD
-        stock = pieza.getStockPieza();
-        
-        //Stock que se está manejando actualmente
-        stockCarrito = coordinadorEstados.calcularStockAntesVenta(pieza.getId());
-        
-        //Recalcula y usa este valor, considerando las piezas ya ingresadas al carrito
-        stockDisponible = stock - stockCarrito;
-        
-        //Crea un arreglo de Strings con base en la información de la pieza
-        String[] info = {
-            "Nombre: " + nombre,
-            "Categoría: " + categoria,
-            "Marca: " + marca,
-            "Modelo: " + modelo,
-            "Precio individual: " + costo 
-        };
 
-        //Crea un label por cada elemento del arreglo
-        for (String texto: info) {
-            JLabel lbl = UtilGeneral.crearLabel(texto);
-            lbl.setAlignmentX(Component.CENTER_ALIGNMENT);
-            panelPrincipal.add(lbl);
-            panelPrincipal.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 5)));
-        }
+    private void crearTitulo() {
+        JLabel titulo = new JLabel("Información del Cliente");
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelPrincipal.add(titulo);
+        espacio(20);
     }
-    
-    
-    
-    /** Crea el área del label de stock, elección de cantidad y botón de confirmar */
-    private void areaStock() {
-        //Label del stock local restante de la pieza
-        JLabel labelStock = UtilGeneral.crearLabel("Stock disponible: " + stockDisponible);
-        espacio();
-        labelStock.setFont(labelStock.getFont().deriveFont(java.awt.Font.BOLD, 14f));
-        labelStock.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelPrincipal.add(labelStock);
-        
-        //Arreglo con datos del cliente
-        String[] labels = {
+
+    private void crearFormulario() {
+       String[] etiquetas = {
             Constantes.CLIENTE_NOMBRE,
             Constantes.CLIENTE_APELLIDOP,
             Constantes.CLIENTE_APELLIDOM,
             Constantes.CLIENTE_CORREO,
             Constantes.CLIENTE_TELEFONO
         };
-        
-        //Crea los campos de texto por cada campo para el cliente
-        for (String texto: labels) {
+
+        for (String texto : etiquetas) {
+            JLabel lbl = UtilGeneral.crearLabel(texto + ":");
+            lbl.setAlignmentX(Component.CENTER_ALIGNMENT); 
+            panelPrincipal.add(lbl);
+            
+            panelPrincipal.add(Box.createRigidArea(new Dimension(0, 5)));
+
             JTextField campo = UtilGeneral.crearCampoTexto();
+            campo.setAlignmentX(Component.CENTER_ALIGNMENT);
+            campo.setMaximumSize(new Dimension(450, 40)); 
             panelPrincipal.add(campo);
+            
             camposCliente.put(texto, campo);
             
-            //Pequeño espacio
-            panelPrincipal.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 25)));
+            espacio(15);
         }
-        
-        
+    }
 
-        //Boton que selecciona la pieza
-        JButton boton = UtilBoton.crearBoton("Registrar");
-        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boton.addActionListener(e -> {
-            
-            for (String texto: labels) {
-                JTextField campo = camposCliente.get(texto);
-                String infoCampo = campo.getText();
-                if (infoCampo == null || infoCampo.isBlank()) {
-                    UtilSwing.dialogoAlerta(InfoCliente.this, "Todos los campos son obligatorios");
-                    return;
-                }
+    private void crearAcciones() {
+        JPanel panelBoton = new JPanel();
+        panelBoton.setLayout(new BoxLayout(panelBoton, BoxLayout.X_AXIS));
+        panelBoton.setOpaque(false);
+        panelBoton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JButton botonRegistrar = UtilBoton.crearBoton("Asignar a la Venta");
+
+        botonRegistrar.setMaximumSize(new Dimension(300, 50));
+        botonRegistrar.setPreferredSize(new Dimension(300, 50));
+
+        botonRegistrar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        botonRegistrar.addActionListener(e -> {
+
+            Validaciones validador = new Validaciones();
+
+            String nombre = camposCliente.get(Constantes.CLIENTE_NOMBRE).getText().trim();
+            String paterno = camposCliente.get(Constantes.CLIENTE_APELLIDOP).getText().trim();
+            String materno = camposCliente.get(Constantes.CLIENTE_APELLIDOM).getText().trim();
+            String correo = camposCliente.get(Constantes.CLIENTE_CORREO).getText().trim();
+            String telefono = camposCliente.get(Constantes.CLIENTE_TELEFONO).getText().trim();
+
+            if (!validador.validarNombres(nombre)) {
+                UtilSwing.dialogoAlerta(this, "El nombre no es válido (solo letras y espacios).");
+                return;
             }
-            
-            //Implementación chafa temporal XDDDDD
-            ClienteDTO cliente = 
-                    ensambladorDTO
-                            .ensamblarClienteDTO(
-                                    camposCliente.get(Constantes.CLIENTE_NOMBRE).getText(),
-                                    camposCliente.get(Constantes.CLIENTE_APELLIDOM).getText(),
-                                    camposCliente.get(Constantes.CLIENTE_APELLIDOP).getText(),
-                                    camposCliente.get(Constantes.CLIENTE_CORREO).getText(),
-                                    camposCliente.get(Constantes.CLIENTE_TELEFONO).getText()
-                            );
-            
 
-            
+            if (!validador.validarApellidos(paterno)) {
+                UtilSwing.dialogoAlerta(this, "El apellido paterno no es válido (solo letras, sin espacios).");
+                return;
+            }
+
+            if (!validador.validarApellidos(materno)) {
+                UtilSwing.dialogoAlerta(this, "El apellido materno no es válido (solo letras, sin espacios).");
+                return;
+            }
+
+            if (!validador.validarCorreo(correo)) {
+                UtilSwing.dialogoAlerta(this, "El formato de correo electrónico no es válido.");
+                return;
+            }
+
+            if (!validador.validarTelefono(telefono)) {
+                UtilSwing.dialogoAlerta(this, "El teléfono debe tener exactamente 10 dígitos numéricos.");
+                return;
+            }
+
+            UtilSwing.dialogoConfirmacion(this, "¿Desea asignar a " + nombre + " a esta venta?", () -> {
+                ClienteDTO cliente = ensambladorDTO.ensamblarClienteDTO(
+                        nombre, paterno, materno, correo, telefono
+                );
+
+                coordinadorEstados.setCliente(cliente);
+
+                if (observador != null) {
+                    observador.observar();
+                }
+
+                UtilSwing.dialogoAviso(this, "Cliente validado y asignado.");
+                this.dispose();
+            });
         });
-        panelPrincipal.add(boton);
+
+        panelPrincipal.add(Box.createVerticalGlue());
+        panelPrincipal.add(botonRegistrar);
+
+        botonRegistrar.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
-    
-    
-    /**
-     * Método que agrega una pieza al carrito. Es llamado por
-     * el botón que confirma dicha decisión
-     * 
-     * @param cantidadString para trabajar
-     */
-    private void agregarPieza(String cantidadString) {
-        
-        //Parsea solo si se confirma el agregado
-        int cantidad = Integer.parseInt(cantidadString);
-        if (stockDisponible == 0) {
-            UtilSwing.dialogoAlerta(this, "No hay stock disponible para esta pieza. Se recomienda hacer una solicitud");
-            return;
-        }
 
-        //Valida stock suficiente
-        if (cantidad > stockDisponible) {
-            UtilSwing.dialogoAlerta(this, cantidad + " excede el stock actual (" + stockDisponible + ")");
-            return;
-        }
-
-        //Crea el detalle
-        DetallesVentaDTO detalle = ensambladorDTO.ensamblarDetalleVentaDTO(cantidad, pieza);
-
-        //Agrega el detalle al carrito y notifica al observador
-        coordinadorEstados.agregarCarritoVenta(detalle);
-        observador.observar();
-        UtilSwing.dialogoAviso(this, "Se agregaron " + cantidad + " de la pieza " + nombre);
-        this.dispose();
-    }
-    
-    
-    
-    /** Da un pequeño espacio al panel*/
-    private void espacio() {
-        panelPrincipal.add(javax.swing.Box.createRigidArea(new java.awt.Dimension(0, 20)));
+    private void espacio(int alto) {
+        panelPrincipal.add(Box.createRigidArea(new java.awt.Dimension(0, alto)));
     }
 }

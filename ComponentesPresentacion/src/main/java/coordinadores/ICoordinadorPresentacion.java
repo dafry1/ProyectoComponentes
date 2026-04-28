@@ -4,6 +4,8 @@ import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
 import DTOS.VentaDTO;
+import ensambladores.IEnsambladorDTO;
+import java.awt.Frame;
 import java.util.function.Supplier;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -63,4 +65,6 @@ public interface ICoordinadorPresentacion {
     void abrirInfoDetalle(IObservador observador, DetallesVentaDTO detalle);
         
     void abrirDetalleVenta(VentaDTO venta);
+    
+    void abrirInfoCliente( IObservador observador, IEnsambladorDTO ensambladorDTO);
 }

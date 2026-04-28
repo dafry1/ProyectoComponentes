@@ -28,19 +28,19 @@ import utilPresentacion.UtilBoton.BotonAlmacenador;
 
 /**
  * Pantalla que muestra el resumen del carrito
- * 
+ *
  * @author Andre
  */
 public class PantallaResumen extends JFrame implements IObservador {
 
     private JPanel contenedorListaDetalles;
-    
+
     // Coordinadores
     private ICoordinadorPresentacion coordinadorPresentacion;
     private ICoordinadorNegocio coordinadorNegocio;
     private ICoordinadorEstados coordinadorEstados;
     private IEnsambladorDTO ensambladorDTO;
-    
+
     private double totalCarrito;
     private JLabel labelTotal;
 
@@ -51,7 +51,7 @@ public class PantallaResumen extends JFrame implements IObservador {
         this.ensambladorDTO = ensambladorDTO;
         this.totalCarrito = coordinadorEstados.totalCarritoVenta();
         this.labelTotal = new JLabel("Total: $ " + totalCarrito);
-        
+
         // Configuración general
         UtilSwing.configurarFrame("Resumen de Venta", this);
 
@@ -59,17 +59,19 @@ public class PantallaResumen extends JFrame implements IObservador {
         add(UtilBuild.crearNavegacion(this, coordinadorPresentacion), BorderLayout.NORTH);
 
         // Panel principal de contenido
-        JPanel contenido = new JPanel(new GridBagLayout()); 
+        JPanel contenido = new JPanel(new GridBagLayout());
         contenido.setBackground(Constantes.COLOR_FONDO);
         contenido.setBorder(new EmptyBorder(20, 20, 20, 20));
 
         GridBagConstraints g = new GridBagConstraints();
         g.fill = GridBagConstraints.BOTH;
         g.insets = new Insets(10, 10, 10, 10);
-        
-        g.gridx = 0; g.weightx = 1.0; g.weighty = 1.0;
+
+        g.gridx = 0;
+        g.weightx = 1.0;
+        g.weighty = 1.0;
         contenido.add(crearPanelCarrito(), g);
-        
+
         add(contenido, BorderLayout.CENTER);
         add(crearPanelInferior(), BorderLayout.SOUTH);
     }
@@ -82,7 +84,7 @@ public class PantallaResumen extends JFrame implements IObservador {
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
         titulo.setBorder(new EmptyBorder(0, 0, 15, 0));
         p.add(titulo, BorderLayout.NORTH);
-        
+
         contenedorListaDetalles = new JPanel();
         contenedorListaDetalles.setLayout(new BoxLayout(contenedorListaDetalles, BoxLayout.Y_AXIS));
         contenedorListaDetalles.setBackground(Color.WHITE);
@@ -93,12 +95,12 @@ public class PantallaResumen extends JFrame implements IObservador {
         scrollD.setBorder(null);
         scrollD.getVerticalScrollBar().setUnitIncrement(16);
         p.add(scrollD, BorderLayout.CENTER);
-        
+
         labelTotal.setFont(new Font("Segoe UI", Font.BOLD, 22));
         labelTotal.setHorizontalAlignment(SwingConstants.CENTER);
         labelTotal.setBorder(new EmptyBorder(15, 0, 0, 0));
         p.add(labelTotal, BorderLayout.SOUTH);
-        
+
         return p;
     }
 
@@ -106,7 +108,7 @@ public class PantallaResumen extends JFrame implements IObservador {
         JPanel p = new JPanel(new BorderLayout());
         p.setBackground(Color.WHITE);
         p.setBorder(new EmptyBorder(15, 30, 20, 30));
-        
+
         JButton botonRegresar = UtilBoton.crearBotonRegresar();
         botonRegresar.addActionListener(e -> coordinadorPresentacion.mostrarVentanaInicio());
 
@@ -117,34 +119,37 @@ public class PantallaResumen extends JFrame implements IObservador {
                 UtilSwing.dialogoAlerta(this, "El carrito está vacío");
                 return;
             }
-            
+
             UtilSwing.dialogoConfirmacion(this, "¿Confirmar la venta por $" + totalCarrito + "?", () -> {
                 confirmarVenta();
             });
         });
 
-        p.add(botonRegresar, BorderLayout.WEST); 
+        p.add(botonRegresar, BorderLayout.WEST);
         p.add(botonContinuar, BorderLayout.EAST);
         return p;
     }
 
     private void confirmarVenta() {
         try {
-            // Datos del contexto
             EmpleadoDTO empleado = coordinadorEstados.getUsuarioLogueado();
             List<DetallesVentaDTO> carrito = coordinadorEstados.getCarritoVenta();
-            
-            // Cliente HARDCODED (Requerido)
-            ClienteDTO cliente = new ClienteDTO("Andre", "Vega", "Romero", "andre@gmail.com", "123456789");
-            
-            // Ensamblar DTO
+            ClienteDTO cliente = coordinadorEstados.getCliente();
+
+            if (cliente == null) {
+                UtilSwing.dialogoAlerta(this, "Debe registrar un cliente antes de finalizar la venta.");
+                coordinadorPresentacion.abrirDialogo(() -> new InfoCliente(coordinadorEstados, this, ensambladorDTO));
+                return;
+            }
+
             VentaDTO venta = ensambladorDTO.ensamblarVentaDTO(cliente, empleado, carrito);
-            
-            // Procesar en la capa de negocio
             coordinadorNegocio.procesarVenta(venta, this);
-            
-            // Feedback y navegación final
-            UtilSwing.dialogoAviso(this, "Venta procesada con éxito.");
+
+            UtilSwing.dialogoAviso(this, "Venta procesada con éxito para el cliente: " + cliente.getNombres());
+
+            coordinadorEstados.setCliente(null);
+            coordinadorEstados.limpiarCarritoVenta();
+
             coordinadorPresentacion.mostrarVentanaInicio();
             this.dispose();
 
@@ -157,37 +162,35 @@ public class PantallaResumen extends JFrame implements IObservador {
         for (DetallesVentaDTO detalle : coordinadorEstados.getCarritoVenta()) {
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
             tarjeta.setLayout(new BorderLayout(10, 10));
-            
-            // Información del producto
+
             String nombre = detalle.getPieza().getNombre();
             int cantidad = detalle.getCantidad();
             double costo = detalle.getCosto();
             double subtotal = detalle.getSubtotal();
-            
+
             JPanel panelInfoBasica = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
             panelInfoBasica.setOpaque(false);
-            
-            String desc = "<html><body style='width: 150px'>" +
-                          "<font color='white' size='4'><b>" + nombre + "</b></font><br>" +
-                          "<font color='white' size='3'>Cant: " + cantidad + " x $" + costo + "</font></body></html>";
+
+            String desc = "<html><body style='width: 150px'>"
+                    + "<font color='white' size='4'><b>" + nombre + "</b></font><br>"
+                    + "<font color='white' size='3'>Cant: " + cantidad + " x $" + costo + "</font></body></html>";
             panelInfoBasica.add(new JLabel(desc));
-            
-            // Precio y Botón Info
+
             JPanel panelDerecho = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
             panelDerecho.setOpaque(false);
-            
-            JLabel lblSubtotal = new JLabel("$" + subtotal); 
+
+            JLabel lblSubtotal = new JLabel("$" + subtotal);
             lblSubtotal.setForeground(new Color(50, 255, 100));
             lblSubtotal.setFont(new Font("Segoe UI", Font.BOLD, 20));
-            
+
             BotonAlmacenador botonInfo = new BotonAlmacenador("Detalles", detalle);
             botonInfo.addActionListener(e -> {
-                String info = "Producto: " + detalle.getPieza().getNombre() + 
-                             "\nCategoría: " + detalle.getPieza().getCategoria() +
-                             "\nSubtotal: $" + detalle.getSubtotal();
+                String info = "Producto: " + detalle.getPieza().getNombre()
+                        + "\nCategoría: " + detalle.getPieza().getCategoria()
+                        + "\nSubtotal: $" + detalle.getSubtotal();
                 UtilSwing.dialogoAviso(this, info);
             });
-            
+
             panelDerecho.add(lblSubtotal);
             panelDerecho.add(botonInfo);
 

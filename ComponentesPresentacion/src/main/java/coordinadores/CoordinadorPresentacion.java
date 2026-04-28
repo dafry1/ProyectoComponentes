@@ -16,6 +16,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import observadores.IObservador;
 import pantallasVentas.DetalleVenta;
+import pantallasVentas.InfoCliente;
 import pantallasVentas.InfoDetalle;
 import pantallasVentas.InfoPieza;
 import pantallasVentas.PantallaResumen;
@@ -161,11 +162,15 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     public void abrirInfoPieza(IObservador observador, PiezaDTO pieza) {
         abrirDialogo(() -> new InfoPieza(coordinadorEstados, observador, pieza, ensambladorDTO));
     }
-
+    
+    @Override
+    public void abrirInfoCliente( IObservador observador, IEnsambladorDTO ensambladorDTO) {
+        abrirDialogo(() -> new InfoCliente(coordinadorEstados, observador, ensambladorDTO));
+        
+    }
+    
 @Override
     public void abrirDetalleVenta(VentaDTO venta) {
-        // Este abre el resumen de una venta ya realizada en el HISTORIAL
-        // Pasamos 'ventanaActual' para que sea el padre del diálogo
         abrirDialogo(() -> new DetalleVenta(ventanaActual, venta));
     }
 
