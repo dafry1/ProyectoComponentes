@@ -137,7 +137,6 @@ public class PantallaResumen extends JFrame implements IObservador {
             ClienteDTO cliente = coordinadorEstados.getCliente();
 
             if (cliente == null) {
-                UtilSwing.dialogoAlerta(this, "Debe registrar un cliente antes de finalizar la venta.");
                 coordinadorPresentacion.abrirDialogo(() -> new InfoCliente(coordinadorEstados, this, ensambladorDTO));
                 return;
             }

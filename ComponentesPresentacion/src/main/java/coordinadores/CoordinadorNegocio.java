@@ -7,11 +7,13 @@ import DTOS.VentaDTO;
 import excepciones.PresentacionException;
 import excepciones.NegocioException;
 import fachada.FachadaInicioSesion;
+import fachadas.FachadaSolicitudes;
 import fachadas.FachadaVentas;
 import interfaces.IFachadaInicioSesion;
-import interfaces.IFachadaVentas;
 import java.util.List;
 import observadores.IObservador;
+import interfaces.IFachadaSolicitudes;
+import interfaces.IFachadaVentas;
 
 /**
  * Coordinador encargado de recopilar todas las fachadas con lógica
@@ -25,6 +27,7 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
     //Instancia de la fachada del subsistema de las ventas
     private IFachadaVentas fachadaVentas = new FachadaVentas();
     private IFachadaInicioSesion fachadaInicioSesion = new FachadaInicioSesion();
+    private IFachadaSolicitudes fachadaSolicitudes = new FachadaSolicitudes();
     
     //Coordinador auxiliar
     

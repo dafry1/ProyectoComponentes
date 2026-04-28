@@ -12,6 +12,7 @@
         <module>NegocioBO</module>
         <module>NegocioDTO</module>
         <module>Persistencia</module>
+        <module>SubsistemaSolicitudes</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

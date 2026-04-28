@@ -1,5 +1,7 @@
 package bo;
 
+import DTOS.ClienteDTO;
+import DTOS.EmpleadoDTO;
 import DTOS.VentaDTO;
 import dominio.Venta;
 import excepciones.NegocioException;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import utilerias.UtilNegocio;
 
 /**
  * BO para la entidad venta
@@ -20,12 +23,13 @@ import java.util.List;
  * @author Andre
  */
 public class VentaBO implements IVentaBO {
-
     private static final System.Logger LOG = System.getLogger(VentaBO.class.getName());
+    String DEBUG;
     
     //Atributos
     private IVentaDAO ventaDAO;
     private IAdaptadorVenta adaptadorVenta;
+    
     
     /**
      * Constructor que inyecta DAO y adaptador
@@ -62,13 +66,49 @@ public class VentaBO implements IVentaBO {
      */
     @Override
     public VentaDTO registrarVenta(VentaDTO venta) {
+        //Venta inválida
         if (venta == null || venta.getDetalles().isEmpty()) {
-            String DEBUG = "Venta vacía o sin detalles";
+            DEBUG = "Venta vacía o sin detalles";
             LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
             throw new NegocioException(DEBUG);
         }
+        
+        //Sin cliente
+        ClienteDTO cliente = venta.getCliente();
+        if (cliente == null) {
+            DEBUG = "Venta sin cliente";
+            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+            throw new NegocioException(DEBUG); 
+        }
+        
+        //Datos del cliente inválidos
+        if (!UtilNegocio.validarCliente(cliente)) {
+            DEBUG = "Cliente con datos inválidos";
+            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+            throw new NegocioException(DEBUG); 
+        }
+        
+        //Sin empleado
+        EmpleadoDTO empleado = venta.getEmpleado();
+        if (empleado == null) {
+            DEBUG = "Venta sin empleado";
+            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+            throw new NegocioException(DEBUG); 
+        }
+        
+        //Datos del empleado inválidos
+        if (!UtilNegocio.validarEmpleado(empleado)) {
+            DEBUG = "Empleado con datos inválidos";
+            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+            throw new NegocioException(DEBUG); 
+        }
+        
+        
+        //Asigna folio y fecha y hora
         venta.setFolio(generarFolio());
         venta.setFechaHora(generarFecha());
+        
+        //Registra la venta
         Venta v = adaptadorVenta.Entidad(venta);
         return adaptadorVenta.DTO(ventaDAO.registrarVenta(v));
     }
