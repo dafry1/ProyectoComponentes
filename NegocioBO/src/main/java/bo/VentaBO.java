@@ -68,7 +68,7 @@ public class VentaBO implements IVentaBO {
             throw new NegocioException(DEBUG);
         }
         venta.setFolio(generarFolio());
-        generarFecha(venta);
+        venta.setFechaHora(generarFecha());
         Venta v = adaptadorVenta.Entidad(venta);
         return adaptadorVenta.DTO(ventaDAO.registrarVenta(v));
     }
@@ -79,7 +79,8 @@ public class VentaBO implements IVentaBO {
      * @param venta FIXME: TEMPORAL, EN FUNCIÓN REAL DEBE ACUDIR AL DAO PARA CONTAR LAS QUE LLEVAN EN EL DÍA
      */
     private String generarFolio() {
-        return "TW - " + ventaDAO.consultarVentas() + 1;
+        int numero = ventaDAO.consultarVentas().size() + 1;
+        return "TW - " + numero;
     }
     
     /**
@@ -87,7 +88,7 @@ public class VentaBO implements IVentaBO {
      * 
      * @param venta 
      */
-    private String generarFecha(VentaDTO venta) {
+    private String generarFecha() {
         LocalDateTime fechaHoraRegistro = LocalDateTime.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         return fechaHoraRegistro.format(formato);

@@ -3,16 +3,20 @@ package pantallasPrincipales;
 import DTOS.PiezaDTO;
 import coordinadores.CoordinadorNegocio;
 import coordinadores.CoordinadorPresentacion;
+import coordinadores.ICoordinadorEstados;
 import coordinadores.ICoordinadorNegocio;
 import coordinadores.ICoordinadorPresentacion;
+import excepciones.PresentacionException;
 import java.awt.BorderLayout;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import utilEstilos.UtilBuild;
 import utilPresentacion.UtilPanel;
+import java.util.List;
 
 /**
  *
@@ -21,6 +25,11 @@ import utilPresentacion.UtilPanel;
 public class Vinicio extends JFrame {
     private ICoordinadorPresentacion coordinadorPresentacion;
     private ICoordinadorNegocio coordinadorNegocio;
+    
+    final String MAS_VENDIDAS_DIA = "Piezas más vendidas (día)";
+    final String MAS_VENDIDAS_SEMANA = "Piezas más vendidas (semana)";
+    final String MAS_VENDIDAS_MES = "Piezas más vendidas (mes)";
+    final String MAS_VENDIDAS_TODO = "Piezas más vendidas (todo el tiempo)";
 
     public Vinicio(ICoordinadorPresentacion coordinadorPresentacion, ICoordinadorNegocio coordinadorNegocio) {
         this.coordinadorPresentacion = coordinadorPresentacion;
@@ -43,11 +52,11 @@ public class Vinicio extends JFrame {
         JPanel gridContenedor = new JPanel(new GridLayout(2, 2, 25, 25));
         gridContenedor.setBackground(Color.WHITE);
         gridContenedor.setBorder(new EmptyBorder(30, 30, 30, 30));
-
-        gridContenedor.add(new TarjetaCarrusel("Piezas más vendidas (día)"));
-        gridContenedor.add(new TarjetaCarrusel("Piezas más vendidas (semana)"));
-        gridContenedor.add(new TarjetaCarrusel("Piezas más vendidas (mes)"));
-        gridContenedor.add(new TarjetaCarrusel("Piezas más vendidas (todo el tiempo)"));
+        
+        gridContenedor.add(new TarjetaCarrusel(MAS_VENDIDAS_DIA));
+        gridContenedor.add(new TarjetaCarrusel(MAS_VENDIDAS_SEMANA));
+        gridContenedor.add(new TarjetaCarrusel(MAS_VENDIDAS_MES));
+        gridContenedor.add(new TarjetaCarrusel(MAS_VENDIDAS_TODO));
 
         add(gridContenedor, BorderLayout.CENTER);
     }
@@ -79,39 +88,28 @@ public class Vinicio extends JFrame {
             for (PiezaDTO pieza: coordinadorNegocio.consultarPiezas()) {
                 panelCartas.add(generarContenidoProducto(pieza));
             }
+
+            //Consulta el tipo de filtro para las vendidas
+            List<PiezaDTO> piezasFiltradas = switch (titulo) {
+                case MAS_VENDIDAS_DIA -> coordinadorNegocio.consultarTopDiaPiezas();
+                case MAS_VENDIDAS_SEMANA -> coordinadorNegocio.consultarTopSemanaPiezas();
+                case MAS_VENDIDAS_MES -> coordinadorNegocio.consultarTopMesPiezas();
+                case MAS_VENDIDAS_TODO -> coordinadorNegocio.consultarTopTodoPiezas();
+                default -> throw new PresentacionException("Categoría de filtrado de piezas no válida");
+            };
             
-            /*
-            if (titulo.equals("Piezas más vendidas (día)")) {
-                for (PiezaDTO pieza : CoordinadorNegocio.getInstance().consultarTopDiaPiezas()) {
-                    panelCartas.add(generarContenidoProducto(pieza));
-                }
-                TOTAL_PRODUCTOS = CoordinadorNegocio.getInstance().consultarTopDiaPiezas().size();
+            //Según la lista que se haya poblado, muestra cada pieza
+            for (PiezaDTO pieza: piezasFiltradas) {
+                panelCartas.add(generarContenidoProducto(pieza));
             }
-            if (titulo.equals("Piezas más vendidas (semana)")) {
-                for (PiezaDTO pieza : CoordinadorNegocio.getInstance().consultarTopSemanaPiezas()) {
-                    panelCartas.add(generarContenidoProducto(pieza));
-                }
-                TOTAL_PRODUCTOS = CoordinadorNegocio.getInstance().consultarTopSemanaPiezas().size();
-            }
-            if (titulo.equals("Piezas más vendidas (mes)")) {
-                for (PiezaDTO pieza : CoordinadorNegocio.getInstance().consultarTopMesPiezas()) {
-                    panelCartas.add(generarContenidoProducto(pieza));
-                }
-                TOTAL_PRODUCTOS = CoordinadorNegocio.getInstance().consultarTopMesPiezas().size();
-            }
-            if (titulo.equals("Piezas más vendidas (todo el tiempo)")) {
-                for (PiezaDTO pieza : CoordinadorNegocio.getInstance().consultarTopTodoPiezas()) {
-                    panelCartas.add(generarContenidoProducto(pieza));
-                }
-                TOTAL_PRODUCTOS = CoordinadorNegocio.getInstance().consultarTopTodoPiezas().size();
-            }
-             */
+            
+            //Saca el total de piezas
+            TOTAL_PRODUCTOS = piezasFiltradas.size();
 
+            //Aspecto gráfico
             add(panelCartas, BorderLayout.CENTER);
-
             add(crearBotonAccion("<", true), BorderLayout.WEST);
             add(crearBotonAccion(">", false), BorderLayout.EAST);
-
             panelPuntos = crearIndicadores();
             add(panelPuntos, BorderLayout.SOUTH);
             actualizarPuntos();

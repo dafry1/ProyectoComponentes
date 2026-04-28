@@ -23,8 +23,10 @@ public class VentaDAO implements IVentaDAO {
 
     @Override
     public Venta registrarVenta(Venta venta) {
+        System.out.println("DAO ANTES DE REGISTRAR VENTA: " + venta.getFechaHora());
         VENTAS.add(venta);
-        LOG.log(System.Logger.Level.INFO, "Venta registrada exitosamente: " + venta.getCliente().getNombres() + " : " + venta.getDetalles().size());
+        LOG.log(System.Logger.Level.INFO, ">> Venta registrada exitosamente: " + venta.getCliente().getNombres() + " : " + venta.getDetalles().size());
+        System.out.println("DAO DESPUES DE REGISTRAR VENTA: " + venta.getFechaHora());
         return venta;
     }
 

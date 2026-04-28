@@ -4,6 +4,7 @@ import DTOS.DTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import coordinadores.CoordinadorEstados;
+import coordinadores.ICoordinadorEstados;
 import java.awt.Component;
 import java.awt.Font;
 import javax.swing.*;
@@ -21,7 +22,7 @@ public class InfoDetalle extends JDialog {
 
     private IObservador observador;
 
-    public InfoDetalle(IObservador observador, DetallesVentaDTO detalle) {
+    public InfoDetalle(ICoordinadorEstados coordinadorEstados, IObservador observador, DetallesVentaDTO detalle) {
         // Configuración inicial
         this.observador = observador;   
         this.setModal(true); 
@@ -32,10 +33,11 @@ public class InfoDetalle extends JDialog {
         
         //Extracción de datos
         PiezaDTO pieza = detalle.getPieza();
-        
         String nombrePieza = pieza.getNombre();
-        int stockDisponible = pieza.getStockPieza();
         int cantidadActual = detalle.getCantidad();
+        
+        //Consulta directamente desde negocio la cantidad de stock restante aún en selección de piezas
+        int stockDisponible = coordinadorEstados.calcularStockAntesVenta(pieza.getId());
         
         // Panel Principal
         JPanel panelPrincipal = new JPanel();
@@ -87,7 +89,7 @@ public class InfoDetalle extends JDialog {
             }
             
             int nuevaCantidad = Integer.parseInt(input);
-
+            
             if (nuevaCantidad > stockDisponible) {
                 UtilSwing.dialogoAlerta(this, "Error: Solo hay " + stockDisponible + " unidades disponibles.");
                 return;

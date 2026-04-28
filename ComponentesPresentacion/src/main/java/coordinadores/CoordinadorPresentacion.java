@@ -21,8 +21,10 @@ import pantallasVentas.InfoPieza;
 import pantallasVentas.PantallaResumen;
 
 /**
- * Clase que coordina el flujo entre pantallas También guarda el tipo de client
- * que ingresó: la lógica es mostrar u ocultar componentes gráficos
+ * Clase que coordina el flujo entre pantallas, haciendo que
+ * desconozcan sobre el resto de frames, solo preocupándose por
+ * pasar parámetros en específicio. Este coordinador ya inecta todo
+ * lo necesario: otros coordinadores o ensambladores
  */
 public class CoordinadorPresentacion implements ICoordinadorPresentacion {
 
@@ -170,9 +172,6 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     
     @Override
     public void abrirInfoDetalle(IObservador observador, DetallesVentaDTO detalle) {
-        abrirDialogo(() -> new InfoDetalle(observador, detalle));
+        abrirDialogo(() -> new InfoDetalle(coordinadorEstados, observador, detalle));
     }
-
-
-
 }

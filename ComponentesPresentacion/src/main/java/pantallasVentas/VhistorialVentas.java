@@ -174,18 +174,18 @@ public class VhistorialVentas extends JFrame implements IObservador {
     private void dibujarTarjetasVentas(List<VentaDTO> ventas) {
 
         //Declara variables
-        double total;
         String fechaHora;
         String folio;
         int cantidadDetalles; //-> FIXME: ES TEMPORAL PARA PROBAR RAPIDAMENTE QUE SI SE PASAN LOS DETALLES
 
         //Por cada venta de la lista...
-        for (VentaDTO venta : ventas) {
+        for (VentaDTO venta: ventas) {
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
             tarjeta.setLayout(new BorderLayout(20, 0));
 
             //Asigna valores
-            total = venta.getTotal();
+            double supertotal = venta.getTotal();
+            System.out.println("LA FECHA HORA: " + venta.getFechaHora());
             fechaHora = venta.getFechaHora();
             folio = venta.getFolio();
             cantidadDetalles = venta.getDetalles().size();
@@ -196,8 +196,8 @@ public class VhistorialVentas extends JFrame implements IObservador {
 
             //Parte de ícono y descripción
             String desc = "<html><body style='width: 120px'>"
-                    + "<font color='white' size='3'><b>" + folio + "</b> (" + cantidadDetalles + ")</font><br>"
-                    + "<font color='white' size='2'>$ " + fechaHora + "</font></body></html>";
+                    + "<font color='white' size='3'><b>" + folio + "</b> (" + cantidadDetalles + " elementos)</font><br>"
+                    + "<font color='white' size='2'> " + fechaHora + "</font></body></html>";
             panelInfoBasica.add(new JLabel(desc));
 
             //Sección para mostrar información adicional: el precio y el botón de detalles
@@ -205,7 +205,7 @@ public class VhistorialVentas extends JFrame implements IObservador {
             panelMostrarInfo.setOpaque(false);
 
             //Label de precio
-            JLabel lblP = new JLabel("$" + total);
+            JLabel lblP = new JLabel("$" + supertotal);
             lblP.setForeground(new Color(50, 255, 100));
             lblP.setFont(new Font("Segoe UI", Font.BOLD, 22));
 
@@ -217,14 +217,9 @@ public class VhistorialVentas extends JFrame implements IObservador {
             panelMostrarInfo.add(lblP);
             panelMostrarInfo.add(botonInfo);
 
-            // Agrega funcionalidad al botón de mostrarInfo
+            //Agrega funcionalidad al botón de mostrarInfo
             botonInfo.addActionListener(e -> {
-                // 1. Recuperamos la venta almacenada en el botón
-                VentaDTO ventaSeleccionada = (VentaDTO) botonInfo.getDTO();
-
-                // 2. Le pedimos al coordinador que abra el detalle
-                // Nota: El coordinador ya se encarga de hacer el .setVisible(true)
-                coordinadorPresentacion.abrirDetalleVenta(ventaSeleccionada);
+                coordinadorPresentacion.abrirDetalleVenta(venta);
             });
 
             //Agrega al panel principal
