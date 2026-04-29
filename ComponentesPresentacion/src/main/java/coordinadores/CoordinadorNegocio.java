@@ -30,12 +30,25 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
     private IFachadaSolicitudes fachadaSolicitudes = new FachadaSolicitudes();
     
     //Coordinador auxiliar
+    ICoordinadorEstados coordinadorEstados;
     
     //Constructor
-    public CoordinadorNegocio() {
-        //this.fachadaVentas = fachadaVentas;
-        //this.fachadaInicioSesion = fachadaInicioSesion;
+    public CoordinadorNegocio(ICoordinadorEstados coordinadorEstados) {
+        this.coordinadorEstados = coordinadorEstados;
     };
+    
+    /**
+     * Llama a la fachada de ventas para que consulte
+     * una pieza por Id
+     * 
+     * @param id de la pieza
+     * 
+     * @return la pieza
+     */
+    @Override
+    public PiezaDTO consultarPieza(Long id) {
+        return fachadaVentas.consultarPieza(id);
+    }
     
     /**
      * Regresa todas las piezas del sistema, dadas directamente
@@ -123,7 +136,7 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
      * @param venta a procesar
      * @param observador si se necesita actualizar algo. Puede ser null
      */
-    @Override
+//    @Override
     public VentaDTO procesarVenta(VentaDTO venta, IObservador observador) {
         
         //Excepción si es null
@@ -134,8 +147,8 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
         //Procesa la venta directamente de la fachada
         fachadaVentas.procesarVenta(venta);
 
-        //TEMPORAL LIMPIA EL CARRITO!!
-        CoordinadorEstados.singleton().limpiarCarritoVenta();
+        //Limpia el carrito
+        coordinadorEstados.limpiarCarritoVenta();
         
         //Activa al observador si existe
         if (observador != null) {
@@ -143,11 +156,8 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
         }
         
         //Regresa la venta
-        System.out.println("Venta" + venta.getDetalles().size());
         return venta;
     }
-    
-    
     
     /**
      * Valida que el usuario con los datos ingresados
@@ -161,12 +171,9 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
      */
     @Override
     public EmpleadoDTO iniciarSesion(String nombreUsuario, String contra) {
-        EmpleadoDTO empleado;
-        
-        //-> FIXME? TAL VEZ CUANDO EXISTA PERSISTENCIA NO SE IMPLEMENTE ASÍ
         try {
-            empleado = fachadaInicioSesion.verificarEmpleado(nombreUsuario, contra);
-            CoordinadorEstados.singleton().establecerSesion(empleado);
+            EmpleadoDTO empleado = fachadaInicioSesion.verificarEmpleado(nombreUsuario, contra);
+            coordinadorEstados.establecerSesion(empleado);
             LOG.log(System.Logger.Level.INFO, ">> Sesión iniciada con éxito; " + nombreUsuario); 
             return empleado;
         } catch (NegocioException e){

@@ -3,22 +3,16 @@ package pantallasVentas;
 import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
-import DTOS.PiezaDTO;
 import DTOS.VentaDTO;
-import coordinadores.CoordinadorEstados;
-import coordinadores.CoordinadorNegocio;
 import coordinadores.ICoordinadorEstados;
 import coordinadores.ICoordinadorNegocio;
 import coordinadores.ICoordinadorPresentacion;
 import ensambladores.IEnsambladorDTO;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import utilEstilos.Constantes;
 import utilPresentacion.UtilBoton;
-import utilPresentacion.UtilGeneral;
 import utilPresentacion.UtilPanel;
 import java.util.List;
 import observadores.IObservador;
@@ -103,7 +97,7 @@ public class PantallaResumen extends JFrame implements IObservador {
 
         return p;
     }
-
+ 
     private JPanel crearPanelInferior() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBackground(Color.WHITE);
@@ -119,37 +113,13 @@ public class PantallaResumen extends JFrame implements IObservador {
                 UtilSwing.dialogoAlerta(this, "El carrito está vacío");
                 return;
             }
-            confirmarVenta();
+            //confirmarVenta();
+            coordinadorPresentacion.abrirInfoCliente(this, ensambladorDTO);
         });
 
         p.add(botonRegresar, BorderLayout.WEST);
         p.add(botonContinuar, BorderLayout.EAST);
         return p;
-    }
-
-    private void confirmarVenta() {
-        try {
-            EmpleadoDTO empleado = coordinadorEstados.getUsuarioLogueado();
-            List<DetallesVentaDTO> carrito = coordinadorEstados.getCarritoVenta();
-            ClienteDTO cliente = coordinadorEstados.getCliente();
-
-            coordinadorPresentacion.abrirDialogo(() -> new InfoCliente(coordinadorEstados, this, ensambladorDTO));
-
-
-            VentaDTO venta = ensambladorDTO.ensamblarVentaDTO(cliente, empleado, carrito);
-            coordinadorNegocio.procesarVenta(venta, this);
-
-            UtilSwing.dialogoAviso(this, "Venta procesada con éxito para el cliente: " + cliente.getNombres());
-
-            coordinadorEstados.setCliente(null);
-            coordinadorEstados.limpiarCarritoVenta();
-
-            coordinadorPresentacion.mostrarVentanaInicio();
-            this.dispose();
-
-        } catch (Exception ex) {
-            UtilSwing.dialogoError(this, "Error al procesar la venta: " + ex.getMessage());
-        }
     }
 
     private void dibujarTarjetasCarrito() {
@@ -179,10 +149,7 @@ public class PantallaResumen extends JFrame implements IObservador {
 
             BotonAlmacenador botonInfo = new BotonAlmacenador("Detalles", detalle);
             botonInfo.addActionListener(e -> {
-                String info = "Producto: " + detalle.getPieza().getNombre()
-                        + "\nCategoría: " + detalle.getPieza().getCategoria()
-                        + "\nSubtotal: $" + detalle.getSubtotal();
-                UtilSwing.dialogoAviso(this, info);
+                coordinadorPresentacion.abrirInfoDetalle(this, detalle);
             });
 
             panelDerecho.add(lblSubtotal);

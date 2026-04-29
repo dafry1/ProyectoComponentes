@@ -61,6 +61,7 @@ public class UtilBoton {
             this.dto = dto;
         }
         public DTO getDTO() {return dto;}
+        public void setDTO(DTO dto) {this.dto = dto;}
     }
     
     

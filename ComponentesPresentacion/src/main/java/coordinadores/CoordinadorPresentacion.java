@@ -7,7 +7,7 @@ import DTOS.VentaDTO;
 import ensambladores.IEnsambladorDTO;
 import pantallasPrincipales.VinicioSesion;
 import pantallasPrincipales.Vinicio;
-import pantallasVentas.VhistorialSolicitudes;
+import pantallasSolicitudes.VhistorialSolicitudes;
 import pantallasVentas.ViniciarVenta;
 import pantallasVentas.ViniciarSolicitud;
 import pantallasVentas.VhistorialVentas;
@@ -164,19 +164,19 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     }
     
     @Override
-    public void abrirInfoCliente( IObservador observador, IEnsambladorDTO ensambladorDTO) {
-        abrirDialogo(() -> new InfoCliente(coordinadorEstados, observador, ensambladorDTO));
+    public void abrirInfoCliente(IObservador observador, IEnsambladorDTO ensambladorDTO) {
+        abrirDialogo(() -> new InfoCliente(this, coordinadorNegocio, coordinadorEstados, observador, ensambladorDTO));
         
     }
     
 @Override
     public void abrirDetalleVenta(VentaDTO venta) {
-        abrirDialogo(() -> new DetalleVenta(ventanaActual, venta));
+        abrirDialogo(() -> new DetalleVenta(ventanaActual, venta, ensambladorDTO));
     }
 
     
     @Override
     public void abrirInfoDetalle(IObservador observador, DetallesVentaDTO detalle) {
-        abrirDialogo(() -> new InfoDetalle(coordinadorEstados, observador, detalle));
+        abrirDialogo(() -> new InfoDetalle(coordinadorNegocio, coordinadorEstados, observador, detalle));
     }
 }

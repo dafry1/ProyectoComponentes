@@ -38,6 +38,31 @@ public class PiezaBO implements IPiezaBO {
         this.adaptadorDetalles = adaptadorDetalles;
     }
     
+    /**
+     * Consulta una pieza por id
+     * 
+     * @param id
+     * @return 
+     */
+    @Override
+    public PiezaDTO consultarPieza(Long id) {
+        //Id inválida
+        if (id == null) {
+            String DEBUG = "Id inválida";
+            LOG.log(System.Logger.Level.ERROR, DEBUG);
+            throw new NegocioException(">>" + DEBUG);
+        }
+        
+        //Intenta hallar la pieza
+        Pieza piezaEncontrada = piezaDAO.consultarPieza(id);
+        if (piezaEncontrada == null) {
+            String DEBUG = "Pieza no encontrada";
+            LOG.log(System.Logger.Level.ERROR, DEBUG);
+            throw new NegocioException(">>" + DEBUG);
+        }
+        return adaptadorPieza.DTO(piezaEncontrada);
+    }
+    
     /** Centraliza la forma en la que se adaptan las piezas de Entidad a DTO */
     private List<PiezaDTO> adaptarPiezasInternamente(List<Pieza> piezas) {
         return adaptadorPieza.listaDTO(piezas);

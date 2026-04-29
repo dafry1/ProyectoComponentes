@@ -26,12 +26,16 @@ public class FachadaVentas implements IFachadaVentas {
     private final IFabricaBO fabricaBO = FabricaBO.singleton();
     
     //Controles
-    private final ControlCatalogo controlCatalogo = new ControlCatalogo(fabricaBO);
-    private final ControlVentas controlVentas = new ControlVentas(fabricaBO);
+    private final ControlCatalogo controlCatalogo = new ControlCatalogo(fabricaBO.fabricarPieza());
+    private final ControlVentas controlVentas = new ControlVentas(fabricaBO.fabricarPieza(), fabricaBO.fabricarVenta());
     private final ControlCarrito controlCarrito = new ControlCarrito();
     
     /** Constructor vacío */
     public FachadaVentas() {}
+    
+    public PiezaDTO consultarPieza(Long id) {
+        return controlCatalogo.consultarPieza(id);
+    }
     
     /**
      * Consulta las piezas del sistema
@@ -174,4 +178,9 @@ public class FachadaVentas implements IFachadaVentas {
     public int calcularStockAntesVenta(Long id) {
         return controlCarrito.calcularStockAntesVenta(id);
     } 
+
+    @Override
+    public boolean existePiezaCarrito(Long id) {
+        return controlCarrito.existePiezaCarrito(id);
+    }
 }

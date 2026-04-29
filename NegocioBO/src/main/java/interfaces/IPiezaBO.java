@@ -2,6 +2,7 @@ package interfaces;
 
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
+import dominio.Pieza;
 import java.util.List;
 
 /**
@@ -11,6 +12,15 @@ import java.util.List;
  * @author Andre
  */
 public interface IPiezaBO {
+    
+    /**
+     * Busca pieza por id
+     * 
+     * @param id de pieza
+     * 
+     * @return la pieza
+     */
+    PiezaDTO consultarPieza(Long id);
     
     /**
      * Consulta todas las piezas registradas en el sistema

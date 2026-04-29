@@ -43,4 +43,8 @@ public abstract class PersonaDTO extends DTO {
     public void setApellidoMaterno(String apellidoMaterno) {
         this.apellidoMaterno = apellidoMaterno;
     }
+    
+    public String nombreCompleto() {
+        return nombres + " " + apellidoPaterno + " " + apellidoMaterno;
+    }
 }

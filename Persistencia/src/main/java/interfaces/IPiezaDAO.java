@@ -11,6 +11,16 @@ import java.util.List;
  * @author Andre
  */
 public interface IPiezaDAO {
+    
+    /**
+     * Consulta una piez por su Id
+     * 
+     * @param id de la pieza
+     * 
+     * @return la pieza
+     */
+    Pieza consultarPieza(Long id);
+    
     /**
      * Consulta todas las piezas registradas en el sistema
      * 

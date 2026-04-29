@@ -1,7 +1,12 @@
 package pantallasVentas;
 
 import DTOS.ClienteDTO;
+import DTOS.DetallesVentaDTO;
+import DTOS.EmpleadoDTO;
+import DTOS.VentaDTO;
 import coordinadores.ICoordinadorEstados;
+import coordinadores.ICoordinadorNegocio;
+import coordinadores.ICoordinadorPresentacion;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.HashMap;
@@ -12,7 +17,9 @@ import utilEstilos.Constantes;
 import utilPresentacion.UtilBoton;
 import utilPresentacion.UtilGeneral;
 import ensambladores.IEnsambladorDTO;
+import excepciones.PresentacionException;
 import java.awt.Dimension;
+import java.util.List;
 import utilEstilos.UtilFormato;
 import utilEstilos.UtilSwing;
 
@@ -22,13 +29,17 @@ public class InfoCliente extends JDialog {
     private ICoordinadorEstados coordinadorEstados;
     private IEnsambladorDTO ensambladorDTO;
     private IObservador observador;
+    private ICoordinadorPresentacion coordinadorPresentacion;
+    private ICoordinadorNegocio coordinadorNegocio;
 
     private Map<String, JTextField> camposCliente = new HashMap<>();
 
-    public InfoCliente(ICoordinadorEstados coordinadorEstados, IObservador observador, IEnsambladorDTO ensambladorDTO) {
+    public InfoCliente(ICoordinadorPresentacion coordinadorPresentacion, ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados, IObservador observador, IEnsambladorDTO ensambladorDTO) {
         this.coordinadorEstados = coordinadorEstados;
         this.observador = observador;
         this.ensambladorDTO = ensambladorDTO;
+        this.coordinadorNegocio = coordinadorNegocio;
+        this.coordinadorPresentacion = coordinadorPresentacion;
 
         UtilSwing.configurarDialogoInicio(this, "Capturar datos del cliente");
 
@@ -96,9 +107,7 @@ public class InfoCliente extends JDialog {
 
         botonRegistrar.setAlignmentX(Component.CENTER_ALIGNMENT);
         botonRegistrar.addActionListener(e -> {
-
-            //Validaciones validador = new Validaciones();
-
+            
             String nombre = camposCliente.get(Constantes.CLIENTE_NOMBRE).getText().trim();
             String paterno = camposCliente.get(Constantes.CLIENTE_APELLIDOP).getText().trim();
             String materno = camposCliente.get(Constantes.CLIENTE_APELLIDOM).getText().trim();
@@ -130,20 +139,32 @@ public class InfoCliente extends JDialog {
                 UtilSwing.dialogoAlerta(this, "El teléfono debe tener exactamente 10 dígitos numéricos.");
                 return;
             }
-   
+            
+            //Inicia el proceso dde hacer la venta
+            UtilSwing.dialogoConfirmacion(this, "¿Desea registrar la venta?", () -> {
+                
+                //Crea al cliente con builder
+                ClienteDTO cliente = new ClienteDTO.Builder()
+                                            .nombres(nombre)
+                                            .apellidoPaterno(paterno)
+                                            .apellidoMaterno(materno)
+                                            .correo(correo)
+                                            .telefono(telefono)
+                                            .build();
 
-            UtilSwing.dialogoConfirmacion(this, "¿Desea asignar a " + nombre + " a esta venta?", () -> {
-                ClienteDTO cliente = ensambladorDTO.ensamblarClienteDTO(
-                        nombre, paterno, materno, correo, telefono
-                );
-
-                coordinadorEstados.setCliente(cliente);
-
+                //Activa el observador en caso de que exista
                 if (observador != null) {
                     observador.observar();
                 }
+                
+                //Procesa la venta
+                procesarVentaConfirmada(cliente);
+                
+                //Notifica sobre la venta exitosa
+                UtilSwing.dialogoAviso(this, "Venta procesada con éxito para el cliente: " + cliente.getNombres());
 
-                UtilSwing.dialogoAviso(this, "Cliente validado y asignado.");
+                //Regresa a la pantalla principal
+                coordinadorPresentacion.mostrarVentanaInicio();
                 this.dispose();
             });
         });
@@ -153,7 +174,28 @@ public class InfoCliente extends JDialog {
 
         botonRegistrar.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
+    
+    /**
+     * Arma la venta y la manda a procesar
+     * con todo lo adyacente a eso
+     * 
+     * @param cliente 
+     */
+    private void procesarVentaConfirmada(ClienteDTO cliente) {
+        //Obtiene los datos y crea la venta
+        EmpleadoDTO empleado = coordinadorEstados.getUsuarioLogueado();
+        List<DetallesVentaDTO> carrito = coordinadorEstados.getCarritoVenta();
+        VentaDTO venta = new VentaDTO(cliente, empleado, carrito);
 
+        //Procesa la venta
+        try {
+            coordinadorNegocio.procesarVenta(venta, observador);
+        } catch (PresentacionException pe) {
+            UtilSwing.dialogoAlerta(this, "Error al procesar: " + pe.getMessage());
+        }
+    }
+    
+    /** Crea espacio gráfico */
     private void espacio(int alto) {
         panelPrincipal.add(Box.createRigidArea(new java.awt.Dimension(0, alto)));
     }

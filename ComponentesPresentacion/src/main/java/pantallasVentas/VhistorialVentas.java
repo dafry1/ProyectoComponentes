@@ -176,10 +176,11 @@ public class VhistorialVentas extends JFrame implements IObservador {
         //Declara variables
         String fechaHora;
         String folio;
-        int cantidadDetalles; //-> FIXME: ES TEMPORAL PARA PROBAR RAPIDAMENTE QUE SI SE PASAN LOS DETALLES
+        int cantidadDetalles;
 
         //Por cada venta de la lista...
         for (VentaDTO venta: ventas) {
+            
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
             tarjeta.setLayout(new BorderLayout(20, 0));
 

@@ -46,6 +46,14 @@ public class CoordinadorEstados implements ICoordinadorEstados {
         return clienteActual;
     }
     
+    @Override
+    public boolean existePiezaCarrito(Long id) {
+        return fachadaVentas.existePiezaCarrito(id);
+    }
+    
+    
+    
+    
     
     /**
      * Sinleton que asegura trabajar con una única instancia

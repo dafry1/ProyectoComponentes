@@ -33,12 +33,11 @@ public class ControlCarrito {
      * @param detalle a agregar
      */
     public void agregarCarritoVenta(DetallesVentaDTO detalle) {
-        if (detalle != null) {
-            carrito.add(detalle);
-        } else {
+        if (detalle == null) {
             LOG.log(System.Logger.Level.ERROR, () -> ">> " + DETALLE_VACIO);
             throw new NegocioException(DETALLE_VACIO);
         }
+        carrito.add(detalle);
     }
 
     /**
@@ -93,4 +92,23 @@ public class ControlCarrito {
                 .filter(d -> d.getPieza().getId().equals(id))
                 .mapToInt(DetallesVentaDTO::getCantidad).sum();
     }  
+    
+    /**
+     * Determina si esa pieza ya fue agregada al carrito
+     * 
+     * @param id
+     * @return 
+     */
+    public boolean existePiezaCarrito(Long id) {
+        if (id == null) {
+            LOG.log(System.Logger.Level.ERROR, () -> ">> " + DETALLE_VACIO);
+            throw new NegocioException(DETALLE_VACIO);
+        }
+        for (DetallesVentaDTO detalle: carrito) {
+            if (detalle.getPieza().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

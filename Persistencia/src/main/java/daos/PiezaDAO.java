@@ -50,6 +50,22 @@ public class PiezaDAO implements IPiezaDAO {
         PIEZAS.add(pieza3);
     }
     
+    /**
+     * Consulta una piez por su Id
+     * 
+     * @param id
+     * @return 
+     */
+    @Override
+    public Pieza consultarPieza(Long id) {
+        for (Pieza p: PIEZAS) {
+            if (p.getId().equals(id)) {
+                return p;
+            }
+        }
+        return null;
+    }
+    
     @Override
     public List<Pieza> consultarPiezas() {
         return PIEZAS;

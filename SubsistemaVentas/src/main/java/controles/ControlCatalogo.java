@@ -21,10 +21,20 @@ public class ControlCatalogo{
     /**
      * Constructor con una fábrica inyectada
      * 
-     * @param fabricaBO que suministra los BO
+     * @param piezaBO 
      */
-    public ControlCatalogo(IFabricaBO fabricaBO) {
-        this.piezaBO = fabricaBO.fabricarPieza();
+    public ControlCatalogo(IPiezaBO piezaBO) {
+        this.piezaBO = piezaBO;
+    }
+    
+    /**
+     * Busca una piezas
+     * 
+     * @param id
+     * @return 
+     */
+    public PiezaDTO consultarPieza(Long id) {
+        return piezaBO.consultarPieza(id);
     }
     
     /**

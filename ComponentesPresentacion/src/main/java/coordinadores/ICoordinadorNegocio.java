@@ -15,6 +15,8 @@ import observadores.IObservador;
  */
 public interface ICoordinadorNegocio {
     
+    PiezaDTO consultarPieza(Long id);
+    
     /**
      * Regresa todas las piezas del sistema, dadas directamente
      * por el IFachadaVentas

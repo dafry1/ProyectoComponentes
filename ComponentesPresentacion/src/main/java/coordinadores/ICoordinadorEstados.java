@@ -104,4 +104,6 @@ public interface ICoordinadorEstados {
     public void setCliente(ClienteDTO cliente);
     
     public ClienteDTO getCliente();
+    
+    boolean existePiezaCarrito(Long id);
 }

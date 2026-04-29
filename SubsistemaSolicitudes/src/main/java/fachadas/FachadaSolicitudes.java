@@ -25,7 +25,7 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
     private final IFabricaBO fabricaBO = FabricaBO.singleton();
     
     //Controles
-    private final ControlCatalogo controlCatalogo = new ControlCatalogo(fabricaBO);
+    private final ControlCatalogo controlCatalogo = new ControlCatalogo(fabricaBO.fabricarPieza());
     //private final ControlVentas controlVentas = new ControlVentas(fabricaBO);
     private final ControlCarrito controlCarrito = new ControlCarrito();
     

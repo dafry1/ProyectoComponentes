@@ -1,15 +1,18 @@
 package pantallasVentas;
 
+import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;
+import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
 import DTOS.VentaDTO;
+import ensambladores.IEnsambladorDTO;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class DetalleVenta extends JDialog {
 
-    public DetalleVenta(Frame padre, VentaDTO venta) {
+    public DetalleVenta(Frame padre, VentaDTO venta, IEnsambladorDTO ensambladorDTO) {
         super(padre, "Detalle de Venta", true);
         
         this.setResizable(false);
@@ -30,12 +33,12 @@ public class DetalleVenta extends JDialog {
         lblFecha.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         lblFecha.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // --- SECCIÓN PARTICIPANTES ---
-        String nombreEmpleado = (venta.getEmpleado() != null) ? venta.getEmpleado().getNombres() : "N/A";
-        String nombreCliente = (venta.getCliente() != null) ? venta.getCliente().getNombres() : "Público General";
-
-        String htmlGente = "<html><center>Atendido por: <b>" + nombreEmpleado + "</b><br>"
-                + "Cliente: <b>" + nombreCliente + "</b></center></html>";
+        //Nombre completo de ambos participantes
+        String empleadoNom = venta.getEmpleado().nombreCompleto();
+        String clienteNom = venta.getCliente().nombreCompleto();
+        
+        String htmlGente = "<html><center>Atendido por: <b>" + empleadoNom + "</b><br>"
+                + "Cliente: <b>" + clienteNom + "</b></center></html>";
         
         JLabel lblGente = new JLabel(htmlGente);
         lblGente.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -91,7 +94,7 @@ public class DetalleVenta extends JDialog {
         panelPrincipal.add(Box.createRigidArea(new Dimension(0, 15)));
         panelPrincipal.add(lblGente);
         panelPrincipal.add(Box.createRigidArea(new Dimension(0, 20)));
-        panelPrincipal.add(scrollPane); // Agregamos el scroll en lugar del contenedor directo
+        panelPrincipal.add(scrollPane);
         panelPrincipal.add(lblTotal);
 
         this.add(panelPrincipal);

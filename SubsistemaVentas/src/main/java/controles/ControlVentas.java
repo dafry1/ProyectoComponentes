@@ -25,13 +25,14 @@ public class ControlVentas {
     private IPiezaBO piezaBO;
     
     /**
-     * Constructor con fábrica inyectada
+     * Constructor
      * 
-     * @param fabricaBO que suministra los BO
+     * @param piezaBO
+     * @param ventaBO 
      */
-    public ControlVentas(IFabricaBO fabricaBO) {
-        this.piezaBO = fabricaBO.fabricarPieza();
-        this.ventaBO = fabricaBO.fabricarVenta();
+    public ControlVentas(IPiezaBO piezaBO, IVentaBO ventaBO) {
+        this.piezaBO = piezaBO;
+        this.ventaBO = ventaBO;
     }
     
     /**

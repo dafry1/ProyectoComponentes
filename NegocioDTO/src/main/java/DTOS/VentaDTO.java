@@ -20,6 +20,19 @@ public class VentaDTO extends DTO {
 
     /** Constructor vacío */
     public VentaDTO() {}  
+
+    /**
+     * Constructor básico para presentación
+     * 
+     * @param cliente
+     * @param empleado
+     * @param detalles 
+     */
+    public VentaDTO(ClienteDTO cliente, EmpleadoDTO empleado, List<DetallesVentaDTO> detalles) {
+        this.cliente = cliente;
+        this.empleado = empleado;
+        this.detalles = detalles;
+    }
     
     /**
      * Constructor completo

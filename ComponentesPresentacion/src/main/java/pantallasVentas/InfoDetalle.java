@@ -5,6 +5,7 @@ import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import coordinadores.CoordinadorEstados;
 import coordinadores.ICoordinadorEstados;
+import coordinadores.ICoordinadorNegocio;
 import java.awt.Component;
 import java.awt.Font;
 import javax.swing.*;
@@ -22,7 +23,7 @@ public class InfoDetalle extends JDialog {
 
     private IObservador observador;
 
-    public InfoDetalle(ICoordinadorEstados coordinadorEstados, IObservador observador, DetallesVentaDTO detalle) {
+    public InfoDetalle(ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados, IObservador observador, DetallesVentaDTO detalle) {
         // Configuración inicial
         this.observador = observador;   
         this.setModal(true); 
@@ -36,8 +37,8 @@ public class InfoDetalle extends JDialog {
         String nombrePieza = pieza.getNombre();
         int cantidadActual = detalle.getCantidad();
         
-        //Consulta directamente desde negocio la cantidad de stock restante aún en selección de piezas
-        int stockDisponible = coordinadorEstados.calcularStockAntesVenta(pieza.getId());
+        //Consulta la cantidad total que hay. Como es solo para actualizar la cantidad, se considera el stock real de la BD
+        int stockDisponible = coordinadorNegocio.consultarPieza(pieza.getId()).getStockPieza();
         
         // Panel Principal
         JPanel panelPrincipal = new JPanel();
@@ -48,7 +49,7 @@ public class InfoDetalle extends JDialog {
         String[] info = {
             "Producto: " + nombrePieza,
             "Precio Unitario: $" + detalle.getCosto(),
-            "Stock en almacén: " + stockDisponible,
+            "Stock en almacén: " + stockDisponible ,
             "Cantidad actual: " + cantidadActual
         };
 

@@ -15,12 +15,13 @@ public class Pruebas {
 
     public static void main(String[] args) {
         
-   
-        ICoordinadorEstados coordiandorEstados = CoordinadorEstados.singleton();
-        ICoordinadorNegocio coordinadorNegocio = new CoordinadorNegocio();
-        IEnsambladorDTO ensamladorDTO = new EnsambladorDTO();
+        //Instancia los coordinadores y el ensamblador
+        ICoordinadorEstados coordinadorEstados = CoordinadorEstados.singleton();
+        ICoordinadorNegocio coordinadorNegocio = new CoordinadorNegocio(coordinadorEstados);
+        IEnsambladorDTO ensambladorDTO = new EnsambladorDTO();
         
-        ICoordinadorPresentacion coordinadorPresentacion = new CoordinadorPresentacion(coordinadorNegocio, coordiandorEstados, ensamladorDTO);
+        //Los asigna al coordinador de presentación, que lo suministra al resto de ventanas
+        ICoordinadorPresentacion coordinadorPresentacion = new CoordinadorPresentacion(coordinadorNegocio, coordinadorEstados, ensambladorDTO);
         coordinadorPresentacion.mostrarVentanaInicioSesion();
     }
 }

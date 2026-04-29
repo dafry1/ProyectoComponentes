@@ -13,6 +13,15 @@ import java.util.List;
  * @author Andre
  */
 public interface IFachadaVentas {
+    PiezaDTO consultarPieza(Long id);
+    
+    /**
+     * Determina si esa pieza ya fue agregada al carrito
+     * 
+     * @param id
+     * @return 
+     */
+    boolean existePiezaCarrito(Long id);
     
     /**
      * Consulta todas las piezas del sistema

@@ -1,4 +1,4 @@
-package pantallasVentas;
+package pantallasSolicitudes;
 
 import coordinadores.CoordinadorPresentacion;
 import coordinadores.ICoordinadorPresentacion;
