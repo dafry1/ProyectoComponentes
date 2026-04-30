@@ -130,6 +130,7 @@ public class FachadaVentas implements IFachadaVentas {
     @Override
     public void agregarCarritoVenta(DetallesVentaDTO detalle) {
         controlCarrito.agregarCarritoVenta(detalle);
+        controlCarrito.agruparDetalles();
     }
 
     /**
@@ -140,6 +141,7 @@ public class FachadaVentas implements IFachadaVentas {
     @Override
     public void eliminarCarritoVenta(DetallesVentaDTO detalle) {
         controlCarrito.eliminarCarritoVenta(detalle);
+        controlCarrito.agruparDetalles();
     }
 
     /** Regresa el total */

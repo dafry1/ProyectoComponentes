@@ -9,7 +9,6 @@ import java.awt.Component;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -46,8 +45,6 @@ public class InfoPieza extends JDialog {
     IEnsambladorDTO ensambladorDTO;
     IObservador observador;
     
-    
-    
     /**
      * Constructor que coordina diferentes métodos y establece atributos
      * 
@@ -82,8 +79,6 @@ public class InfoPieza extends JDialog {
         UtilSwing.configurarDialogoFinal(this);
     }
     
-    
-    
     /** Crea el panel principal */
     private void panelPrincipal() {
         this.panelPrincipal = new JPanel();
@@ -91,8 +86,6 @@ public class InfoPieza extends JDialog {
         panelPrincipal.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 50, 30, 50));
         panelPrincipal.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
-    
-    
     
     /** Crea el área donde se despliega la información de la pieza */
     private void areaSuperior() {
@@ -129,8 +122,6 @@ public class InfoPieza extends JDialog {
         }
     }
     
-    
-    
     /** Crea el área del label de stock, elección de cantidad y botón de confirmar */
     private void areaStock() {
         //Label del stock local restante de la pieza
@@ -160,14 +151,12 @@ public class InfoPieza extends JDialog {
             }
             
             //Crea un diálogo de confirmación
-            UtilSwing.dialogoConfirmacion(boton, "¿Desea agregar esta pieza al carrito?", () -> {
+            UtilSwing.dialogoConfirmacion(InfoPieza.this, "¿Desea agregar esta pieza al carrito?", () -> {
                 agregarPieza(cantidadString);
             });
         });
         panelPrincipal.add(boton);
     }
-    
-    
     
     /**
      * Método que agrega una pieza al carrito. Es llamado por
@@ -195,12 +184,14 @@ public class InfoPieza extends JDialog {
 
         //Agrega el detalle al carrito y notifica al observador
         coordinadorEstados.agregarCarritoVenta(detalle);
-        observador.observar();
         UtilSwing.dialogoAviso(this, "Se agregaron " + cantidad + " de la pieza " + nombre);
+        
+        //Notifica al observador
+        if (observador != null) {
+            observador.observar();
+        }
         this.dispose();
     }
-    
-    
     
     /** Da un pequeño espacio al panel*/
     private void espacio() {

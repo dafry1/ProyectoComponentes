@@ -1,10 +1,13 @@
 package controles;
 
 import DTOS.DetallesVentaDTO;
+import DTOS.PiezaDTO;
 import excepciones.NegocioException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Implementación de un control que recuerda en memoria
@@ -110,5 +113,41 @@ public class ControlCarrito {
             }
         }
         return false;
+    }
+    
+    /**
+     * Agrupa detalles de la misma pieza para evitar duplicación
+     * innecesaria, ayudándose de un mapa temporal del juego
+     * <Long, DetallesVentaDTO>, o aplicado a negocio, <idPieza, detalle>
+     * y así agrupar correctamente qué id de pieza tiene un detalle. Va
+     * agregando a ese mapa o actualizando cantidad recorriendo el
+     * carrito. Al final limpia el carrito y actualiza con los datos
+     * frescos del mapa auxiliar
+     */
+    public void agruparDetalles() {
+        
+        //Mapa de juego idPieza, detalle para saber qué piezas tienen qué detalles
+        Map<Long, DetallesVentaDTO> mapaDetalles = new HashMap<>();
+        
+        //Por cada detalle del carrito...
+        for (DetallesVentaDTO detalle: carrito) {
+            Long idPieza = detalle.getPieza().getId();
+            
+            //Si no existe un detalle con esa pieza, solo lo agrega
+            if (!mapaDetalles.containsKey(idPieza)) {
+                mapaDetalles.put(idPieza, detalle);
+            } 
+            
+            //Si ya existe, busca el detalle en el mapa con ese ID y lo suma al detalle de la iteración
+            else {
+                DetallesVentaDTO detalleExistente = mapaDetalles.get(idPieza);
+                int cantidadActualizada = detalleExistente.getCantidad() + detalle.getCantidad();
+                detalleExistente.setCantidad(cantidadActualizada);
+            }
+        }
+        
+        //Limpia el carrito y le manda los valores del mapa, o sea, sin el juego de llave
+        carrito.clear();
+        carrito.addAll(mapaDetalles.values());
     }
 }

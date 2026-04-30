@@ -31,6 +31,8 @@ import utilPresentacion.UtilBoton.BotonAlmacenador;
 public class ViniciarVenta extends JFrame implements IObservador {
     JPanel panelPrincipal;
     
+    JScrollPane scrollDetalles;
+    
     //Se usa en más de un método
     private JPanel contenedorListaPiezas;
     private JPanel contenedorListaDetalles;
@@ -126,12 +128,12 @@ public class ViniciarVenta extends JFrame implements IObservador {
         dibujarTarjetasPiezas(piezas);
         
         //Crea y configura un scroll por si son varios
-        JScrollPane scroll = new JScrollPane(contenedorListaPiezas);
-        scroll.setBorder(null);
-        scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scroll.getVerticalScrollBar().setUnitIncrement(16);
-        p.add(scroll, BorderLayout.CENTER);
+        scrollDetalles = new JScrollPane(contenedorListaPiezas);
+        scrollDetalles.setBorder(null);
+        scrollDetalles.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollDetalles.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollDetalles.getVerticalScrollBar().setUnitIncrement(16);
+        p.add(scrollDetalles, BorderLayout.CENTER);
         
         //Regresa el panel
         return p;
@@ -285,7 +287,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         double costo;
         double subtotal;
         
-        for (DetallesVentaDTO detalle: CoordinadorEstados.singleton().getCarritoVenta()) {
+        for (DetallesVentaDTO detalle: coordinadorEstados.getCarritoVenta()) {
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
             
             //Asigna valores
@@ -426,7 +428,9 @@ public class ViniciarVenta extends JFrame implements IObservador {
         contenedorListaDetalles.removeAll();
         dibujarTarjetasCarrito();
         contenedorListaDetalles.revalidate();
+        scrollDetalles.revalidate();
         contenedorListaDetalles.repaint();
+        scrollDetalles.repaint();
         labelTotal.revalidate();
         labelTotal.repaint();
     }

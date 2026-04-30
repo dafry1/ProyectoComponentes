@@ -64,7 +64,7 @@ public class InfoDetalle extends JDialog {
         panelPrincipal.add(Box.createRigidArea(new java.awt.Dimension(0, 15)));
 
         // Sección de edición
-        JLabel labelInstruccion = UtilGeneral.crearLabel("Ingrese la nueva cantidad:");
+        JLabel labelInstruccion = UtilGeneral.crearLabel("Nueva cantidad: ");
         labelInstruccion.setFont(labelInstruccion.getFont().deriveFont(Font.BOLD, 13f));
         labelInstruccion.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelPrincipal.add(labelInstruccion);
@@ -81,42 +81,69 @@ public class InfoDetalle extends JDialog {
         JButton botonActualizar = UtilBoton.crearBoton("Actualizar");
         botonActualizar.setAlignmentX(Component.CENTER_ALIGNMENT);
         botonActualizar.addActionListener(e -> {
-            
-            String input = campoCantidad.getText().trim();
-            
-            if (!UtilFormato.numeroEnteroPositivo(input)) {
-                UtilSwing.dialogoAlerta(this, "Por favor, ingrese un número entero válido.");
-                return;
-            }
-            
-            int nuevaCantidad = Integer.parseInt(input);
-            
-            if (nuevaCantidad > stockDisponible) {
-                UtilSwing.dialogoAlerta(this, "Error: Solo hay " + stockDisponible + " unidades disponibles.");
-                return;
-            }
-
-            UtilSwing.dialogoConfirmacion(this, "¿Actualizar cantidad?", () -> {
-                if (nuevaCantidad == 0) {
-                    CoordinadorEstados.singleton().getCarritoVenta().remove(detalle);
-                    UtilSwing.dialogoAviso(this, "Pieza eliminada del carrito.");
-                } else {
-                    detalle.setCantidad(nuevaCantidad);
-                    UtilSwing.dialogoAviso(this, "Cantidad actualizada.");
-                }
-                
-                if (observador != null) {
-                    observador.observar();
-                }
-                this.dispose();
+            String cantidad = campoCantidad.getText().trim();
+            actualizarCantidad(cantidad, stockDisponible, detalle);
+        });
+        panelPrincipal.add(botonActualizar);
+        
+        //Botón que elimina el detalle
+        JButton botonEliminar = UtilBoton.crearBoton("Eliminar");
+        botonEliminar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        botonEliminar.addActionListener(e -> {
+            UtilSwing.dialogoConfirmacion(this, "¿Desea eliminar este detalle?", () -> {
+                coordinadorEstados.eliminarCarritoVenta(detalle);
+                observador.observar();
+                UtilSwing.dialogoAviso(this, "Pieza eliminada correctamente");
+                InfoDetalle.this.dispose();
             });
         });
+        panelPrincipal.add(botonEliminar);
         
-        panelPrincipal.add(botonActualizar);
-
-        // Finalización
+        //Finalización
         this.add(panelPrincipal);
         this.pack();
         this.setLocationRelativeTo(null);
+    }
+    
+    /**
+     * Verifica la información para actualizar la cantidad
+     * del detalle si todo está bien activa el proceso
+     * 
+     * @param cantidad
+     * @param stockDisponible
+     * @param detalle 
+     */
+    public void actualizarCantidad(String cantidad, int stockDisponible, DetallesVentaDTO detalle) {
+  
+        //Si no es número válido
+        if (!UtilFormato.numeroEnteroPositivo(cantidad)) {
+            UtilSwing.dialogoAlerta(this, "Por favor, ingrese un número entero válido.");
+            return;
+        }
+
+        //Parsea
+        int nuevaCantidad = Integer.parseInt(cantidad);
+
+        //Si es una cantidad mayor a la disponbile
+        if (nuevaCantidad > stockDisponible) {
+            UtilSwing.dialogoAlerta(this, "Error: Solo hay " + stockDisponible + " unidades disponibles.");
+            return;
+        }
+
+        //Si todo está bien inicia el proceso de verdad
+        UtilSwing.dialogoConfirmacion(this, "¿Actualizar cantidad?", () -> {
+            if (nuevaCantidad == 0) {
+                CoordinadorEstados.singleton().getCarritoVenta().remove(detalle);
+                UtilSwing.dialogoAviso(this, "Pieza eliminada del carrito.");
+            } else {
+                detalle.setCantidad(nuevaCantidad);
+                UtilSwing.dialogoAviso(this, "Cantidad actualizada.");
+            }
+        });
+        
+         //Notifica al observador
+        if (observador != null) {
+            observador.observar();
+        }
     }
 }
