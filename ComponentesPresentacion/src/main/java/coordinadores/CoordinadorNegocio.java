@@ -180,4 +180,24 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
             throw new PresentacionException("No existe el empleado");
         }
     }
+
+    @Override
+    public List<PiezaDTO> filtrarPorNombre(String nombre) {
+        return fachadaVentas.filtrarPorNombre(nombre);
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorCategoria(String categoria) {
+        return fachadaVentas.filtrarPorCategoria(categoria);
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorMarca(String marca) {
+        return fachadaVentas.filtrarPorMarca(marca);
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo) {
+        return fachadaVentas.filtrarPorPrecioMax(precioMaximo);
+    }
 }

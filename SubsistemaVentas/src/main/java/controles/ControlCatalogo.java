@@ -1,6 +1,7 @@
 package controles;
 
 import DTOS.PiezaDTO;
+import excepciones.NegocioException;
 import interfaces.IFabricaBO;
 import interfaces.IPiezaBO;
 import java.util.List;
@@ -90,5 +91,41 @@ public class ControlCatalogo{
         List<PiezaDTO> piezasTopTodo = piezaBO.consultarTopTodoPiezas();
         LOG.log(System.Logger.Level.INFO, () -> EXITO_CONSULTA + piezasTopTodo.size());
         return piezasTopTodo;
+    }
+    
+    public List<PiezaDTO> filtrarPorNombre(String nombre) {
+        if (nombre == null || nombre.isBlank()) {
+            String DEBUG = "Nombre vacío";
+            LOG.log(System.Logger.Level.ERROR, DEBUG);
+            throw new NegocioException(">>" + DEBUG);
+        }
+        return piezaBO.filtrarPorNombre(nombre);
+    }
+
+    public List<PiezaDTO> filtrarPorCategoria(String categoria) {
+        if (categoria == null || categoria.isBlank()) {
+            String DEBUG = "Categoría vacía";
+            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+            throw new NegocioException(DEBUG);
+        }
+        return piezaBO.filtrarPorCategoria(categoria);
+    }
+
+    public List<PiezaDTO> filtrarPorMarca(String marca) {
+        if (marca == null || marca.isBlank()) {
+            String DEBUG = "Marca vacía";
+            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+            throw new NegocioException(DEBUG);
+        }
+        return piezaBO.filtrarPorMarca(marca);
+    }
+
+    public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo) {
+        if (precioMaximo <= 0) {
+            String DEBUG = "Precio igual o menor a 0";
+            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+            throw new NegocioException(DEBUG);
+        }
+        return piezaBO.filtrarPorPrecioMax(precioMaximo);
     }
 }

@@ -97,4 +97,12 @@ public interface ICoordinadorNegocio {
      * @return el empleado DTO en caso de que exista 
      */
     EmpleadoDTO iniciarSesion(String nombreUsuario, String contra);
+    
+    public List<PiezaDTO> filtrarPorNombre(String nombre);
+
+    public List<PiezaDTO> filtrarPorCategoria(String categoria);
+
+    public List<PiezaDTO> filtrarPorMarca(String marca);
+
+    public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo);
 }

@@ -121,6 +121,7 @@ public class UtilSwing {
         }
     }
 
-    public static void dialogoError(PantallaResumen pantalla, String mensaje) {
-        JOptionPane.showMessageDialog(pantalla, mensaje, "Error", JOptionPane.ERROR_MESSAGE);    }
+    public static void dialogoError(Component pantalla, String mensaje) {
+        JOptionPane.showMessageDialog(pantalla, mensaje, "Error", JOptionPane.ERROR_MESSAGE);    
+    }
 }

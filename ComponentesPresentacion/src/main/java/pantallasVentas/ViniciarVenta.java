@@ -4,23 +4,23 @@ import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import DTOS.VentaDTO;
 import coordinadores.CoordinadorEstados;
-import coordinadores.CoordinadorNegocio;
 import coordinadores.ICoordinadorEstados;
 import coordinadores.ICoordinadorNegocio;
 import coordinadores.ICoordinadorPresentacion;
+import excepciones.PresentacionException;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import utilEstilos.Constantes;
 import utilPresentacion.UtilBoton;
-import utilPresentacion.UtilGeneral;
 import utilPresentacion.UtilPanel;
 import java.util.List;
 import observadores.IObservador;
-import utilEstilos.UtilBuild;
-import utilEstilos.UtilSwing;
+import utilEstilos.UtilFormato;
+import utilPresentacion.FachadaUtil;
 import utilPresentacion.UtilBoton.BotonAlmacenador;
 
 /**
@@ -31,11 +31,12 @@ import utilPresentacion.UtilBoton.BotonAlmacenador;
 public class ViniciarVenta extends JFrame implements IObservador {
     JPanel panelPrincipal;
     
-    JScrollPane scrollDetalles;
-    
     //Se usa en más de un método
-    private JPanel contenedorListaPiezas;
-    private JPanel contenedorListaDetalles;
+    private JPanel contenedorListaPiezas = new JPanel();
+    private JPanel contenedorListaDetalles = new JPanel();
+    
+    JScrollPane scrollDetalles = new JScrollPane();
+    JScrollPane scrollPiezas = new JScrollPane();
     
     //Coordinadores
     private ICoordinadorPresentacion coordinadorPresentacion;
@@ -43,10 +44,10 @@ public class ViniciarVenta extends JFrame implements IObservador {
     private ICoordinadorEstados coordinadorEstados;
     
     //Mapa que contiene los campos de búsqueda para recuperarlos después
-    Map<String, JTextField> mapaCampos = new HashMap<>();
+    Map<String, JButton> mapaBotonesFiltros = new HashMap<>();
     
     //Botón de buscar como atributo para usarlo en más de un método
-    JButton botonBuscar = UtilBoton.crearBoton("Buscar");
+    JButton botonBuscar = FachadaUtil.crearBoton("Buscar");
     
     //Arreglo de constantes ya definidas para los campos de texto y así no pelearnos con strings sueltos
     private String[] campos = {Constantes.PIEZA_NOMBRE, Constantes.PIEZA_CATEGORIA, Constantes.PIEZA_MARCA, Constantes.PIEZA_PRECIOMAX};
@@ -56,6 +57,9 @@ public class ViniciarVenta extends JFrame implements IObservador {
     
     //Se usa en más de un método
     private JLabel labelTotal = new JLabel("Total: $ " + totalCarrito);
+    
+    private List<PiezaDTO> piezasMostrar = new ArrayList<>();
+    
     
     
     
@@ -72,16 +76,24 @@ public class ViniciarVenta extends JFrame implements IObservador {
         this.coordinadorEstados = coordinadorEstados;
         
         //Configuración general
-        UtilSwing.configurarFrame("Iniciar venta", this);
+        FachadaUtil.configurarFrame("Iniciar venta", this);
 
         //Añade el panel posterior
-        add(UtilBuild.crearNavegacion(this, coordinadorPresentacion), BorderLayout.NORTH);
+        add(FachadaUtil.crearNavegacion(this, coordinadorPresentacion), BorderLayout.NORTH);
 
         //Crea el panel principal que contiene lo importante
         JPanel contenido = new JPanel(new GridBagLayout()); 
         contenido.setBackground(Constantes.COLOR_FONDO);
         contenido.setBorder(new EmptyBorder(20, 20, 20, 20));
-
+        
+        contenedorListaPiezas.setLayout(new BoxLayout(contenedorListaPiezas, BoxLayout.Y_AXIS));
+        contenedorListaDetalles.setLayout(new BoxLayout(contenedorListaDetalles, BoxLayout.Y_AXIS));
+        scrollPiezas.setViewportView(contenedorListaPiezas);
+        scrollDetalles.setViewportView(contenedorListaDetalles);
+        
+        //Actualiza las listas
+        piezasMostrar = coordinadorNegocio.consultarPiezas();
+        
         //Configura el gbc
         GridBagConstraints g = new GridBagConstraints();
         g.fill = GridBagConstraints.BOTH;
@@ -91,7 +103,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         g.gridx = 0; g.weightx = 0.10; g.weighty = 1.0; contenido.add(crearPanelBusqueda(), g);
         
         //Agrega los paneles
-        JPanel panelSeccionCentral = crearSeccionCentral(coordinadorNegocio.consultarPiezas());
+        JPanel panelSeccionCentral = crearSeccionCentral(piezasMostrar);
         g.gridx = 1; g.weightx = 0.30; contenido.add(panelSeccionCentral, g);
         g.gridx = 2; g.weightx = 0.30; contenido.add(crearPanelCarrito(), g);
         
@@ -99,8 +111,6 @@ public class ViniciarVenta extends JFrame implements IObservador {
         add(contenido, BorderLayout.CENTER);
         add(crearPanelInferior(), BorderLayout.SOUTH);
     }
-    
-    
     
     /**
      * Crea la sección central, donde aparecen las tarjetas de todas las piezas
@@ -119,27 +129,16 @@ public class ViniciarVenta extends JFrame implements IObservador {
         titulo.setBorder(new EmptyBorder(0, 0, 15, 0));
         p.add(titulo, BorderLayout.NORTH);
 
-        //Llena el atributo del contenedor
-        contenedorListaPiezas = new JPanel();
-        contenedorListaPiezas.setLayout(new BoxLayout(contenedorListaPiezas, BoxLayout.Y_AXIS));
-        contenedorListaPiezas.setBackground(Color.WHITE);
-        
-        //Dibuja un campo por cada pieza
+        contenedorListaPiezas.removeAll(); 
         dibujarTarjetasPiezas(piezas);
-        
-        //Crea y configura un scroll por si son varios
-        scrollDetalles = new JScrollPane(contenedorListaPiezas);
-        scrollDetalles.setBorder(null);
-        scrollDetalles.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollDetalles.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollDetalles.getVerticalScrollBar().setUnitIncrement(16);
-        p.add(scrollDetalles, BorderLayout.CENTER);
+        scrollPiezas.setBorder(null);
+        scrollPiezas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPiezas.getVerticalScrollBar().setUnitIncrement(16);
+        p.add(scrollPiezas, BorderLayout.CENTER);
         
         //Regresa el panel
         return p;
     }
-    
-    
     
     /**
      * Crea el panel derecho que contiene gráficamente a
@@ -162,16 +161,27 @@ public class ViniciarVenta extends JFrame implements IObservador {
         contenedorListaDetalles.setLayout(new BoxLayout(contenedorListaDetalles, BoxLayout.Y_AXIS));
         contenedorListaDetalles.setBackground(Color.WHITE);
 
+        /**
+         * Cuando el botón filtrar sea cliqueado, se dispara
+         * el filtro de las piezas YA traídas de la BD por
+         * 
+         * 
+         */
+        botonBuscar.addActionListener(e -> {
+            reconsultarPiezasFiltro();
+        });
+        p.add(botonBuscar);
+        
         //Campo de los detalles
         dibujarTarjetasCarrito();
 
         //Crea un scroll para la lista de detalles
-        JScrollPane scrollD = new JScrollPane(contenedorListaDetalles);
-        scrollD.setBorder(null);
-        scrollD.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollD.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollD.getVerticalScrollBar().setUnitIncrement(16);
-        p.add(scrollD, BorderLayout.CENTER);
+        scrollDetalles = new JScrollPane(contenedorListaDetalles);
+        scrollDetalles.setBorder(null);
+        scrollDetalles.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollDetalles.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollDetalles.getVerticalScrollBar().setUnitIncrement(16);
+        p.add(scrollDetalles, BorderLayout.CENTER);
         
         //Total
         labelTotal.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -181,8 +191,6 @@ public class ViniciarVenta extends JFrame implements IObservador {
         return p;
     }
     
-    
-    
     /**  Crea la barra inferior para continuar y regresar */
     private JPanel crearPanelInferior() {
         JPanel p = new JPanel(new BorderLayout());
@@ -190,17 +198,17 @@ public class ViniciarVenta extends JFrame implements IObservador {
         p.setBorder(new EmptyBorder(10, 30, 20, 30));
         
         //Crea el botón de regreso
-        JButton botonRegresar = UtilBoton.crearBotonRegresar();
+        JButton botonRegresar = FachadaUtil.crearBotonRegresar();
         botonRegresar.addActionListener(e -> coordinadorPresentacion.mostrarVentanaInicio());
 
         //Creaa el botón de continuar y le agrega navegación
-        JButton botonContinuar = UtilBoton.crearBoton("Continuar");
+        JButton botonContinuar = FachadaUtil.crearBoton("Continuar");
         botonContinuar.setPreferredSize(new Dimension(200, 50));
         botonContinuar.addActionListener(e -> {
             
             //Verifica que el carrito no esté vacío
             if (coordinadorEstados.carritoVentaVacio()) {
-                UtilSwing.dialogoAlerta(this, "El carrito está vacío");
+                FachadaUtil.dialogoAlerta(this, "El carrito está vacío");
                 return;
             }
             coordinadorPresentacion.abrirResumenVenta();
@@ -212,8 +220,6 @@ public class ViniciarVenta extends JFrame implements IObservador {
         return p;
     }
     
-    
-    
     /**
      * Crea el panel izquiero de búsqueda
      * Utiliza un arreglo para crear los campos de busqueda
@@ -223,21 +229,30 @@ public class ViniciarVenta extends JFrame implements IObservador {
     private JPanel crearPanelBusqueda() {
         
         //Configura el panel
-        JPanel p = UtilPanel.crearPanel();
+        JPanel p = FachadaUtil.crearPanel();
         p.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(15, 20, 15, 20); 
+        
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 20, 10, 20);
         gbc.gridx = 0;
-
+        gbc.weightx = 1.0;
+        gbc.weighty = 0;
+        
         //Encabezado del panel 
         JLabel titulo = new JLabel("Buscar", SwingConstants.CENTER);
-        titulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        gbc.gridy = 0; gbc.weighty = 0.1;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(20, 20, 10, 20);
         p.add(titulo, gbc);
         
+        //Campo de búsqueda
+        JTextField campoBuscar = FachadaUtil.crearCampoTexto();
+        gbc.gridy = 1;
+        gbc.insets = new Insets(5, 20, 15, 20);
+        p.add(campoBuscar, gbc);
+        
         //Va guardando la posición que tiene cada elemento verticalmente
-        int ordenGbc = 1;
+        int ordenGbc = 2;
         
         /**
          * Empieza a iterar sobre el arreglo de campos
@@ -246,33 +261,72 @@ public class ViniciarVenta extends JFrame implements IObservador {
          */
         for (String stringCampo: campos) {
             
-            //Crea un label con indicaciones del campo respectivo
-            JLabel label = new JLabel(stringCampo);
-            label.setFont(Constantes.FUENTE);
+            //Se va sumando el orden vertical, así que solo se debe poner gbc
             gbc.gridy = ordenGbc++;
-            gbc.insets = new Insets(5, 20, 0, 20);
-            p.add(label, gbc);
+            gbc.insets = new Insets(3, 10, 3, 10);
             
-            //Crea el campo de búsqueda
-            gbc.gridy = ordenGbc++;
-            gbc.insets = new Insets(3, 20, 10, 20);
-            JTextField campoBuscar = UtilGeneral.crearCampoTexto();
-            p.add(campoBuscar, gbc);
+            //Crea un botón de filtrado
+            JButton botonFiltro = FachadaUtil.crearBoton(stringCampo);
+            botonFiltro.addActionListener(e -> {
+                
+                //Verifica que el string sea válido primero
+                String filtro = campoBuscar.getText();
+                if (filtro.isBlank()) {
+                    FachadaUtil.dialogoAlerta(ViniciarVenta.this, "Campo vacío");
+                    return;
+                }
+                inyectarLogicaFiltradoBoton(filtro, stringCampo);
+            });
+            p.add(botonFiltro, gbc);
             
-            //Lo agrega al mapa para poder rescatarlo
-            mapaCampos.put(stringCampo, campoBuscar);
+            //Agrega al mapa de botones para recuperarlo después 
+            mapaBotonesFiltros.put(stringCampo, botonFiltro);
         }
         
+        //Botón encargado de restablecer los filtros y buscar todas las piezas
+        JButton eliminarFiltros = FachadaUtil.crearBoton("Restablecer filtros");
+        eliminarFiltros.addActionListener(e -> {
+            piezasMostrar = coordinadorNegocio.consultarPiezas();
+            reconsultarPiezasFiltro();
+        });
+        gbc.gridy = ordenGbc++;
+        gbc.insets = new Insets(15, 20, 5, 20);
+        p.add(eliminarFiltros, gbc);
+        
         //Configura el botón de búsqueda
-        botonBuscar.setPreferredSize(new Dimension(0, 45));
+        botonBuscar.setPreferredSize(new Dimension(03, 45));
         gbc.gridy = ordenGbc++; 
-        gbc.weighty = 0.1; 
+        //gbc.weighty = 0.1; 
         gbc.insets = new Insets(10, 20, 30, 20);
         p.add(botonBuscar, gbc);
         return p;
     }
     
-    
+    /**
+     * Asigna la naturaleza de filtrado del botón según el 
+     * campo correspondiente
+     * 
+     * @param filtro
+     * @param stringCampo 
+     */
+    private void inyectarLogicaFiltradoBoton(String filtro, String stringCampo) {
+        switch (stringCampo) {
+            case Constantes.PIEZA_NOMBRE -> piezasMostrar = coordinadorNegocio.filtrarPorNombre(filtro);
+            case Constantes.PIEZA_CATEGORIA -> piezasMostrar = coordinadorNegocio.filtrarPorCategoria(filtro);
+            case Constantes.PIEZA_MARCA -> piezasMostrar = coordinadorNegocio.filtrarPorMarca(filtro);   
+            case Constantes.PIEZA_PRECIOMAX -> {
+                piezasMostrar = UtilFormato.numeroEnteroPositivo(filtro) 
+                    ? coordinadorNegocio.filtrarPorPrecioMax(Double.parseDouble(filtro)) 
+                    : piezasMostrar;
+                if (!UtilFormato.numeroEnteroPositivo(filtro)) {
+                    FachadaUtil.dialogoAlerta(ViniciarVenta.this, "Ingrese un número entero positivo");
+                    return;
+                }
+            }
+            default -> throw new PresentacionException("Categoría inválida para filtrar piezas");
+        }
+        reconsultarPiezasFiltro();
+    }
     
     /**
      * En un bucle for por cada detalle del carrito crea
@@ -358,6 +412,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         String marca;
         String modelo;
         double precio;
+        String categoria;
         
         //Por cada pieza de la lista...
         for (PiezaDTO pieza: piezas) {
@@ -369,6 +424,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
             marca = pieza.getMarcaPieza();
             precio = pieza.getCostoPieza();
             modelo = pieza.getModeloPieza();
+            categoria = pieza.getCategoria();
             
             //Crea el panel de información básica
             JPanel panelInfoBasica = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
@@ -376,7 +432,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
             
             //Parte de ícono y descripción
             String desc = "<html><body style='width: 120px'>" +
-                          "<font color='white' size='3'><b>"+nombre+"</b> ("+modelo+")</font><br>" +
+                          "<font color='white' size='3'><b>["+categoria+"] "+nombre+"</b> ("+modelo+")</font><br>" +
                           "<font color='white' size='2'>$ "+marca+"</font></body></html>";
             panelInfoBasica.add(new JLabel(desc));
 
@@ -412,15 +468,17 @@ public class ViniciarVenta extends JFrame implements IObservador {
         }
     }
     
+    /** Redibuja el panel del catálogo de piezas */
+    private void reconsultarPiezasFiltro() {
+        contenedorListaPiezas.removeAll();
+        dibujarTarjetasPiezas(piezasMostrar);
+        contenedorListaPiezas.revalidate();
+        contenedorListaPiezas.repaint();
+        scrollPiezas.revalidate();
+        scrollPiezas.repaint();
+    }
     
-    
-    /**
-     * En orden: 
-     * 1. Obtiene el nuevo total del CoordinadorEstados
-     * 2. Actualiza el label con ese nuevo total
-     * 3. Vacía la lista de detalles del frame
-     * 4. Recalcula y redibuja el panel
-     */
+    /** Actualiza el total y los detalles directamente del carrito así como redibuja todo */
     @Override
     public void observar() {
         totalCarrito = coordinadorEstados.totalCarritoVenta();

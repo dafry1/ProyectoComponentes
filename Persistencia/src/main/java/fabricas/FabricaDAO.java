@@ -7,6 +7,7 @@ import interfaces.IEmpleadoDAO;
 import interfaces.IFabricaDAO;
 import interfaces.IPiezaDAO;
 import interfaces.IVentaDAO;
+import interfaces.IFabricaAdaptadores;
 
 /**
  * Suministra los DAO que contactan los BO
@@ -18,6 +19,9 @@ public class FabricaDAO implements IFabricaDAO {
     //Privados
     private static FabricaDAO instancia;
     private FabricaDAO() {}
+    
+    //Fábrica auxiliar que suministra adaptadores entre entity y documento
+    private IFabricaAdaptadores fabricaAdaptadores;
 
     /**
      * Singleton

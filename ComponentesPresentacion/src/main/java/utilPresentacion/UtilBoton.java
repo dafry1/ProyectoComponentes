@@ -64,7 +64,26 @@ public class UtilBoton {
         public void setDTO(DTO dto) {this.dto = dto;}
     }
     
+    public static JButton crearBotonAlmacenador(String texto, DTO dto) {
+        return new BotonAlmacenador(texto, dto);
+    }
     
+    /**
+     * De un botón almacenador extrae el DTO que
+     * contenga para ser usado. Utiliza un casteo
+     * forzado, pero es su sacrificio para que las
+     * pantallas desconozcan sobre la clase del
+     * botón almacenador
+     * 
+     * @param boton
+     * @return 
+     */
+    public static DTO obtenerDTOBoton(JButton boton) {
+        if (boton instanceof UtilBoton.BotonAlmacenador) {
+            return ((UtilBoton.BotonAlmacenador) boton).getDTO();
+        }
+        return null;
+    }
     
     /**
      * Fábrica de un botón estilizado

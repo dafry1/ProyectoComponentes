@@ -185,4 +185,24 @@ public class FachadaVentas implements IFachadaVentas {
     public boolean existePiezaCarrito(Long id) {
         return controlCarrito.existePiezaCarrito(id);
     }
+
+    @Override
+    public List<PiezaDTO> filtrarPorNombre(String nombre) {
+        return controlCatalogo.filtrarPorNombre(nombre);
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorCategoria(String categoria) {
+        return controlCatalogo.filtrarPorCategoria(categoria);
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorMarca(String marca) {
+        return controlCatalogo.filtrarPorMarca(marca);
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo) {
+        return controlCatalogo.filtrarPorPrecioMax(precioMaximo);
+    }
 }

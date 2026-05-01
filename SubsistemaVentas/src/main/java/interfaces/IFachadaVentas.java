@@ -124,4 +124,12 @@ public interface IFachadaVentas {
      * @return cantidad de stock de dicha pieza
      */
     int calcularStockAntesVenta(Long id);
+    
+    public List<PiezaDTO> filtrarPorNombre(String nombre);
+
+    public List<PiezaDTO> filtrarPorCategoria(String categoria);
+
+    public List<PiezaDTO> filtrarPorMarca(String marca);
+    
+    public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo);
 }

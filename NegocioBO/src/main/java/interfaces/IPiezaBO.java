@@ -109,4 +109,6 @@ public interface IPiezaBO {
      * @param detalles de la venta y el stock se debe actualizar
      */
     void actualizarStockTrasVenta(List<DetallesVentaDTO> detalles);
+    
+    
 }

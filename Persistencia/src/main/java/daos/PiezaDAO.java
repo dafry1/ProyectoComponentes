@@ -15,6 +15,7 @@ import java.util.List;
 public class PiezaDAO implements IPiezaDAO {
     private static final System.Logger LOG = System.getLogger(PiezaDAO.class.getName());
     private static String CARRITO_VACIO = "No se puede procesar una venta con un carrito vacío";
+    private static final String NO_FILTRADO = " inválido para filtrar piezas";
     
     //MEDIDAS TEMPORALES PARA MOCKEO
     private static List<Pieza> PIEZAS = new ArrayList<>();
@@ -119,31 +120,82 @@ public class PiezaDAO implements IPiezaDAO {
             throw new PersistenciaException(CARRITO_VACIO);
         }
         
-        LOG.log(System.Logger.Level.INFO, () -> ">> INICIANDO EL DESCUENTO DE STOCK A NIVEL DAO");
-        
         //Hace la iteración propiamente dicha
         for (DetallesVenta detalle: detalles) {
             actualizarStock(detalle);
         }
     }
 
+    /**
+     * Consulta todas las piezas cuyo nombre
+     * coincida con el campo
+     * 
+     * @param nombre para filtrar
+     * 
+     * @return piezas filtradas 
+     */
     @Override
     public List<Pieza> filtrarPorNombre(String nombre) {
-        return PIEZAS;
+        if (nombre.isBlank()) {
+            String DEBUG = "Nombre " + NO_FILTRADO;
+            LOG.log(System.Logger.Level.ERROR, DEBUG);
+            throw new PersistenciaException(DEBUG);
+        }
+        return PIEZAS.stream().filter(p -> p.getNombre().toLowerCase()
+                                .contains(nombre.toLowerCase()))
+                                .toList();
     }
 
+    /**
+     * Consulta todas las piezas cuya categoria
+     * coincida con el campo
+     * 
+     * @param categoria para filtrar
+     * 
+     * @return piezas filtradas 
+     */
     @Override
     public List<Pieza> filtrarPorCategoria(String categoria) {
-        return PIEZAS;
+        if (categoria.isBlank()) {
+            String DEBUG = "Categoría " + NO_FILTRADO;
+            LOG.log(System.Logger.Level.ERROR, DEBUG);
+            throw new PersistenciaException(DEBUG);
+        }
+        return PIEZAS.stream().filter(p -> p.getCategoria().toLowerCase()
+                                .contains(categoria.toLowerCase()))
+                                .toList();
     }
 
+    /**
+     * Consulta todas las piezas cuya marca
+     * coincida con el campo
+     * 
+     * @param marca para filtrar
+     * 
+     * @return piezas filtradas 
+     */
     @Override
     public List<Pieza> filtrarPorMarca(String marca) {
-        return PIEZAS;
+        if (marca.isBlank()) {
+            String DEBUG = "Marca " + NO_FILTRADO;
+            LOG.log(System.Logger.Level.ERROR, DEBUG);
+            throw new PersistenciaException(DEBUG);
+        }
+        return PIEZAS.stream().filter(p -> p.getMarcaPieza().toLowerCase()
+                                .contains(marca.toLowerCase()))
+                                .toList();
     }
 
+    /**
+     * Consulta todas las piezas cuyo precio
+     * coincida con el máximo
+     * 
+     * @param precioMaximo para filtrar
+     * 
+     * @return piezas filtradas 
+     */
     @Override
     public List<Pieza> filtrarPorPrecioMax(double precioMaximo) {
-        return PIEZAS;
+        return PIEZAS.stream().filter(p -> p.getCostoPieza() <= precioMaximo).toList();
     }
 }
