@@ -6,12 +6,12 @@ import DTOS.EmpleadoDTO;
 import fachada.FachadaInicioSesion;
 import fachadas.FachadaSolicitudes;
 import fachadas.FachadaVentas;
-import interfaces.IFachadaInicioSesion;
+import fachada.IFachadaInicioSesion;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import interfaces.IFachadaSolicitudes;
-import interfaces.IFachadaVentas;
+import fachadas.IFachadaSolicitudes;
+import fachadas.IFachadaVentas;
 
 /**
  * Coordinador que sabe cosas que deben compartirse a lo largo del sistema, como

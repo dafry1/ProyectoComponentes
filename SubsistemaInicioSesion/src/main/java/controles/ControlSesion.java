@@ -4,10 +4,10 @@ import DTOS.EmpleadoDTO;
 import fabricas.FabricaBO;
 import fachada.FachadaInicioSesion;
 import fachadas.FachadaVentas;
-import interfaces.IFabricaBO;
-import interfaces.IEmpleadoBO;
-import interfaces.IFachadaInicioSesion;
-import interfaces.IFachadaVentas;
+import fabricas.IFabricaBO;
+import bo.IEmpleadoBO;
+import fachada.IFachadaInicioSesion;
+import fachadas.IFachadaVentas;
 import java.util.List;
 
 /**

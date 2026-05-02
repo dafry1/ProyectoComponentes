@@ -2,8 +2,8 @@ package controles;
 
 import DTOS.PiezaDTO;
 import excepciones.NegocioException;
-import interfaces.IFabricaBO;
-import interfaces.IPiezaBO;
+import fabricas.IFabricaBO;
+import bo.IPiezaBO;
 import java.util.List;
 
 /**

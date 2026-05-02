@@ -1,4 +1,4 @@
-package interfaces;
+package adaptadores;
 
 import DTOS.PiezaDTO;
 import dominio.Pieza;

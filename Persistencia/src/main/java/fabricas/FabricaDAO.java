@@ -3,11 +3,9 @@ package fabricas;
 import daos.EmpleadoDAO;
 import daos.PiezaDAO;
 import daos.VentaDAO;
-import interfaces.IEmpleadoDAO;
-import interfaces.IFabricaDAO;
-import interfaces.IPiezaDAO;
-import interfaces.IVentaDAO;
-import interfaces.IFabricaAdaptadores;
+import daos.IEmpleadoDAO;
+import daos.IPiezaDAO;
+import daos.IVentaDAO;
 
 /**
  * Suministra los DAO que contactan los BO

@@ -1,4 +1,4 @@
-package interfaces;
+package adaptadores;
 
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;

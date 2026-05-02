@@ -4,9 +4,9 @@ import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.VentaDTO;
 import excepciones.NegocioException;
-import interfaces.IFabricaBO;
-import interfaces.IPiezaBO;
-import interfaces.IVentaBO;
+import fabricas.IFabricaBO;
+import bo.IPiezaBO;
+import bo.IVentaBO;
 import java.util.List;
 
 /**

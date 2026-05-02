@@ -1,14 +1,11 @@
 package fabricas;
 
-import interfaces.IFabricaBO;
 import bo.EmpleadoBO;
 import bo.PiezaBO;
 import bo.VentaBO;
-import interfaces.IEmpleadoBO;
-import interfaces.IFabricaAdaptadores;
-import interfaces.IFabricaDAO;
-import interfaces.IPiezaBO;
-import interfaces.IVentaBO;
+import bo.IEmpleadoBO;
+import bo.IPiezaBO;
+import bo.IVentaBO;
 
 /**
  * Clase que implementa el patrón Fabrica y se encarga

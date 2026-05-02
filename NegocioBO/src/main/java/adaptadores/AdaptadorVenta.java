@@ -2,10 +2,6 @@ package adaptadores;
 
 import DTOS.VentaDTO;
 import dominio.Venta;
-import interfaces.IAdaptadorCliente;
-import interfaces.IAdaptadorDetallesVenta;
-import interfaces.IAdaptadorEmpleado;
-import interfaces.IAdaptadorVenta;
 import java.util.List;
 import java.util.stream.Collectors;
 

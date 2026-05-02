@@ -7,9 +7,8 @@ import DTOS.VentaDTO;
 import controles.ControlCarrito;
 import controles.ControlCatalogo;
 import fabricas.FabricaBO;
-import interfaces.IFabricaBO;
+import fabricas.IFabricaBO;
 import java.util.List;
-import interfaces.IFachadaSolicitudes;
 
 /**
  * Fachada que encapsula y coordina los métodos de los controles para

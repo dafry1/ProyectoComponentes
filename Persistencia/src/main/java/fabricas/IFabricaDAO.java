@@ -1,4 +1,8 @@
-package interfaces;
+package fabricas;
+
+import daos.IVentaDAO;
+import daos.IPiezaDAO;
+import daos.IEmpleadoDAO;
 
 /**
  * Establece el contrato sobre cómo debería suministrar

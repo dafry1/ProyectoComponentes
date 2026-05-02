@@ -2,7 +2,6 @@ package adaptadores;
 
 import DTOS.PiezaDTO;
 import dominio.Pieza;
-import interfaces.IAdaptadorPieza;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -1,4 +1,4 @@
-package interfaces;
+package fachadas;
 
 import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;

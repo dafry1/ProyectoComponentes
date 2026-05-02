@@ -1,4 +1,4 @@
-package interfaces;
+package bo;
 
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;

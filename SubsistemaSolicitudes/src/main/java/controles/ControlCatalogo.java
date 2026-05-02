@@ -1,8 +1,8 @@
 package controles;
 
 import DTOS.PiezaDTO;
-import interfaces.IFabricaBO;
-import interfaces.IPiezaBO;
+import fabricas.IFabricaBO;
+import bo.IPiezaBO;
 import java.util.List;
 
 /**

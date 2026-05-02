@@ -3,7 +3,6 @@ package daos;
 import dominio.DetallesVenta;
 import dominio.Pieza;
 import excepciones.PersistenciaException;
-import interfaces.IPiezaDAO;
 import java.util.ArrayList;
 import java.util.List;
 

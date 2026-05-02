@@ -5,12 +5,11 @@ import adaptadores.AdaptadorDetallesVenta;
 import adaptadores.AdaptadorEmpleado;
 import adaptadores.AdaptadorPieza;
 import adaptadores.AdaptadorVenta;
-import interfaces.IAdaptadorCliente;
-import interfaces.IAdaptadorDetallesVenta;
-import interfaces.IAdaptadorEmpleado;
-import interfaces.IAdaptadorPieza;
-import interfaces.IAdaptadorVenta;
-import interfaces.IFabricaAdaptadores;
+import adaptadores.IAdaptadorCliente;
+import adaptadores.IAdaptadorDetallesVenta;
+import adaptadores.IAdaptadorEmpleado;
+import adaptadores.IAdaptadorPieza;
+import adaptadores.IAdaptadorVenta;
 
 /**
  * Interfaz para una fábrica que suministra adaptadores

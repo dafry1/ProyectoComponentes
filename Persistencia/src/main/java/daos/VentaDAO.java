@@ -1,7 +1,6 @@
 package daos;
 
 import dominio.Venta;
-import interfaces.IVentaDAO;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

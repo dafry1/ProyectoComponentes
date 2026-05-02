@@ -4,10 +4,9 @@ import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import dominio.Pieza;
 import excepciones.NegocioException;
-import interfaces.IAdaptadorDetallesVenta;
-import interfaces.IAdaptadorPieza;
-import interfaces.IPiezaBO;
-import interfaces.IPiezaDAO;
+import adaptadores.IAdaptadorDetallesVenta;
+import adaptadores.IAdaptadorPieza;
+import daos.IPiezaDAO;
 import java.util.List;
 import utilerias.UtilNegocio;
 

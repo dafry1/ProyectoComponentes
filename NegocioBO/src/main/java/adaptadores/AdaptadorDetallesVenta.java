@@ -3,9 +3,6 @@ package adaptadores;
 import DTOS.DetallesVentaDTO;
 import dominio.DetallesVenta;
 import fabricas.FabricaAdaptadores;
-import interfaces.IAdaptadorDetallesVenta;
-import interfaces.IAdaptadorPieza;
-import interfaces.IFabricaAdaptadores;
 import java.util.List;
 import java.util.stream.Collectors;
 

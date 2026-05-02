@@ -2,7 +2,6 @@ package adaptadores;
 
 import DTOS.ClienteDTO;
 import dominio.Cliente;
-import interfaces.IAdaptadorCliente;
 import java.util.List;
 import java.util.stream.Collectors;
 

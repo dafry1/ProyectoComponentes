@@ -1,8 +1,8 @@
-package interfaces;
+package fabricas;
 
-import interfaces.IEmpleadoBO;
-import interfaces.IPiezaBO;
-import interfaces.IVentaBO;
+import bo.IEmpleadoBO;
+import bo.IPiezaBO;
+import bo.IVentaBO;
 
 /**
  * Interfaz de FabricaBO

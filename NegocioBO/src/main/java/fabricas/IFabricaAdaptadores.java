@@ -1,4 +1,10 @@
-package interfaces;
+package fabricas;
+
+import adaptadores.IAdaptadorVenta;
+import adaptadores.IAdaptadorDetallesVenta;
+import adaptadores.IAdaptadorPieza;
+import adaptadores.IAdaptadorCliente;
+import adaptadores.IAdaptadorEmpleado;
 
 /**
  * Contrato para suministrar de interfaces los BO y

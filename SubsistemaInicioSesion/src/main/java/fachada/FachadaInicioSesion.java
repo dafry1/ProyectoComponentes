@@ -3,8 +3,7 @@ package fachada;
 import DTOS.EmpleadoDTO;
 import controles.ControlSesion;
 import fabricas.FabricaBO;
-import interfaces.IFabricaBO;
-import interfaces.IFachadaInicioSesion;
+import fabricas.IFabricaBO;
 import java.util.List;
 
 /**

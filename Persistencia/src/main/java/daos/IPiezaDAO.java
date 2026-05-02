@@ -1,4 +1,4 @@
-package interfaces;
+package daos;
 
 import dominio.DetallesVenta;
 import dominio.Pieza;

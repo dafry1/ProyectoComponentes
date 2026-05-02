@@ -3,9 +3,8 @@ package bo;
 import DTOS.EmpleadoDTO;
 import dominio.Empleado;
 import excepciones.NegocioException;
-import interfaces.IAdaptadorEmpleado;
-import interfaces.IEmpleadoBO;
-import interfaces.IEmpleadoDAO;
+import adaptadores.IAdaptadorEmpleado;
+import daos.IEmpleadoDAO;
 import java.util.ArrayList;
 import java.util.List;
 

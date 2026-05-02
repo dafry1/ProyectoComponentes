@@ -1,4 +1,4 @@
-package interfaces;
+package bo;
 
 import DTOS.VentaDTO;
 import java.time.LocalDate;

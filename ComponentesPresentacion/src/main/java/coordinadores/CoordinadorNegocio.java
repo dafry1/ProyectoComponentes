@@ -9,11 +9,11 @@ import excepciones.NegocioException;
 import fachada.FachadaInicioSesion;
 import fachadas.FachadaSolicitudes;
 import fachadas.FachadaVentas;
-import interfaces.IFachadaInicioSesion;
+import fachada.IFachadaInicioSesion;
 import java.util.List;
 import observadores.IObservador;
-import interfaces.IFachadaSolicitudes;
-import interfaces.IFachadaVentas;
+import fachadas.IFachadaSolicitudes;
+import fachadas.IFachadaVentas;
 
 /**
  * Coordinador encargado de recopilar todas las fachadas con lógica

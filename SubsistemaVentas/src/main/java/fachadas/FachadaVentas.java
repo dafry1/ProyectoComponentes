@@ -8,8 +8,7 @@ import controles.ControlCarrito;
 import controles.ControlCatalogo;
 import controles.ControlVentas;
 import fabricas.FabricaBO;
-import interfaces.IFabricaBO;
-import interfaces.IFachadaVentas;
+import fabricas.IFabricaBO;
 import java.util.List;
 
 /**
