@@ -3,6 +3,7 @@ package coordinadores;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
+import DTOS.SolicitudDTO;
 import DTOS.VentaDTO;
 import excepciones.PresentacionException;
 import excepciones.NegocioException;
@@ -137,6 +138,7 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
      * @param observador si se necesita actualizar algo. Puede ser null
      */
 //    @Override
+    @Override
     public VentaDTO procesarVenta(VentaDTO venta, IObservador observador) {
         
         //Excepción si es null
@@ -199,5 +201,28 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
     @Override
     public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo) {
         return fachadaVentas.filtrarPorPrecioMax(precioMaximo);
+    }
+    
+    @Override
+    public SolicitudDTO procesarSolicitud(SolicitudDTO solicitud, IObservador observador) {
+        
+        //Excepción si es null
+        if (solicitud == null) {
+            throw new PresentacionException("Solicitud vacía");
+        }
+        
+        //Procesa la solicitud directamente de la fachada
+        //fachadaSolicitudes.procesarSolicitud(solicitud);
+
+        //Limpia el carrito
+        coordinadorEstados.limpiarCarritoVenta();
+        
+        //Activa al observador si existe
+        if (observador != null) {
+            observador.observar();
+        }
+        
+        //Regresa la venta
+        return solicitud;
     }
 }

@@ -3,6 +3,7 @@ package coordinadores;
 import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
+import DTOS.PiezaDTO;
 import java.util.List;
 
 /**
@@ -106,4 +107,18 @@ public interface ICoordinadorEstados {
     public ClienteDTO getCliente();
     
     boolean existePiezaCarrito(Long id);
+    
+    public List<PiezaDTO> consultarPiezas();
+    
+    public List<DetallesVentaDTO> getCarritoSolicitud();
+    
+    public void agregarCarritoSolicitud(DetallesVentaDTO detalle);
+    
+    public void eliminarCarritoSolicitud(DetallesVentaDTO detalle);
+    
+    public double totalCarritoSolicitud();
+    
+    public boolean carritoSolicitudVacio();
+    
+    public void limpiarCarritoSolicitud();
 }

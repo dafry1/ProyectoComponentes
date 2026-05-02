@@ -3,6 +3,7 @@ package coordinadores;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
+import DTOS.SolicitudDTO;
 import DTOS.VentaDTO;
 import java.util.List;
 import observadores.IObservador;
@@ -105,4 +106,6 @@ public interface ICoordinadorNegocio {
     public List<PiezaDTO> filtrarPorMarca(String marca);
 
     public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo);
+    
+    SolicitudDTO procesarSolicitud(SolicitudDTO solicitud, IObservador observador);
 }

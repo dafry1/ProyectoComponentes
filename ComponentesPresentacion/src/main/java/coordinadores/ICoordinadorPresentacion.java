@@ -3,6 +3,7 @@ import DTOS.DTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
+import DTOS.SolicitudDTO;
 import DTOS.VentaDTO;
 import ensambladores.IEnsambladorDTO;
 import java.awt.Frame;
@@ -67,4 +68,10 @@ public interface ICoordinadorPresentacion {
     void abrirDetalleVenta(VentaDTO venta);
     
     void abrirInfoCliente( IObservador observador, IEnsambladorDTO ensambladorDTO);
+    
+    void abrirInfoClienteSolicitud(IObservador observador);
+    
+    void abrirDetalleSolicitud(SolicitudDTO solicitud);
+    
+    void abrirResumenSolicitud();
 }

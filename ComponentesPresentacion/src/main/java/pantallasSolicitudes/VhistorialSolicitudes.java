@@ -1,207 +1,241 @@
 package pantallasSolicitudes;
 
+import DTOS.VentaDTO;
+import coordinadores.CoordinadorEstados;
 import coordinadores.CoordinadorPresentacion;
+import coordinadores.ICoordinadorEstados;
+import coordinadores.ICoordinadorNegocio;
 import coordinadores.ICoordinadorPresentacion;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import observadores.IObservador;
+import utilEstilos.Constantes;
+import utilEstilos.UtilBuild;
+import utilEstilos.UtilSwing;
+import utilPresentacion.UtilBoton;
+import utilPresentacion.UtilPanel;
 
 /**
  * Pantalla que muestra el historial de solicitudes realizadas.
  * 
  * @author Aaron
  */
-public class VhistorialSolicitudes extends JFrame {
+public class VhistorialSolicitudes extends JFrame implements IObservador{
 
-    private JPanel contenedorListaSolicitudes;
-    private ICoordinadorPresentacion coordinador;
+    JPanel panelPrincipal;
 
-    public VhistorialSolicitudes(CoordinadorPresentacion coordinador) {
-        this.coordinador = coordinador;
-        setTitle("Technoware - Historial de Solicitudes");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1300, 850);
-        setLocationRelativeTo(null);
-        getContentPane().setBackground(Color.WHITE);
-        setLayout(new BorderLayout());
+    //Se usa en más de un método
+    private JPanel contenedorListaPiezas;
+    private JPanel contenedorListaDetalles;
 
-        // Barra de navegación superior (Azul)
-        add(crearNavegacion(), BorderLayout.NORTH);
+    //Coordinadores
+    private ICoordinadorPresentacion coordinadorPresentacion;
+    private ICoordinadorNegocio coordinadorNegocio;
+    private ICoordinadorEstados coordinadorEstados;
 
+    //Mapa que contiene los campos de búsqueda para recuperarlos después
+    Map<String, JTextField> mapaCampos = new HashMap<>();
+
+    //Botón de buscar como atributo para usarlo en más de un método
+    JButton botonBuscar = UtilBoton.crearBoton("Buscar");
+
+    //Arreglo de constantes ya definidas para los campos de texto y así no pelearnos con strings sueltos
+    private String[] campos = {Constantes.PIEZA_NOMBRE, Constantes.PIEZA_CATEGORIA, Constantes.PIEZA_MARCA, Constantes.PIEZA_PRECIOMAX};
+
+    //Siempre actualizado desde el CoordiandorEstados
+    private double totalCarrito = CoordinadorEstados.singleton().totalCarritoVenta();
+
+    //Se usa en más de un método
+    private JLabel labelTotal = new JLabel("Total: $ " + totalCarrito);
+
+    /**
+     * Constructor donde se ensambla toda el frame
+     *
+     * @param coordinadorPresentacion que navegará entre pantallas
+     * @param coordinadorNegocio para lógica de procesos
+     * @param coordinadorEstados
+     */
+    public VhistorialSolicitudes(ICoordinadorPresentacion coordinadorPresentacion, ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados) {
+        this.coordinadorPresentacion = coordinadorPresentacion;
+        this.coordinadorNegocio = coordinadorNegocio;
+        this.coordinadorEstados = coordinadorEstados;
+
+        //Configuración general
+        UtilSwing.configurarFrame("Historial de solicitudes", this);
+
+        //Añade el panel posterior
+        add(UtilBuild.crearNavegacion(this, coordinadorPresentacion), BorderLayout.NORTH);
+
+        //Crea el panel principal que contiene lo importante
         JPanel contenido = new JPanel(new GridBagLayout());
-        contenido.setBackground(Color.WHITE);
+        contenido.setBackground(Constantes.COLOR_FONDO);
         contenido.setBorder(new EmptyBorder(20, 20, 20, 20));
 
+        //Configura el gbc
         GridBagConstraints g = new GridBagConstraints();
         g.fill = GridBagConstraints.BOTH;
         g.insets = new Insets(0, 10, 0, 10);
 
-        // Lado Izquierdo: Panel de Búsqueda (Gris redondeado)
-        g.gridx = 0; g.weightx = 0.30; g.weighty = 1.0;
-        contenido.add(crearPanelBusqueda(), g);
-
-        // Lado Derecho: Lista de Solicitudes (Panel Azul)
-        g.gridx = 1; g.weightx = 0.70;
-        contenido.add(crearSeccionSolicitudes(), g);
-
+        //Agrega a dicho panel
+        //g.gridx = 0; g.weightx = 0.10; g.weighty = 1.0; contenido.add(crearPanelBusqueda(), g);
+        //Agrega los paneles
+        JPanel panelSeccionCentral = crearSeccionCentral(coordinadorNegocio.consultarVentas());
+        g.gridx = 1;
+        g.weightx = 0.30;
+        contenido.add(panelSeccionCentral, g);
+        
+        //Añade al frame
         add(contenido, BorderLayout.CENTER);
-        
-        // Flecha de regresar abajo a la izquierda
-        add(crearBarraInferior(), BorderLayout.SOUTH);
+        add(crearPanelInferior(), BorderLayout.SOUTH);
     }
 
-    private JPanel crearNavegacion() {
-        JPanel nav = new JPanel(new GridLayout(1, 5));
-        nav.setPreferredSize(new Dimension(0, 65));
-        nav.setBackground(new Color(0, 95, 255));
-        
-        String[] nombres = {"Inicio", "Iniciar venta", "Iniciar solicitud", "Historial de ventas", "Historial de solicitudes"};
-        
-        for (String texto : nombres) {
-            JButton btn = new JButton(texto);
-            btn.setForeground(Color.WHITE);
-            btn.setBackground(new Color(0, 95, 255));
-            btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
-            btn.setFocusPainted(false);
-            btn.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.WHITE));
-            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-            btn.addActionListener(e -> {
-                switch (texto) {
-                    case "Inicio" -> coordinador.mostrarVentanaInicio();
-                    case "Iniciar venta" -> coordinador.mostrarVentanaVenta();
-                    case "Historial de ventas" -> coordinador.mostrarHistorialVentas();
-                    case "Historial de solicitudes" -> {}
-                    default -> JOptionPane.showMessageDialog(this, "Módulo en desarrollo");
-                }
-            });
-            nav.add(btn);
-        }
-        return nav;
-    }
-
-    private JPanel crearSeccionSolicitudes() {
+    /**
+     * Crea la sección central, donde aparecen las tarjetas de todas las ventas
+     *
+     * @param piezas en una lista
+     *
+     * @return el panel listo
+     */
+    private JPanel crearSeccionCentral(java.util.List<VentaDTO> ventas) {
         JPanel p = new JPanel(new BorderLayout());
         p.setOpaque(false);
 
-        JLabel titulo = new JLabel("Solicitudes realizadas", SwingConstants.CENTER);
-        titulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        //Encabezado
+        JLabel titulo = new JLabel("Solicitudes", SwingConstants.CENTER);
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
         titulo.setBorder(new EmptyBorder(0, 0, 15, 0));
         p.add(titulo, BorderLayout.NORTH);
 
-        // Este es el "Fondo Azul" de tu imagen
-        PanelRedondeado panelAzul = new PanelRedondeado(40, new Color(0, 95, 255));
-        panelAzul.setLayout(new BorderLayout());
-        panelAzul.setBorder(new EmptyBorder(20, 20, 20, 20));
+        //Llena el atributo del contenedor
+        contenedorListaPiezas = new JPanel();
+        contenedorListaPiezas.setLayout(new BoxLayout(contenedorListaPiezas, BoxLayout.Y_AXIS));
+        contenedorListaPiezas.setBackground(Color.WHITE);
 
-        contenedorListaSolicitudes = new JPanel();
-        contenedorListaSolicitudes.setLayout(new BoxLayout(contenedorListaSolicitudes, BoxLayout.Y_AXIS));
-        contenedorListaSolicitudes.setOpaque(false);
+        //Dibuja un campo por cada pieza
+        dibujarTarjetasVentas(ventas);
 
-        // Ejemplo de carga de datos
-        for(int i=0; i<5; i++) {
-            agregarSolicitudALista("Aaron Burciaga", "6442288812", i + " piezas");
-        }
-
-        JScrollPane scroll = new JScrollPane(contenedorListaSolicitudes);
-        scroll.setOpaque(false);
-        scroll.getViewport().setOpaque(false);
+        //Crea y configura un scroll por si son varios
+        JScrollPane scroll = new JScrollPane(contenedorListaPiezas);
         scroll.setBorder(null);
-        panelAzul.add(scroll, BorderLayout.CENTER);
+        scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scroll.getVerticalScrollBar().setUnitIncrement(16);
+        p.add(scroll, BorderLayout.CENTER);
 
-        p.add(panelAzul, BorderLayout.CENTER);
+        //Regresa el panel
         return p;
     }
+    
+    /**
+     * Crea la barra inferior para continuar y regresar
+     */
+    private JPanel crearPanelInferior() {
+        JPanel p = new JPanel(new BorderLayout());
+        p.setBackground(Color.WHITE);
+        p.setBorder(new EmptyBorder(10, 30, 20, 30));
 
-    private void agregarSolicitudALista(String cliente, String tel, String cantidad) {
-        contenedorListaSolicitudes.add(new CardSolicitud(cliente, tel, cantidad));
-        contenedorListaSolicitudes.add(Box.createVerticalStrut(15));
-    }
+        //Crea el botón de regreso
+        JButton botonRegresar = UtilBoton.crearBotonRegresar();
+        botonRegresar.addActionListener(e -> coordinadorPresentacion.mostrarVentanaInicio());
 
-    private JPanel crearPanelBusqueda() {
-        PanelRedondeado p = new PanelRedondeado(40, new Color(225, 225, 225));
-        p.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 25, 10, 25);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 0;
+        //Creaa el botón de continuar y le agrega navegación
+        JButton botonContinuar = UtilBoton.crearBoton("Continuar");
+        botonContinuar.setPreferredSize(new Dimension(200, 50));
+        botonContinuar.addActionListener(e -> {
 
-        JLabel titulo = new JLabel("Buscar", SwingConstants.CENTER);
-        titulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        gbc.gridy = 0; p.add(titulo, gbc);
+            //Verifica que el carrito no esté vacío
+            if (coordinadorEstados.getCarritoVenta().isEmpty()) {
+                UtilSwing.dialogoAlerta(this, "El carrito está vacío");
+                return;
+            }
+            coordinadorPresentacion.abrirResumenVenta();
+        });
 
-        gbc.gridy = 1; p.add(new JTextField("Folio..."), gbc);
-        gbc.gridy = 2; p.add(new JTextField("Cliente..."), gbc);
-        gbc.gridy = 3; p.add(new JTextField("Fecha..."), gbc);
-
-        JButton btnBuscar = new JButton("Buscar");
-        btnBuscar.setBackground(new Color(0, 95, 255));
-        btnBuscar.setForeground(Color.WHITE);
-        btnBuscar.setPreferredSize(new Dimension(0, 45));
-        gbc.gridy = 4; gbc.insets = new Insets(30, 25, 10, 25);
-        p.add(btnBuscar, gbc);
-
+        //Agrega los botones al panel
+        p.add(botonRegresar, BorderLayout.WEST);
+        p.add(botonContinuar, BorderLayout.EAST);
         return p;
     }
+    
+    /**
+     * Dibuja y habita cada tarjeta que le corresponde una pieza en específico
+     * Crea la tarjeta de UtilPanel Extrae los datos de la pieza Configura cómo
+     * se plasma la información Crea el BotonAlmacenador mostrarInfo Esa
+     * información del DTO se manda a un diálogo
+     *
+     * @param pieza específica
+     */
+    private void dibujarTarjetasVentas(java.util.List<VentaDTO> ventas) {
+        for (VentaDTO venta : ventas) {
+            JPanel tarjeta = UtilPanel.dibujarTarjeta();
+            tarjeta.setLayout(new BorderLayout(20, 0));
 
-    private JPanel crearBarraInferior() {
-        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 30, 10));
-        p.setOpaque(false);
-        JButton btnBack = new JButton("←");
-        btnBack.setFont(new Font("Arial", Font.BOLD, 35));
-        btnBack.setContentAreaFilled(false);
-        btnBack.setBorderPainted(false);
-        btnBack.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnBack.addActionListener(e -> coordinador.mostrarVentanaInicio());
-        p.add(btnBack);
-        return p;
-    }
+            double supertotal = venta.getTotal();
+            String fechaHora = venta.getFechaHora();
+            String folio = venta.getFolio();
+            int cantidadDetalles = venta.getDetalles().size();
 
-    // --- CLASES INTERNAS DE DISEÑO ---
+            // Panel de información básica
+            JPanel panelInfoBasica = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+            panelInfoBasica.setOpaque(false);
 
-    class CardSolicitud extends JPanel {
-        public CardSolicitud(String cliente, String tel, String piezas) {
-            setOpaque(false);
-            setLayout(new BorderLayout());
-            setMaximumSize(new Dimension(800, 800)); // Para que no se estire de más
-            setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.WHITE)); // Línea divisoria blanca
+            String desc = "<html><body style='width: 120px'>"
+                    + "<font color='white' size='3'><b>" + folio + "</b> (" + cantidadDetalles + " elementos)</font><br>"
+                    + "<font color='white' size='2'> " + fechaHora + "</font></body></html>";
+            panelInfoBasica.add(new JLabel(desc));
 
-            // Info izquierda: Icono + Datos
-            JPanel info = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
-            info.setOpaque(false);
-            JLabel icono = new JLabel("👤"); icono.setFont(new Font("Arial", Font.PLAIN, 40));
-            icono.setForeground(Color.BLACK);
+            // Sección derecha (Precio y Botón)
+            JPanel panelMostrarInfo = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 8));
+            panelMostrarInfo.setOpaque(false);
+
+            JLabel lblP = new JLabel("$" + supertotal);
+            lblP.setForeground(new Color(50, 255, 100));
+            lblP.setFont(new Font("Segoe UI", Font.BOLD, 22));
+
+            Color colorBoton = new Color(50, 255, 100);
+            UtilBoton.BotonAlmacenador botonInfo = new UtilBoton.BotonAlmacenador("Detalles", venta);
+            botonInfo.setBackground(colorBoton);
+            UtilBoton.asignarHoverBoton(botonInfo, colorBoton.darker());
             
-            String html = "<html><font color='white' size='4'><b>"+cliente+"</b></font><br>"
-                        + "<font color='white'>"+tel+"</font></html>";
-            info.add(icono);
-            info.add(new JLabel(html));
+            panelMostrarInfo.add(lblP);
+            panelMostrarInfo.add(botonInfo);
 
-            // Info centro: Piezas
-            JLabel lblPiezas = new JLabel(piezas);
-            lblPiezas.setForeground(Color.WHITE);
-            lblPiezas.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+            // FUNCIONALIDAD DEL BOTÓN: Detectar si es Venta o Solicitud
+            botonInfo.addActionListener(e -> {
+                if (venta instanceof DTOS.SolicitudDTO) {
+                    // Si es una solicitud, abrimos nuestro nuevo diálogo modal
+                    // Pasamos 'this' como Frame padre
+                    DetalleSolicitud ds = new DetalleSolicitud(this, (DTOS.SolicitudDTO) venta, null); 
+                    ds.setVisible(true);
+                } else {
+                    // Si es una venta normal, usamos el flujo que ya tenías
+                    coordinadorPresentacion.abrirDetalleVenta(venta);
+                }
+            });
 
-            // Botón derecho: Ver
-            JButton btnVer = new JButton("Ver");
-            btnVer.setBackground(new Color(80, 255, 80)); // Verde brillante como tu imagen
-            btnVer.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            tarjeta.add(panelInfoBasica, BorderLayout.WEST);
+            tarjeta.add(panelMostrarInfo, BorderLayout.EAST);
 
-            add(info, BorderLayout.WEST);
-            add(lblPiezas, BorderLayout.CENTER);
-            add(btnVer, BorderLayout.EAST);
+            contenedorListaPiezas.add(tarjeta);
+            contenedorListaPiezas.add(Box.createVerticalStrut(15));
         }
     }
 
-    class PanelRedondeado extends JPanel {
-        private int r; private Color c;
-        public PanelRedondeado(int radio, Color color) { this.r = radio; this.c = color; setOpaque(false); }
-        @Override protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g;
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setColor(c);
-            g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), r, r));
-        }
+    /**
+     * En orden: 1. Obtiene el nuevo total del CoordinadorEstados 2. Actualiza
+     * el label con ese nuevo total 3. Vacía la lista de detalles del frame 4.
+     * Recalcula y redibuja el panel
+     */
+    @Override
+    public void observar() {
+        totalCarrito = coordinadorEstados.totalCarritoVenta();
+        labelTotal.setText("Total: $ " + totalCarrito);
+        contenedorListaDetalles.removeAll();
+        contenedorListaDetalles.revalidate();
+        contenedorListaDetalles.repaint();
     }
 }

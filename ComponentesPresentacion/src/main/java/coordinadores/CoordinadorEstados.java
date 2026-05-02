@@ -3,6 +3,7 @@ package coordinadores;
 import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
+import DTOS.PiezaDTO;
 import fachada.FachadaInicioSesion;
 import fachadas.FachadaSolicitudes;
 import fachadas.FachadaVentas;
@@ -25,6 +26,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     //Fachadas de las cuales necesita los métodos de estados
     private final IFachadaInicioSesion fachadaSesion = new FachadaInicioSesion();
     private final IFachadaVentas fachadaVentas = new FachadaVentas();
+    private final IFachadaSolicitudes fachadaSolicitud = new FachadaSolicitudes();
     //Instancia de sí mismo
     private static CoordinadorEstados instancia = null;
     
@@ -195,5 +197,71 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     public EmpleadoDTO verificarEmpleado(String usuario, String contra) {
         return fachadaSesion.verificarEmpleado(usuario, contra);
     }
+   
+    //----- MÉTODOS SOLICITUD-----//
+     /**
+     * Consulta las piezas del sistema
+     * 
+     * @return lista de tipo PiezaDTO
+     */
+    @Override
+    public List<PiezaDTO> consultarPiezas() {
+        return fachadaSolicitud.consultarPiezas();
+    }
+    
+    
+    /**
+     * Regresa el carrito
+     * 
+     * @return lista de detalles
+     */
+    @Override
+    public List<DetallesVentaDTO> getCarritoSolicitud() {
+        return fachadaSolicitud.getCarritoSolicitud();
+    }
+
+    
+    /**
+     * Agrega un detalle
+     * 
+     * @param detalle 
+     */
+    @Override
+    public void agregarCarritoSolicitud(DetallesVentaDTO detalle) {
+        fachadaSolicitud.agregarCarritoSolicitud(detalle);
+    }
+    
+    /**
+     * Elimina un detalle
+     * 
+     * @param detalle 
+     */
+    @Override
+    public void eliminarCarritoSolicitud(DetallesVentaDTO detalle) {
+        fachadaSolicitud.eliminarCarritoSolicitud(detalle);
+    }
+
+    /** Regresa el total */
+    @Override
+    public double totalCarritoSolicitud() {
+        return fachadaSolicitud.totalCarritoSolicitud();
+    }
+
+    /**
+     * Determina si está vacío el carrito
+     * 
+     * @return true o false
+     */
+    @Override
+    public boolean carritoSolicitudVacio() {
+        return fachadaSolicitud.carritoSolicitudVacio();
+    }
+
+    //Vacía el carrito
+    @Override
+    public void limpiarCarritoSolicitud() {
+        fachadaSolicitud.limpiarCarritoSolicitud();
+    }
+    
     
 }
