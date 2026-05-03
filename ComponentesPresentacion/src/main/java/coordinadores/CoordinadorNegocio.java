@@ -225,4 +225,9 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
         //Regresa la venta
         return solicitud;
     }
+    
+    @Override
+    public List<SolicitudDTO> consultarSolicitudes(){
+        return fachadaSolicitudes.consultarSolicitudes();
+    }
 }

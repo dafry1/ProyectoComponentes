@@ -125,7 +125,8 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
         controlCarrito.eliminarCarritoSolicitud(detalle);
     }
 
-    /** Regresa el total */
+    /** Regresa el total
+     * @return  */
     @Override
     public double totalCarritoSolicitud() {
         return controlCarrito.totalCarritoSolicitud();
@@ -165,5 +166,10 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
     @Override
     public List<SolicitudDTO> filtrarSolicitudesPorMontoMinimo(double minimo) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public List<SolicitudDTO> consultarSolicitudes(){
+        return controlSolicitudes.consultarSolicitudes();
     }
 }

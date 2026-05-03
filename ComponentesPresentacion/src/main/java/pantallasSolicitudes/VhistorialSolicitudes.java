@@ -1,5 +1,6 @@
 package pantallasSolicitudes;
 
+import DTOS.SolicitudDTO;
 import DTOS.VentaDTO;
 import coordinadores.CoordinadorEstados;
 import coordinadores.CoordinadorPresentacion;
@@ -7,9 +8,8 @@ import coordinadores.ICoordinadorEstados;
 import coordinadores.ICoordinadorNegocio;
 import coordinadores.ICoordinadorPresentacion;
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import observadores.IObservador;
@@ -47,7 +47,7 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
     private String[] campos = {Constantes.PIEZA_NOMBRE, Constantes.PIEZA_CATEGORIA, Constantes.PIEZA_MARCA, Constantes.PIEZA_PRECIOMAX};
 
     //Siempre actualizado desde el CoordiandorEstados
-    private double totalCarrito = CoordinadorEstados.singleton().totalCarritoVenta();
+    private double totalCarrito = CoordinadorEstados.singleton().totalCarritoSolicitud();
 
     //Se usa en más de un método
     private JLabel labelTotal = new JLabel("Total: $ " + totalCarrito);
@@ -80,10 +80,8 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
         g.fill = GridBagConstraints.BOTH;
         g.insets = new Insets(0, 10, 0, 10);
 
-        //Agrega a dicho panel
-        //g.gridx = 0; g.weightx = 0.10; g.weighty = 1.0; contenido.add(crearPanelBusqueda(), g);
         //Agrega los paneles
-        JPanel panelSeccionCentral = crearSeccionCentral(coordinadorNegocio.consultarVentas());
+        JPanel panelSeccionCentral = crearSeccionCentral(coordinadorNegocio.consultarSolicitudes());
         g.gridx = 1;
         g.weightx = 0.30;
         contenido.add(panelSeccionCentral, g);
@@ -94,13 +92,13 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
     }
 
     /**
-     * Crea la sección central, donde aparecen las tarjetas de todas las ventas
+     * Crea la sección central, donde aparecen las tarjetas de todas las solicitudes
      *
      * @param piezas en una lista
      *
      * @return el panel listo
      */
-    private JPanel crearSeccionCentral(java.util.List<VentaDTO> ventas) {
+    private JPanel crearSeccionCentral(java.util.List<SolicitudDTO> solicitud) {
         JPanel p = new JPanel(new BorderLayout());
         p.setOpaque(false);
 
@@ -116,7 +114,7 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
         contenedorListaPiezas.setBackground(Color.WHITE);
 
         //Dibuja un campo por cada pieza
-        dibujarTarjetasVentas(ventas);
+        dibujarTarjetasSolicitud(solicitud);
 
         //Crea y configura un scroll por si son varios
         JScrollPane scroll = new JScrollPane(contenedorListaPiezas);
@@ -148,11 +146,11 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
         botonContinuar.addActionListener(e -> {
 
             //Verifica que el carrito no esté vacío
-            if (coordinadorEstados.getCarritoVenta().isEmpty()) {
+            if (coordinadorEstados.getCarritoSolicitud().isEmpty()) {
                 UtilSwing.dialogoAlerta(this, "El carrito está vacío");
                 return;
             }
-            coordinadorPresentacion.abrirResumenVenta();
+            coordinadorPresentacion.abrirResumenSolicitud();
         });
 
         //Agrega los botones al panel
@@ -169,15 +167,25 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
      *
      * @param pieza específica
      */
-    private void dibujarTarjetasVentas(java.util.List<VentaDTO> ventas) {
-        for (VentaDTO venta : ventas) {
+    private void dibujarTarjetasSolicitud(java.util.List<SolicitudDTO> solicitudes) {
+        
+        //Declara variables
+        String fechaHora;
+        String folio;
+        int cantidadDetalles;
+        
+        
+        for (SolicitudDTO solicitud : solicitudes) {
+             
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
             tarjeta.setLayout(new BorderLayout(20, 0));
 
-            double supertotal = venta.getTotal();
-            String fechaHora = venta.getFechaHora();
-            String folio = venta.getFolio();
-            int cantidadDetalles = venta.getDetalles().size();
+            //Asigna valores
+            double supertotal = solicitud.getTotal();
+            System.out.println("LA FECHA HORA: " + solicitud.getFechaHora());
+            fechaHora = solicitud.getFechaHora();
+            folio = solicitud.getFolio();
+            cantidadDetalles = solicitud.getDetalles().size();
 
             // Panel de información básica
             JPanel panelInfoBasica = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
@@ -197,7 +205,7 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
             lblP.setFont(new Font("Segoe UI", Font.BOLD, 22));
 
             Color colorBoton = new Color(50, 255, 100);
-            UtilBoton.BotonAlmacenador botonInfo = new UtilBoton.BotonAlmacenador("Detalles", venta);
+            UtilBoton.BotonAlmacenador botonInfo = new UtilBoton.BotonAlmacenador("Detalles", solicitud);
             botonInfo.setBackground(colorBoton);
             UtilBoton.asignarHoverBoton(botonInfo, colorBoton.darker());
             
@@ -206,14 +214,14 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
 
             // FUNCIONALIDAD DEL BOTÓN: Detectar si es Venta o Solicitud
             botonInfo.addActionListener(e -> {
-                if (venta instanceof DTOS.SolicitudDTO) {
+                if (solicitud instanceof DTOS.SolicitudDTO) {
                     // Si es una solicitud, abrimos nuestro nuevo diálogo modal
                     // Pasamos 'this' como Frame padre
-                    DetalleSolicitud ds = new DetalleSolicitud(this, (DTOS.SolicitudDTO) venta, null); 
+                    DetalleSolicitud ds = new DetalleSolicitud(this, (DTOS.SolicitudDTO) solicitud, null); 
                     ds.setVisible(true);
                 } else {
                     // Si es una venta normal, usamos el flujo que ya tenías
-                    coordinadorPresentacion.abrirDetalleVenta(venta);
+                    coordinadorPresentacion.abrirDetalleSolicitud(solicitud);
                 }
             });
 

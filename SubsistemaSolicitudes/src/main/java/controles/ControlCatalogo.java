@@ -3,8 +3,6 @@ package controles;
 import DTOS.PiezaDTO;
 import fabricas.IFabricaBO;
 import bo.IPiezaBO;
-import dominio.DetallesVenta;
-import dominio.Pieza;
 import excepciones.NegocioException;
 import excepciones.PersistenciaException;
 import fachadas.FachadaBodega;
@@ -19,10 +17,16 @@ import java.util.List;
 public class ControlCatalogo{
     private FachadaBodega fachadaBodega;
     
-    /** Constructor */
-    public ControlCatalogo() {
-        fachadaBodega = new FachadaBodega();
+    /** Constructor
+     * @param fachadaBodega */
+    public ControlCatalogo(FachadaBodega fachadaBodega) {
+        this.fachadaBodega = new FachadaBodega();
     }
+
+    public ControlCatalogo() {
+        this.fachadaBodega = new FachadaBodega();
+    }
+   
     
     public List<PiezaDTO> consultarBodega() {
         return fachadaBodega.consultarBodega();

@@ -72,4 +72,6 @@ public interface IFachadaSolicitudes {
      * @return Lista de solicitudes filtradas.
      */
     List<SolicitudDTO> filtrarSolicitudesPorMontoMinimo(double minimo);
+    
+    List<SolicitudDTO> consultarSolicitudes();
 }

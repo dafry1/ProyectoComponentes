@@ -108,4 +108,6 @@ public interface ICoordinadorNegocio {
     public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo);
     
     SolicitudDTO procesarSolicitud(SolicitudDTO solicitud, IObservador observador);
+    
+    public List<SolicitudDTO> consultarSolicitudes();
 }

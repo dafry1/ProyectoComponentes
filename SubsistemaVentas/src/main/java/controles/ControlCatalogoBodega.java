@@ -12,8 +12,8 @@ import java.util.List;
  * 
  * @author Andre
  */
-public class ControlCatalogo{
-    private static final System.Logger LOG = System.getLogger(ControlCatalogo.class.getName());
+public class ControlCatalogoBodega{
+    private static final System.Logger LOG = System.getLogger(ControlCatalogoBodega.class.getName());
     private static final String EXITO_CONSULTA = ">> Piezas consultadas con éxito ";
     
     //Interfaces
@@ -24,7 +24,7 @@ public class ControlCatalogo{
      * 
      * @param piezaBO 
      */
-    public ControlCatalogo(IPiezaBO piezaBO) {
+    public ControlCatalogoBodega(IPiezaBO piezaBO) {
         this.piezaBO = piezaBO;
     }
     

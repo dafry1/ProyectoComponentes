@@ -5,7 +5,7 @@ import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import DTOS.VentaDTO;
 import controles.ControlCarrito;
-import controles.ControlCatalogo;
+import controles.ControlCatalogoBodega;
 import controles.ControlVentas;
 import fabricas.FabricaBO;
 import fabricas.IFabricaBO;
@@ -25,7 +25,7 @@ public class FachadaVentas implements IFachadaVentas {
     private final IFabricaBO fabricaBO = FabricaBO.singleton();
     
     //Controles
-    private final ControlCatalogo controlCatalogo = new ControlCatalogo(fabricaBO.fabricarPieza());
+    private final ControlCatalogoBodega controlCatalogo = new ControlCatalogoBodega(fabricaBO.fabricarPieza());
     private final ControlVentas controlVentas = new ControlVentas(fabricaBO.fabricarPieza(), fabricaBO.fabricarVenta());
     private final ControlCarrito controlCarrito = new ControlCarrito();
     

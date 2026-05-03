@@ -241,7 +241,8 @@ public class CoordinadorEstados implements ICoordinadorEstados {
         fachadaSolicitud.eliminarCarritoSolicitud(detalle);
     }
 
-    /** Regresa el total */
+    /** Regresa el total
+     * @return  */
     @Override
     public double totalCarritoSolicitud() {
         return fachadaSolicitud.totalCarritoSolicitud();
