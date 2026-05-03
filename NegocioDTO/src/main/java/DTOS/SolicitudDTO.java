@@ -14,40 +14,36 @@ import java.util.List;
 public class SolicitudDTO extends VentaDTO {
     
     //Atributos
-    String fechaHoraPedido;
-    String fechaLlegada;
+    String fechaEntrega;
+    String fechaEntregaEstimada;
     String estado;
-    DireccionDTO direccion;
+    String direccion;
 
     public SolicitudDTO() {
     }
 
-    public SolicitudDTO(String fechaHoraPedido, String fechaLlegada, String estado, DireccionDTO direccion, Long id, EmpleadoDTO empleado, ClienteDTO cliente, List<DetallesVentaDTO> detalles, double total, String fechaHora, String folio) {
+    public SolicitudDTO(String fechaEntrega, String fechaEntregaEstimada, String estado, String direccion, Long id, EmpleadoDTO empleado, ClienteDTO cliente, List<DetallesVentaDTO> detalles, double total, String fechaHora, String folio) {
         super(id, empleado, cliente, detalles, total, fechaHora, folio);
-        this.fechaHoraPedido = fechaHoraPedido;
-        this.fechaLlegada = fechaLlegada;
+        this.fechaEntrega = fechaEntrega;
+        this.fechaEntregaEstimada = fechaEntregaEstimada;
         this.estado = estado;
         this.direccion = direccion;
     }
-    
-    public SolicitudDTO build() {
-        return new SolicitudDTO();
+
+    public String getFechaEntrega() {
+        return fechaEntrega;
     }
 
-    public String getFechaHoraPedido() {
-        return fechaHoraPedido;
+    public void setFechaEntrega(String fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
     }
 
-    public void setFechaHoraPedido(String fechaHoraPedido) {
-        this.fechaHoraPedido = fechaHoraPedido;
+    public String getFechaEntregaEstimada() {
+        return fechaEntregaEstimada;
     }
 
-    public String getFechaLlegada() {
-        return fechaLlegada;
-    }
-
-    public void setFechaLlegada(String fechaLlegada) {
-        this.fechaLlegada = fechaLlegada;
+    public void setFechaEntregaEstimada(String fechaEntregaEstimada) {
+        this.fechaEntregaEstimada = fechaEntregaEstimada;
     }
 
     public String getEstado() {
@@ -58,11 +54,11 @@ public class SolicitudDTO extends VentaDTO {
         this.estado = estado;
     }
 
-    public DireccionDTO getDireccion() {
+    public String getDireccion() {
         return direccion;
     }
 
-    public void setDireccion(DireccionDTO direccion) {
+    public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
 }

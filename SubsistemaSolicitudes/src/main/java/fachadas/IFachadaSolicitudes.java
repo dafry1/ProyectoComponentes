@@ -2,58 +2,74 @@ package fachadas;
 
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
+import DTOS.SolicitudDTO;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Contrato para la fachada que unifica los métodos
- * del subsistema
+ * Contrato para la fachada que unifica los métodos del subsistema de solicitudes.
+ * Incluye gestión de catálogo, carrito y persistencia de solicitudes.
  * 
  * @author Andre
  */
 public interface IFachadaSolicitudes {
-    
-    /**
-     * Consulta todas las piezas del sistema
-     * 
-     * @return lista de PiezaDTO
-     */
+
+
     List<PiezaDTO> consultarPiezas();
-    
-    /**
-     * Regresa la lista inmutable de ventas
-     * 
-     * @return 
-     */
+
+    PiezaDTO consultarPieza(Long id);
+
+    List<PiezaDTO> filtrarPorNombre(String nombre);
+
+    List<PiezaDTO> filtrarPorCategoria(String categoria);
+
+    List<PiezaDTO> filtrarPorMarca(String marca);
+
+    List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo);
+
+
     List<DetallesVentaDTO> getCarritoSolicitud();
 
-    /**
-     * Agrega un detalle al carrito de ventas
-     * 
-     * @param detalle a agregar
-     */
     void agregarCarritoSolicitud(DetallesVentaDTO detalle);
 
-    /**
-     * Elimina un detalle del carrito de ventas
-     * 
-     * @param detalle a eliminar
-     */
     void eliminarCarritoSolicitud(DetallesVentaDTO detalle);
-    
-    /**
-     * Calcula el total del carrito
-     * 
-     * @return la suma del subtotal de todos los detalles
-     */
-    double totalCarritoSolicitud();
-    
-    /**
-     * Determina si el carrito está vacío
-     * 
-     * @return true o false
-     */
-    public boolean carritoSolicitudVacio();
 
-    /** Encapsula la lógica de limpiar el carrito */
+    double totalCarritoSolicitud();
+
+    boolean carritoSolicitudVacio();
+
     void limpiarCarritoSolicitud();
+
+
+    /**
+     * Procesa y registra la solicitud final en el sistema.
+     * Coordina la actualización de inventario y la persistencia.
+     * 
+     * @param solicitud El objeto DTO con cliente, empleado y detalles.
+     * @return La solicitud registrada con su folio y fecha asignada.
+     */
+    SolicitudDTO procesarSolicitud(SolicitudDTO solicitud);
+
+    /**
+     * Consulta el historial completo de solicitudes realizadas.
+     * 
+     * @return Lista de solicitudes.
+     */
+    List<SolicitudDTO> consultarHistorialSolicitudes();
+
+    /**
+     * Filtra las solicitudes realizadas en una fecha específica.
+     * 
+     * @param fecha Fecha a consultar.
+     * @return Lista de solicitudes que coinciden con la fecha.
+     */
+    List<SolicitudDTO> filtrarSolicitudesPorFecha(LocalDate fecha);
+
+    /**
+     * Busca solicitudes dentro de un rango de costo total.
+     * 
+     * @param minimo Total mínimo.
+     * @return Lista de solicitudes filtradas.
+     */
+    List<SolicitudDTO> filtrarSolicitudesPorMontoMinimo(double minimo);
 }

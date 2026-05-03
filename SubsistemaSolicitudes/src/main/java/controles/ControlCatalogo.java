@@ -3,6 +3,11 @@ package controles;
 import DTOS.PiezaDTO;
 import fabricas.IFabricaBO;
 import bo.IPiezaBO;
+import dominio.DetallesVenta;
+import dominio.Pieza;
+import excepciones.NegocioException;
+import excepciones.PersistenciaException;
+import fachadas.FachadaBodega;
 import java.util.List;
 
 /**
@@ -12,29 +17,34 @@ import java.util.List;
  * @author Andre
  */
 public class ControlCatalogo{
-    private static final System.Logger LOG = System.getLogger(ControlCatalogo.class.getName());
-    private static final String EXITO_CONSULTA = ">> Piezas consultadas con éxito ";
+    private FachadaBodega fachadaBodega;
     
-    //Interfaces
-    private IPiezaBO piezaBO;
-    
-    /**
-     * Constructor con una fábrica inyectada
-     * 
-     * @param piezaBO 
-     */
-    public ControlCatalogo(IPiezaBO piezaBO) {
-        this.piezaBO = piezaBO;
+    /** Constructor */
+    public ControlCatalogo() {
+        fachadaBodega = new FachadaBodega();
     }
     
-    /**
-     * Consulta las piezas de su BO respectivo
-     * 
-     * @return lista de tipo PiezaDTO
-     */
-    public List<PiezaDTO> consultarPiezas() {
-        List<PiezaDTO> piezas = piezaBO.consultarPiezas();
-        LOG.log(System.Logger.Level.INFO, () -> EXITO_CONSULTA + piezas.size());
-        return piezas;
+    public List<PiezaDTO> consultarBodega() {
+        return fachadaBodega.consultarBodega();
+    }
+
+    public PiezaDTO consultarPieza(Long id) {
+        return fachadaBodega.consultarPieza(id);
+    }
+
+    public List<PiezaDTO> filtrarPorNombre(String nombre) {
+        return fachadaBodega.filtrarPorNombre(nombre);
+    }
+
+    public List<PiezaDTO> filtrarPorCategoria(String categoria) {
+        return fachadaBodega.filtrarPorCategoria(categoria);
+    }
+
+    public List<PiezaDTO> filtrarPorMarca(String marca) {
+        return fachadaBodega.filtrarPorMarca(marca);
+    }
+
+    public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo) {
+        return fachadaBodega.filtrarPorPrecioMax(precioMaximo);
     }
 }

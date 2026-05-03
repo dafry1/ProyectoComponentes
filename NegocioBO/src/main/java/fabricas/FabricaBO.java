@@ -1,11 +1,14 @@
 package fabricas;
 
+import adaptadores.AdaptadorSolicitud;
 import bo.EmpleadoBO;
 import bo.PiezaBO;
 import bo.VentaBO;
 import bo.IEmpleadoBO;
 import bo.IPiezaBO;
+import bo.ISolicitudBO;
 import bo.IVentaBO;
+import bo.SolicitudBO;
 
 /**
  * Clase que implementa el patrón Fabrica y se encarga
@@ -30,6 +33,7 @@ public class FabricaBO implements IFabricaBO {
     private IPiezaBO instanciaPieza;
     private IVentaBO instanciaVenta;
     private IEmpleadoBO instanciaEmpleado;
+    private ISolicitudBO instanciaSolicitud;
     
     /**
      * Singleton de la fábrica
@@ -84,5 +88,13 @@ public class FabricaBO implements IFabricaBO {
             instanciaEmpleado = new EmpleadoBO(fabricaDAO.fabricarEmpleado(), fabricaAdaptadores.fabricarAdaptadorEmpleado());
         }
         return instanciaEmpleado;
+    }
+
+    @Override
+    public ISolicitudBO fabricarSolicitud() {
+        if (instanciaSolicitud == null) {
+            instanciaSolicitud = new SolicitudBO(fabricaDAO.fabricarSolicitud(), new AdaptadorSolicitud(fabricaAdaptadores.fabricarAdaptadorEmpleado(), fabricaAdaptadores.fabricarAdaptadorCliente(), fabricaAdaptadores.fabricarAdaptadorDetallesVenta()));
+        }
+        return instanciaSolicitud;
     }
 }

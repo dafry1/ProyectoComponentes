@@ -2,6 +2,7 @@ package fabricas;
 
 import bo.IEmpleadoBO;
 import bo.IPiezaBO;
+import bo.ISolicitudBO;
 import bo.IVentaBO;
 
 /**
@@ -31,4 +32,6 @@ public interface IFabricaBO {
      * @return el contrato de EmpleadoBO
      */
     IEmpleadoBO fabricarEmpleado();
+    
+    ISolicitudBO fabricarSolicitud();
 }

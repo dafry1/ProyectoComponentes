@@ -19,35 +19,12 @@ public class PiezaDAO implements IPiezaDAO {
     //MEDIDAS TEMPORALES PARA MOCKEO
     private static List<Pieza> PIEZAS = new ArrayList<>();
     static {
-        Pieza pieza1 = new Pieza();
-        pieza1.setId(1L);
-        pieza1.setNombre("Ryzen 5 9600X");
-        pieza1.setCategoria("Procesador");
-        pieza1.setMarcaPieza("AMD");
-        pieza1.setModeloPieza("Zen 5");
-        pieza1.setCostoPieza(2500.0);
-        pieza1.setStockPieza(50);
-        PIEZAS.add(pieza1);
-        
-        Pieza pieza2 = new Pieza();
-        pieza2.setId(2L);
-        pieza2.setNombre("Core i9-14900K");
-        pieza2.setCategoria("Procesador");
-        pieza2.setMarcaPieza("Intel");
-        pieza2.setModeloPieza("Raptor Lake");
-        pieza2.setCostoPieza(5500.0);
-        pieza2.setStockPieza(40);
-        PIEZAS.add(pieza2);
-        
-        Pieza pieza3 = new Pieza();
-        pieza3.setId(3L);
-        pieza3.setNombre("Trident Z5 RGB");
-        pieza3.setCategoria("RAM");
-        pieza3.setMarcaPieza("G.Skill");
-        pieza3.setModeloPieza("DDR5-6400");
-        pieza3.setCostoPieza(1800.0);
-        pieza3.setStockPieza(30);
-        PIEZAS.add(pieza3);
+        PIEZAS.add(new Pieza(1L, "Ryzen 5 9600X", "Procesador", "AMD", "Zen 5", 2500.0, 50));
+        PIEZAS.add(new Pieza(2L, "Core i9-14900K", "Procesador", "Intel", "Raptor Lake", 5500.0, 40));
+        PIEZAS.add(new Pieza(3L, "Trident Z5 RGB", "RAM", "G.Skill", "DDR5-6400", 1800.0, 30));
+        PIEZAS.add(new Pieza(4L, "Vengeance RGB Frosted", "RAM", "Corsair", "DDR5-6000", 2100.0, 25));
+        PIEZAS.add(new Pieza(5L, "GeForce RTX 4090", "Tarjeta Gráfica", "NVIDIA", "Founders Edition", 35000.0, 10));
+        PIEZAS.add(new Pieza(6L, "Radeon RX 7800 XT", "Tarjeta Gráfica", "AMD", "Steel Legend", 9800.0, 15));
     }
     
     /**

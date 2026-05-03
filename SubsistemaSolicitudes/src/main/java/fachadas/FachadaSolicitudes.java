@@ -3,11 +3,16 @@ package fachadas;
 import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
+import DTOS.SolicitudDTO;
 import DTOS.VentaDTO;
 import controles.ControlCarrito;
 import controles.ControlCatalogo;
+import controles.ControlSolicitudes;
+import excepciones.InfraestructuraException;
+import excepciones.NegocioException;
 import fabricas.FabricaBO;
 import fabricas.IFabricaBO;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -24,8 +29,8 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
     private final IFabricaBO fabricaBO = FabricaBO.singleton();
     
     //Controles
-    private final ControlCatalogo controlCatalogo = new ControlCatalogo(fabricaBO.fabricarPieza());
-    //private final ControlVentas controlVentas = new ControlVentas(fabricaBO);
+    private final ControlCatalogo controlCatalogo = new ControlCatalogo();
+    private final ControlSolicitudes controlSolicitudes = new ControlSolicitudes(fabricaBO.fabricarPieza(), fabricaBO.fabricarSolicitud());
     private final ControlCarrito controlCarrito = new ControlCarrito();
     
     /** Constructor vacío */
@@ -38,7 +43,56 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
      */
     @Override
     public List<PiezaDTO> consultarPiezas() {
-        return controlCatalogo.consultarPiezas();
+        try {
+            return controlCatalogo.consultarBodega();
+        } catch (InfraestructuraException e) {
+            throw new NegocioException(e.getMessage());
+        }
+    }
+    
+    @Override
+    public PiezaDTO consultarPieza(Long id) {
+        try {
+            return controlCatalogo.consultarPieza(id);
+        } catch (InfraestructuraException e) {
+            throw new NegocioException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorNombre(String nombre) {
+        try {
+            return controlCatalogo.filtrarPorNombre(nombre);
+        } catch (InfraestructuraException e) {
+            throw new NegocioException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorCategoria(String categoria) {
+        try {
+            return controlCatalogo.filtrarPorCategoria(categoria);
+        } catch (InfraestructuraException e) {
+            throw new NegocioException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorMarca(String marca) {
+        try {
+            return controlCatalogo.filtrarPorMarca(marca);
+        } catch (InfraestructuraException e) {
+            throw new NegocioException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo) {
+        try {
+            return controlCatalogo.filtrarPorPrecioMax(precioMaximo);
+        } catch (InfraestructuraException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
     
     /**
@@ -91,5 +145,25 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
     @Override
     public void limpiarCarritoSolicitud() {
         controlCarrito.limpiarCarritoSolicitud();
+    }
+
+    @Override
+    public SolicitudDTO procesarSolicitud(SolicitudDTO solicitud) {
+        return controlSolicitudes.procesarSolicitud(solicitud);
+    }
+
+    @Override
+    public List<SolicitudDTO> consultarHistorialSolicitudes() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<SolicitudDTO> filtrarSolicitudesPorFecha(LocalDate fecha) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<SolicitudDTO> filtrarSolicitudesPorMontoMinimo(double minimo) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

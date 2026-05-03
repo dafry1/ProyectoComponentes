@@ -143,6 +143,8 @@ public class InfoClienteSolicitud extends JDialog {
                     campos.get("Número").getText().trim(),
                     campos.get("Código Postal").getText().trim()
             );
+            
+            String direccionReal = direccion.toString();
 
             List<DetallesVentaDTO> carrito = coordinadorEstados.getCarritoVenta();
             EmpleadoDTO empleado = coordinadorEstados.getUsuarioLogueado();
@@ -150,7 +152,7 @@ public class InfoClienteSolicitud extends JDialog {
             // Construir Solicitud
             SolicitudDTO solicitud = new SolicitudDTO();
             solicitud.setCliente(cliente);
-            solicitud.setDireccion(direccion);
+            solicitud.setDireccion(direccionReal);
             solicitud.setEmpleado(empleado);
             solicitud.setDetalles(carrito);
             solicitud.setEstado("PENDIENTE");

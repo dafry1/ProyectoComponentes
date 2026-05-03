@@ -63,4 +63,11 @@ public class DireccionDTO extends DTO {
     public void setCodigoPostal(String codigoPostal) {
         this.codigoPostal = codigoPostal;
     }
+
+    @Override
+    public String toString() {
+        return  "calle=" + calle + ", colonia=" + colonia + ", numero=" + numero + ", codigoPostal=" + codigoPostal + '}';
+    }
+    
+    
 }

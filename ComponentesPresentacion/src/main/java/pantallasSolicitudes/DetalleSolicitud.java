@@ -52,9 +52,9 @@ public class DetalleSolicitud extends JDialog {
         // Aquí simulamos o iteramos el historial si tu DTO tiene una lista de eventos
         // Si no la tiene, mostramos la fecha de pedido y entrega estimada como hitos
         String htmlHistorial = "<html><div style='padding: 5px;'>"
-                + "• <b>Pedido recibido:</b> " + solicitud.getFechaHoraPedido() + "<br>"
+                + "• <b>Pedido recibido:</b> " + solicitud.getFechaEntrega() + "<br>"
                 + "• <b>Procesando:</b> En almacén principal<br>"
-                + "<font color='#d35400'>• <b>Entrega estimada:</b> " + solicitud.getFechaLlegada() + "</font>"
+                + "<font color='#d35400'>• <b>Entrega estimada:</b> " + solicitud.getFechaEntregaEstimada() + "</font>"
                 + "</div></html>";
         JLabel lblHistorialTexto = new JLabel(htmlHistorial);
         panelHistorial.add(lblHistorialTexto);

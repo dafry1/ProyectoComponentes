@@ -6,22 +6,17 @@
         <artifactId>ProyectoComponentes</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>SubsistemaSolicitudes</artifactId>
+    <artifactId>InfraestructuraBodega</artifactId>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>NegocioBO</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>InfraestructuraBodega</artifactId>
+            <artifactId>NegocioDTO</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
-        <exec.mainClass>com.mycompany.subsistemasolicitudes.SubsistemaSolicitudes</exec.mainClass>
+        <exec.mainClass>com.mycompany.infraestructurabodega.InfraestructuraBodega</exec.mainClass>
     </properties>
 </project>

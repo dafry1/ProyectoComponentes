@@ -5,7 +5,9 @@ import daos.PiezaDAO;
 import daos.VentaDAO;
 import daos.IEmpleadoDAO;
 import daos.IPiezaDAO;
+import daos.ISolicitudDAO;
 import daos.IVentaDAO;
+import daos.SolicitudDAO;
 
 /**
  * Suministra los DAO que contactan los BO
@@ -47,4 +49,11 @@ public class FabricaDAO implements IFabricaDAO {
     public IEmpleadoDAO fabricarEmpleado() {
         return new EmpleadoDAO();
     }
+
+    @Override
+    public ISolicitudDAO fabricarSolicitud() {
+        return new SolicitudDAO();
+    }
+    
+    
 }
