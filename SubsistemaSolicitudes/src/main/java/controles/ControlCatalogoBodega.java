@@ -14,16 +14,16 @@ import java.util.List;
  * 
  * @author Andre
  */
-public class ControlCatalogo{
+public class ControlCatalogoBodega{
     private FachadaBodega fachadaBodega;
     
     /** Constructor
      * @param fachadaBodega */
-    public ControlCatalogo(FachadaBodega fachadaBodega) {
+    public ControlCatalogoBodega(FachadaBodega fachadaBodega) {
         this.fachadaBodega = new FachadaBodega();
     }
 
-    public ControlCatalogo() {
+    public ControlCatalogoBodega() {
         this.fachadaBodega = new FachadaBodega();
     }
    

@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
- * Utilerías que implementa el patrón Builder: una clase con métodos que
+ * Utilerías que es una clase con métodos que
  * construyen partes del programa más que simple moldes. Es como una
  * linea de ensamblaje con un plano que solo debe replicar. A diferencia
  * UtilPanel, que te dice "ten esta plantilla para tus necesidades", esta 

@@ -113,32 +113,6 @@ public class InfoCliente extends JDialog {
             String materno = camposCliente.get(Constantes.CLIENTE_APELLIDOM).getText().trim();
             String correo = camposCliente.get(Constantes.CLIENTE_CORREO).getText().trim();
             String telefono = camposCliente.get(Constantes.CLIENTE_TELEFONO).getText().trim();
-
-            
-            if (!UtilFormato.validarNombre(nombre)) {
-                UtilSwing.dialogoAlerta(this, "El nombre no es válido (solo letras y espacios).");
-                return;
-            }
-
-            if (!UtilFormato.validarNombre(paterno)) {
-                UtilSwing.dialogoAlerta(this, "El apellido paterno no es válido (solo letras, sin espacios).");
-                return;
-            }
-
-            if (!UtilFormato.validarNombre(materno)) {
-                UtilSwing.dialogoAlerta(this, "El apellido materno no es válido (solo letras, sin espacios).");
-                return;
-            }
-
-            if (!UtilFormato.validarCorreo(correo)) {
-                UtilSwing.dialogoAlerta(this, "El formato de correo electrónico no es válido.");
-                return;
-            }
-
-            if (!UtilFormato.validarTelefono(telefono)) {
-                UtilSwing.dialogoAlerta(this, "El teléfono debe tener exactamente 10 dígitos numéricos.");
-                return;
-            }
             
             //Inicia el proceso dde hacer la venta
             UtilSwing.dialogoConfirmacion(this, "¿Desea registrar la venta?", () -> {
@@ -158,7 +132,11 @@ public class InfoCliente extends JDialog {
                 }
                 
                 //Procesa la venta
-                procesarVentaConfirmada(cliente);
+                try {
+                    procesarVentaConfirmada(cliente);
+                } catch (Exception ex) {
+                    UtilSwing.dialogoError(InfoCliente.this, ex.getMessage());
+                }
                 
                 //Notifica sobre la venta exitosa
                 UtilSwing.dialogoAviso(this, "Venta procesada con éxito para el cliente: " + cliente.getNombres());

@@ -27,9 +27,7 @@ import utilPresentacion.UtilBoton.BotonAlmacenador;
  * @author Andre
  */
 public class VhistorialVentas extends JFrame implements IObservador {
-
-    JPanel panelPrincipal;
-
+    
     //Se usa en más de un método
     private JPanel contenedorListaPiezas;
     private JPanel contenedorListaDetalles;
@@ -38,12 +36,6 @@ public class VhistorialVentas extends JFrame implements IObservador {
     private ICoordinadorPresentacion coordinadorPresentacion;
     private ICoordinadorNegocio coordinadorNegocio;
     private ICoordinadorEstados coordinadorEstados;
-
-    //Mapa que contiene los campos de búsqueda para recuperarlos después
-    Map<String, JTextField> mapaCampos = new HashMap<>();
-
-    //Botón de buscar como atributo para usarlo en más de un método
-    JButton botonBuscar = UtilBoton.crearBoton("Buscar");
 
     //Arreglo de constantes ya definidas para los campos de texto y así no pelearnos con strings sueltos
     private String[] campos = {Constantes.PIEZA_NOMBRE, Constantes.PIEZA_CATEGORIA, Constantes.PIEZA_MARCA, Constantes.PIEZA_PRECIOMAX};

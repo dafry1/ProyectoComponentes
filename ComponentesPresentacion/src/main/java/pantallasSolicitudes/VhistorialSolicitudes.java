@@ -98,7 +98,7 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
      *
      * @return el panel listo
      */
-    private JPanel crearSeccionCentral(java.util.List<SolicitudDTO> solicitud) {
+    private JPanel crearSeccionCentral(java.util.List<SolicitudDTO> solicitudes) {
         JPanel p = new JPanel(new BorderLayout());
         p.setOpaque(false);
 
@@ -114,7 +114,7 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
         contenedorListaPiezas.setBackground(Color.WHITE);
 
         //Dibuja un campo por cada pieza
-        dibujarTarjetasSolicitud(solicitud);
+        dibujarTarjetasSolicitud(solicitudes);
 
         //Crea y configura un scroll por si son varios
         JScrollPane scroll = new JScrollPane(contenedorListaPiezas);
@@ -214,15 +214,7 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
 
             // FUNCIONALIDAD DEL BOTÓN: Detectar si es Venta o Solicitud
             botonInfo.addActionListener(e -> {
-                if (solicitud instanceof DTOS.SolicitudDTO) {
-                    // Si es una solicitud, abrimos nuestro nuevo diálogo modal
-                    // Pasamos 'this' como Frame padre
-                    DetalleSolicitud ds = new DetalleSolicitud(this, (DTOS.SolicitudDTO) solicitud, null); 
-                    ds.setVisible(true);
-                } else {
-                    // Si es una venta normal, usamos el flujo que ya tenías
-                    coordinadorPresentacion.abrirDetalleSolicitud(solicitud);
-                }
+               coordinadorPresentacion.abrirDetalleSolicitud(solicitud);
             });
 
             tarjeta.add(panelInfoBasica, BorderLayout.WEST);
@@ -240,7 +232,7 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
      */
     @Override
     public void observar() {
-        totalCarrito = coordinadorEstados.totalCarritoVenta();
+        totalCarrito = coordinadorEstados.totalCarritoSolicitud();
         labelTotal.setText("Total: $ " + totalCarrito);
         contenedorListaDetalles.removeAll();
         contenedorListaDetalles.revalidate();

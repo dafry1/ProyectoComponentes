@@ -203,6 +203,28 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
         return fachadaVentas.filtrarPorPrecioMax(precioMaximo);
     }
     
+    
+    
+    @Override
+    public List<PiezaDTO> filtrarPorNombreSoli(String nombre) {
+        return fachadaSolicitudes.filtrarPorNombre(nombre);
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorCategoriaSoli(String categoria) {
+        return fachadaSolicitudes.filtrarPorCategoria(categoria);
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorMarcaSoli(String marca) {
+        return fachadaSolicitudes.filtrarPorMarca(marca);
+    }
+
+    @Override
+    public List<PiezaDTO> filtrarPorPrecioMaxSoli(double precioMaximo) {
+        return fachadaSolicitudes.filtrarPorPrecioMax(precioMaximo);
+    }
+    
     @Override
     public SolicitudDTO procesarSolicitud(SolicitudDTO solicitud, IObservador observador) {
         
@@ -212,10 +234,10 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
         }
         
         //Procesa la solicitud directamente de la fachada
-        //fachadaSolicitudes.procesarSolicitud(solicitud);
+        fachadaSolicitudes.procesarSolicitud(solicitud);
 
         //Limpia el carrito
-        coordinadorEstados.limpiarCarritoVenta();
+        coordinadorEstados.limpiarCarritoSolicitud();
         
         //Activa al observador si existe
         if (observador != null) {
@@ -229,5 +251,10 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
     @Override
     public List<SolicitudDTO> consultarSolicitudes(){
         return fachadaSolicitudes.consultarSolicitudes();
+    }
+
+    @Override
+    public List<PiezaDTO> consultarPiezasBodega() {
+        return fachadaSolicitudes.consultarPiezas();
     }
 }

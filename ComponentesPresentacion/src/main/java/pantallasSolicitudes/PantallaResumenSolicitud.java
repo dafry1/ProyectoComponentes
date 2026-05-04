@@ -39,8 +39,7 @@ public class PantallaResumenSolicitud extends JFrame implements IObservador {
         this.coordinadorNegocio = cn;
         this.coordinadorEstados = ce;
         this.ensambladorDTO = ens;
-        
-        this.totalSolicitud = coordinadorEstados.totalCarritoVenta();
+        this.totalSolicitud = coordinadorEstados.totalCarritoSolicitud();
         this.labelTotal = new JLabel("Total Solicitud: $ " + totalSolicitud);
 
         // Configuración general: Título adaptado
@@ -107,13 +106,11 @@ public class PantallaResumenSolicitud extends JFrame implements IObservador {
         JButton botonContinuar = UtilBoton.crearBoton("Datos de Envío");
         botonContinuar.setPreferredSize(new Dimension(220, 50));
         botonContinuar.addActionListener(e -> {
-            if (coordinadorEstados.getCarritoVenta().isEmpty()) {
+            if (coordinadorEstados.getCarritoSolicitud().isEmpty()) {
                 UtilSwing.dialogoAlerta(this, "No hay artículos para solicitar");
                 return;
             }
             
-            // Abrimos el formulario de InfoClienteSolicitud (el que tiene dirección)
-            // Pasamos 'this' como observador para que la pantalla se actualice si algo cambia
             InfoClienteSolicitud info = new InfoClienteSolicitud(
                 coordinadorPresentacion, 
                 coordinadorNegocio, 
@@ -129,7 +126,7 @@ public class PantallaResumenSolicitud extends JFrame implements IObservador {
     }
 
     private void dibujarTarjetasCarrito() {
-        for (DetallesVentaDTO detalle : coordinadorEstados.getCarritoVenta()) {
+        for (DetallesVentaDTO detalle : coordinadorEstados.getCarritoSolicitud()) {
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
             tarjeta.setLayout(new BorderLayout(10, 10));
             
@@ -175,7 +172,7 @@ public class PantallaResumenSolicitud extends JFrame implements IObservador {
 
     @Override
     public void observar() {
-        totalSolicitud = coordinadorEstados.totalCarritoVenta();
+        totalSolicitud = coordinadorEstados.totalCarritoSolicitud();
         labelTotal.setText("Total Solicitud: $ " + totalSolicitud);
         contenedorListaDetalles.removeAll();
         dibujarTarjetasCarrito();

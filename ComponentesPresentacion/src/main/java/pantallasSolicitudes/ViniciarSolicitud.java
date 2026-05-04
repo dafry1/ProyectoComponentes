@@ -2,6 +2,7 @@ package pantallasSolicitudes;
 
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
+import coordinadores.CoordinadorEstados;
 import coordinadores.ICoordinadorEstados;
 import coordinadores.ICoordinadorNegocio;
 import coordinadores.ICoordinadorPresentacion;
@@ -39,8 +40,10 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
 
     private Map<String, JButton> mapaBotonesFiltros = new HashMap<>();
     private JButton botonBuscar = FachadaUtil.crearBoton("Buscar");
-    private String[] campos = {Constantes.PIEZA_NOMBRE, Constantes.PIEZA_CATEGORIA, Constantes.PIEZA_MARCA};
+    private String[] campos = {Constantes.PIEZA_NOMBRE, Constantes.PIEZA_CATEGORIA, Constantes.PIEZA_MARCA, Constantes.PIEZA_PRECIOMAX};
 
+    private double totalCarrito = CoordinadorEstados.singleton().totalCarritoSolicitud();
+    
     private double totalSolicitud = 0;
     private JLabel labelTotal = new JLabel("Total Solicitud: $ 0.0");
     private List<PiezaDTO> piezasMostrar = new ArrayList<>();
@@ -63,7 +66,7 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
         contenedorListaDetalles.setLayout(new BoxLayout(contenedorListaDetalles, BoxLayout.Y_AXIS));
         
         // Consultar piezas iniciales
-        piezasMostrar = coordinadorNegocio.consultarPiezas();
+        piezasMostrar = coordinadorNegocio.consultarPiezasBodega();
 
         GridBagConstraints g = new GridBagConstraints();
         g.fill = GridBagConstraints.BOTH;
@@ -126,41 +129,85 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
         return p;
     }
 
+    /**
+     * Crea el panel izquiero de búsqueda
+     * Utiliza un arreglo para crear los campos de busqueda
+     * 
+     * @return 
+     */
     private JPanel crearPanelBusqueda() {
+        
+        //Configura el panel
         JPanel p = FachadaUtil.crearPanel();
         p.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+        
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 20, 10, 20);
-        gbc.gridx = 0; gbc.weightx = 1.0;
-
-        JLabel titulo = new JLabel("Búsqueda", SwingConstants.CENTER);
-        gbc.gridy = 0; p.add(titulo, gbc);
-
+        gbc.gridx = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 0;
+        
+        //Encabezado del panel 
+        JLabel titulo = new JLabel("Buscar", SwingConstants.CENTER);
+        gbc.gridy = 0;
+        gbc.insets = new Insets(20, 20, 10, 20);
+        p.add(titulo, gbc);
+        
+        //Campo de búsqueda
         JTextField campoBuscar = FachadaUtil.crearCampoTexto();
-        gbc.gridy = 1; p.add(campoBuscar, gbc);
-
-        int orden = 2;
-        for (String campo : campos) {
-            JButton btnFiltro = FachadaUtil.crearBoton(campo);
-            btnFiltro.addActionListener(e -> {
+        gbc.gridy = 1;
+        gbc.insets = new Insets(5, 20, 15, 20);
+        p.add(campoBuscar, gbc);
+        
+        //Va guardando la posición que tiene cada elemento verticalmente
+        int ordenGbc = 2;
+        
+        /**
+         * Empieza a iterar sobre el arreglo de campos
+         * Por cada iteración, crea el label de indicaciones y el campo para ingresar información
+         * Al final, lo agrega al campo para que no quede aislado
+         */
+        for (String stringCampo: campos) {
+            
+            //Se va sumando el orden vertical, así que solo se debe poner gbc
+            gbc.gridy = ordenGbc++;
+            gbc.insets = new Insets(3, 10, 3, 10);
+            
+            //Crea un botón de filtrado
+            JButton botonFiltro = FachadaUtil.crearBoton(stringCampo);
+            botonFiltro.addActionListener(e -> {
+                
+                //Verifica que el string sea válido primero
                 String filtro = campoBuscar.getText();
                 if (filtro.isBlank()) {
-                    FachadaUtil.dialogoAlerta(this, "Ingrese un término para buscar");
+                    FachadaUtil.dialogoAlerta(ViniciarSolicitud.this, "Campo vacío");
                     return;
                 }
-                inyectarLogicaFiltradoBoton(filtro, campo);
+                inyectarLogicaFiltradoBoton(filtro, stringCampo);
             });
-            gbc.gridy = orden++; p.add(btnFiltro, gbc);
+            p.add(botonFiltro, gbc);
+            
+            //Agrega al mapa de botones para recuperarlo después 
+            mapaBotonesFiltros.put(stringCampo, botonFiltro);
         }
-
-        JButton btnRestablecer = FachadaUtil.crearBoton("Restablecer");
-        btnRestablecer.addActionListener(e -> {
-            piezasMostrar = coordinadorNegocio.consultarPiezas();
+        
+        //Botón encargado de restablecer los filtros y buscar todas las piezas
+        JButton eliminarFiltros = FachadaUtil.crearBoton("Restablecer filtros");
+        eliminarFiltros.addActionListener(e -> {
+            piezasMostrar = coordinadorNegocio.consultarPiezasBodega();
             reconsultarPiezasFiltro();
         });
-        gbc.gridy = orden++; p.add(btnRestablecer, gbc);
-
+        gbc.gridy = ordenGbc++;
+        gbc.insets = new Insets(15, 20, 5, 20);
+        p.add(eliminarFiltros, gbc);
+        
+        //Configura el botón de búsqueda
+        botonBuscar.setPreferredSize(new Dimension(03, 45));
+        gbc.gridy = ordenGbc++; 
+        //gbc.weighty = 0.1; 
+        gbc.insets = new Insets(10, 20, 30, 20);
+        p.add(botonBuscar, gbc);
         return p;
     }
 
@@ -169,43 +216,90 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
             case Constantes.PIEZA_NOMBRE -> piezasMostrar = coordinadorNegocio.filtrarPorNombre(filtro);
             case Constantes.PIEZA_CATEGORIA -> piezasMostrar = coordinadorNegocio.filtrarPorCategoria(filtro);
             case Constantes.PIEZA_MARCA -> piezasMostrar = coordinadorNegocio.filtrarPorMarca(filtro);   
-            default -> throw new PresentacionException("Categoría inválida");
+            case Constantes.PIEZA_PRECIOMAX -> {
+                piezasMostrar = UtilFormato.numeroEnteroPositivo(filtro) 
+                    ? coordinadorNegocio.filtrarPorPrecioMax(Double.parseDouble(filtro)) 
+                    : piezasMostrar;
+                if (!UtilFormato.numeroEnteroPositivo(filtro)) {
+                    FachadaUtil.dialogoAlerta(ViniciarSolicitud.this, "Ingrese un número entero positivo");
+                    return;
+                }
+            }
+            default -> throw new PresentacionException("Categoría inválida para filtrar piezas");
         }
         reconsultarPiezasFiltro();
     }
 
+    /**
+     * Dibuja y habita cada tarjeta que le corresponde una pieza en específico
+     * Crea la tarjeta de UtilPanel
+     * Extrae los datos de la pieza
+     * Configura cómo se plasma la información
+     * Crea el BotonAlmacenador mostrarInfo
+     * Esa información del DTO se manda a un diálogo
+     * 
+     * @param pieza específica
+     */
     private void dibujarTarjetasPiezas(List<PiezaDTO> piezas) {
-        contenedorListaPiezas.removeAll();
-        for (PiezaDTO pieza : piezas) {
+        
+        //Declara variables
+        String nombre;
+        String marca;
+        String modelo;
+        double precio;
+        String categoria;
+        
+        //Por cada pieza de la lista...
+        for (PiezaDTO pieza: piezas) {
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
-            tarjeta.setBackground(new Color(30, 90, 230)); // Azul vibrante
             tarjeta.setLayout(new BorderLayout(20, 0));
+        
+            //Asigna valores
+            nombre = pieza.getNombre();
+            marca = pieza.getMarcaPieza();
+            precio = pieza.getCostoPieza();
+            modelo = pieza.getModeloPieza();
+            categoria = pieza.getCategoria();
+            
+            //Crea el panel de información básica
+            JPanel panelInfoBasica = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+            panelInfoBasica.setOpaque(false);
+            
+            //Parte de ícono y descripción
+            String desc = "<html><body style='width: 120px'>" +
+                          "<font color='white' size='3'><b>["+categoria+"] "+nombre+"</b> ("+modelo+")</font><br>" +
+                          "<font color='white' size='2'>$ "+marca+"</font></body></html>";
+            panelInfoBasica.add(new JLabel(desc));
 
-            // Info (Izquierda)
-            String desc = "<html><font color='white' size='4'><b>" + pieza.getNombre() + "</b></font><br>" +
-                          "<font color='white' size='2'>" + pieza.getMarcaPieza() + " (" + pieza.getModeloPieza() + ")</font></html>";
-            JLabel lblInfo = new JLabel(desc);
-            lblInfo.setBorder(new EmptyBorder(10, 15, 10, 0));
+            //Sección para mostrar información adicional: el precio y el botón de detalles
+            JPanel panelMostrarInfo = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 8));
+            panelMostrarInfo.setOpaque(false);
+            
+            //Label de precio
+            JLabel lblP = new JLabel("$" + precio); 
+            lblP.setForeground(new Color(50, 255, 100));
+            lblP.setFont(new Font("Segoe UI", Font.BOLD, 22));
 
-            // Acciones (Derecha)
-            JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 15));
-            panelAcciones.setOpaque(false);
+            //Crea un botón de información adicional
+            Color colorBoton = new Color(50, 255, 100);
+            UtilBoton.BotonAlmacenador botonInfo = new BotonAlmacenador("Info", pieza);
+            botonInfo.setBackground(colorBoton);
+            UtilBoton.asignarHoverBoton(botonInfo, colorBoton.darker());
+            panelMostrarInfo.add(lblP); 
+            panelMostrarInfo.add(botonInfo);
 
-            JLabel lblPrecio = new JLabel("$" + pieza.getCostoPieza());
-            lblPrecio.setForeground(new Color(50, 255, 100)); // Verde neón
-            lblPrecio.setFont(new Font("Segoe UI", Font.BOLD, 20));
+            //Agrega funcionalidad al botón de mostrarInfo
+            botonInfo.addActionListener(e -> {
+                coordinadorPresentacion.abrirInfoPiezaBodega(this, pieza);
+            });
 
-            JButton btnInfo = FachadaUtil.crearBoton("Info");
-            btnInfo.setBackground(new Color(50, 255, 100));
-            btnInfo.addActionListener(e -> coordinadorPresentacion.abrirInfoPieza(this, pieza));
+            //Agrega al panel principal
+            tarjeta.add(panelInfoBasica, BorderLayout.WEST);
+            tarjeta.add(panelMostrarInfo, BorderLayout.EAST);
 
-            panelAcciones.add(lblPrecio);
-            panelAcciones.add(btnInfo);
-
-            tarjeta.add(lblInfo, BorderLayout.WEST);
-            tarjeta.add(panelAcciones, BorderLayout.EAST);
+            //Agrega al panel
             contenedorListaPiezas.add(tarjeta);
-            contenedorListaPiezas.add(Box.createVerticalStrut(10));
+            contenedorListaPiezas.add(Box.createVerticalStrut(15));
         }
     }
 
@@ -217,7 +311,7 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
         double costo;
         double subtotal;
         
-        for (DetallesVentaDTO detalle: coordinadorEstados.getCarritoVenta()) {
+        for (DetallesVentaDTO detalle: coordinadorEstados.getCarritoSolicitud()) {
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
             
             //Asigna valores
@@ -256,7 +350,7 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
             
             //Agrega funcionalidad al botón de mostrarInfo
             botonInfo.addActionListener(e -> {
-                coordinadorPresentacion.abrirInfoDetalle(ViniciarSolicitud.this, detalle);
+                coordinadorPresentacion.abrirInfoDetalleSolicitud(ViniciarSolicitud.this, detalle);
             });
             
             //Agrega al panel principal
@@ -280,7 +374,7 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
         JButton btnContinuar = FachadaUtil.crearBoton("Siguiente");
         btnContinuar.setPreferredSize(new Dimension(200, 50));
         btnContinuar.addActionListener(e -> {
-            if (coordinadorEstados.carritoVentaVacio()) {
+            if (coordinadorEstados.carritoSolicitudVacio()) {
                 FachadaUtil.dialogoAlerta(this, "La solicitud está vacía");
                 return;
             }
@@ -292,18 +386,27 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
         return p;
     }
 
+    /** Redibuja el panel del catálogo de piezas */
     private void reconsultarPiezasFiltro() {
+        contenedorListaPiezas.removeAll();
         dibujarTarjetasPiezas(piezasMostrar);
         contenedorListaPiezas.revalidate();
         contenedorListaPiezas.repaint();
+        scrollPiezas.revalidate();
+        scrollPiezas.repaint();
     }
 
     @Override
     public void observar() {
-        totalSolicitud = coordinadorEstados.totalCarritoVenta();
-        labelTotal.setText("Total Solicitud: $ " + totalSolicitud);
+        totalCarrito = coordinadorEstados.totalCarritoSolicitud();
+        labelTotal.setText("Total: $ " + totalCarrito);
+        contenedorListaDetalles.removeAll();
         dibujarTarjetasCarrito();
         contenedorListaDetalles.revalidate();
+        scrollDetalles.revalidate();
         contenedorListaDetalles.repaint();
+        scrollDetalles.repaint();
+        labelTotal.revalidate();
+        labelTotal.repaint();
     }
 }

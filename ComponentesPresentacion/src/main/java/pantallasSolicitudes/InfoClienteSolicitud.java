@@ -146,7 +146,7 @@ public class InfoClienteSolicitud extends JDialog {
             
             String direccionReal = direccion.toString();
 
-            List<DetallesVentaDTO> carrito = coordinadorEstados.getCarritoVenta();
+            List<DetallesVentaDTO> carrito = coordinadorEstados.getCarritoSolicitud();
             EmpleadoDTO empleado = coordinadorEstados.getUsuarioLogueado();
 
             // Construir Solicitud
@@ -155,7 +155,7 @@ public class InfoClienteSolicitud extends JDialog {
             solicitud.setDireccion(direccionReal);
             solicitud.setEmpleado(empleado);
             solicitud.setDetalles(carrito);
-            solicitud.setEstado("PENDIENTE");
+            //solicitud.setEstado("PENDIENTE");
 
             // Llamada al coordinador
             coordinadorNegocio.procesarSolicitud(solicitud, observador);

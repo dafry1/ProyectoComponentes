@@ -11,8 +11,8 @@ import java.util.List;
  * 
  * @author Andre
  */
-public class ControlCarrito {
-    private static final System.Logger LOG = System.getLogger(ControlCarrito.class.getName());
+public class ControlCarritoSolicitudes {
+    private static final System.Logger LOG = System.getLogger(ControlCarritoSolicitudes.class.getName());
     private static String DETALLE_VACIO = "El detalle está vacío";
     
     //Carritos actuales protegidos mediante los métodos

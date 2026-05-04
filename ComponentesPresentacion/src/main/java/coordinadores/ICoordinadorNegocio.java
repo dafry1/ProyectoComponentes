@@ -107,7 +107,25 @@ public interface ICoordinadorNegocio {
 
     public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo);
     
+    
+    
+    
+    public List<PiezaDTO> filtrarPorNombreSoli(String nombre);
+
+    public List<PiezaDTO> filtrarPorCategoriaSoli(String categoria);
+
+    public List<PiezaDTO> filtrarPorMarcaSoli(String marca);
+
+    public List<PiezaDTO> filtrarPorPrecioMaxSoli(double precioMaximo);
+    
+    
     SolicitudDTO procesarSolicitud(SolicitudDTO solicitud, IObservador observador);
     
     public List<SolicitudDTO> consultarSolicitudes();
+    
+    
+    List<PiezaDTO> consultarPiezasBodega();
+    
+    
+    
 }

@@ -5,8 +5,8 @@ import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import DTOS.SolicitudDTO;
 import DTOS.VentaDTO;
-import controles.ControlCarrito;
-import controles.ControlCatalogo;
+import controles.ControlCarritoSolicitudes;
+import controles.ControlCatalogoBodega;
 import controles.ControlSolicitudes;
 import excepciones.InfraestructuraException;
 import excepciones.NegocioException;
@@ -29,9 +29,9 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
     private final IFabricaBO fabricaBO = FabricaBO.singleton();
     
     //Controles
-    private final ControlCatalogo controlCatalogo = new ControlCatalogo();
+    private final ControlCatalogoBodega controlCatalogo = new ControlCatalogoBodega();
     private final ControlSolicitudes controlSolicitudes = new ControlSolicitudes(fabricaBO.fabricarPieza(), fabricaBO.fabricarSolicitud());
-    private final ControlCarrito controlCarrito = new ControlCarrito();
+    private final ControlCarritoSolicitudes controlCarrito = new ControlCarritoSolicitudes();
     
     /** Constructor vacío */
     public FachadaSolicitudes() {}

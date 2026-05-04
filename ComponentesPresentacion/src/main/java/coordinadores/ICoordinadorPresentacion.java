@@ -74,4 +74,8 @@ public interface ICoordinadorPresentacion {
     void abrirDetalleSolicitud(SolicitudDTO solicitud);
     
     void abrirResumenSolicitud();
+    
+    void abrirInfoPiezaBodega(IObservador observador, PiezaDTO pieza);
+    
+    void abrirInfoDetalleSolicitud(IObservador observador, DetallesVentaDTO detalle);
 }

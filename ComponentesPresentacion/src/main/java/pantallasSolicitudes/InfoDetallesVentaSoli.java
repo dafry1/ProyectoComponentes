@@ -1,4 +1,4 @@
-package pantallasVentas;
+package pantallasSolicitudes;
 
 import DTOS.DTO;
 import DTOS.DetallesVentaDTO;
@@ -19,12 +19,12 @@ import utilPresentacion.UtilGeneral;
  * Diálogo para editar la cantidad de una pieza ya presente en el carrito
  * @author Andre
  */
-public class InfoDetalle extends JDialog {
+public class InfoDetallesVentaSoli extends JDialog {
 
     private IObservador observador;
     ICoordinadorEstados coordinadorEstados;
 
-    public InfoDetalle(ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados, IObservador observador, DetallesVentaDTO detalle) {
+    public InfoDetallesVentaSoli(ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados, IObservador observador, DetallesVentaDTO detalle) {
         this.coordinadorEstados = coordinadorEstados;
         
         // Configuración inicial
@@ -40,9 +40,6 @@ public class InfoDetalle extends JDialog {
         String nombrePieza = pieza.getNombre();
         int cantidadActual = detalle.getCantidad();
         
-        //Consulta la cantidad total que hay. Como es solo para actualizar la cantidad, se considera el stock real de la BD
-        int stockDisponible = coordinadorNegocio.consultarPieza(pieza.getId()).getStockPieza();
-        
         // Panel Principal
         JPanel panelPrincipal = new JPanel();
         panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
@@ -52,7 +49,6 @@ public class InfoDetalle extends JDialog {
         String[] info = {
             "Producto: " + nombrePieza,
             "Precio Unitario: $" + detalle.getCosto(),
-            "Stock en almacén: " + stockDisponible ,
             "Cantidad actual: " + cantidadActual
         };
 
@@ -85,7 +81,7 @@ public class InfoDetalle extends JDialog {
         botonActualizar.setAlignmentX(Component.CENTER_ALIGNMENT);
         botonActualizar.addActionListener(e -> {
             String cantidad = campoCantidad.getText().trim();
-            actualizarCantidad(cantidad, stockDisponible, detalle);
+            actualizarCantidad(cantidad, detalle);
         });
         panelPrincipal.add(botonActualizar);
         
@@ -94,14 +90,10 @@ public class InfoDetalle extends JDialog {
         botonEliminar.setAlignmentX(Component.CENTER_ALIGNMENT);
         botonEliminar.addActionListener(e -> {
             UtilSwing.dialogoConfirmacion(this, "¿Desea eliminar este detalle?", () -> {
-                if (coordinadorEstados.existePiezaCarrito(detalle.getPieza().getId())) {
-                    coordinadorEstados.eliminarCarritoVenta(detalle);
-                } else {
-                    coordinadorEstados.eliminarCarritoVenta(detalle);
-                }
+                coordinadorEstados.eliminarCarritoSolicitud(detalle);
                 observador.observar();
                 UtilSwing.dialogoAviso(this, "Pieza eliminada correctamente");
-                InfoDetalle.this.dispose();
+                InfoDetallesVentaSoli.this.dispose();
             });
         });
         panelPrincipal.add(botonEliminar);
@@ -120,7 +112,7 @@ public class InfoDetalle extends JDialog {
      * @param stockDisponible
      * @param detalle 
      */
-    public void actualizarCantidad(String cantidad, int stockDisponible, DetallesVentaDTO detalle) {
+    public void actualizarCantidad(String cantidad, DetallesVentaDTO detalle) {
   
         //Si no es número válido
         if (!UtilFormato.numeroEnteroPositivo(cantidad)) {
@@ -130,13 +122,7 @@ public class InfoDetalle extends JDialog {
 
         //Parsea
         int nuevaCantidad = Integer.parseInt(cantidad);
-
-        //Si es una cantidad mayor a la disponbile
-        if (nuevaCantidad > stockDisponible) {
-            UtilSwing.dialogoAlerta(this, "Error: Solo hay " + stockDisponible + " unidades disponibles.");
-            return;
-        }
-
+        
         //Si todo está bien inicia el proceso de verdad
         UtilSwing.dialogoConfirmacion(this, "¿Actualizar cantidad?", () -> {
             if (nuevaCantidad == 0) {

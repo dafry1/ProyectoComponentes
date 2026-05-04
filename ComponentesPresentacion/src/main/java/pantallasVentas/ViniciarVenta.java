@@ -26,7 +26,7 @@ import utilPresentacion.UtilBoton.BotonAlmacenador;
 /**
  * Pantalla donde se eligen piezas para el carrito
  * 
- * @author DANIEL
+ * @author Andre
  */
 public class ViniciarVenta extends JFrame implements IObservador {
     JPanel panelPrincipal;
