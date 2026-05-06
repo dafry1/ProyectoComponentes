@@ -5,6 +5,7 @@ import dominio.Empleado;
 import excepciones.NegocioException;
 import adaptadores.IAdaptadorEmpleado;
 import daos.IEmpleadoDAO;
+import excepciones.PersistenciaException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,16 +56,12 @@ public class EmpleadoBO implements IEmpleadoBO {
      */
     @Override
     public EmpleadoDTO verificarEmpleado(String nombreUsuario, String password) {
-        if (nombreUsuario == null || nombreUsuario.isBlank()) {
-            String DEBUG = "Nombre de usuario vacío";
-            LOG.log(System.Logger.Level.ERROR, DEBUG);
-            throw new NegocioException(">>" + DEBUG);
-        }
-        if (password == null || password.isBlank()) {
-            String DEBUG = "Contraseña vacía";
-            LOG.log(System.Logger.Level.ERROR, DEBUG);
-            throw new NegocioException(">>" + DEBUG);
-        }
-        return adaptadorEmpleado.DTO(empleadoDAO.verificarEmpleado(nombreUsuario, password));
+        try {
+            return adaptadorEmpleado.DTO(empleadoDAO.verificarEmpleado(nombreUsuario, password));
+        } catch (PersistenciaException e) {
+            String MSJ = "Error al verificar empleado: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new NegocioException(MSJ);
+        } 
     }
 }

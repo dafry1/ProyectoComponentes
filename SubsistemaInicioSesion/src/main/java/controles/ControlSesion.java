@@ -59,9 +59,8 @@ public class ControlSesion {
      * @param empleado dueño de la sesión
      */
     public void establecerSesion(EmpleadoDTO empleado) {
-        this.usuarioLogueado = empleado;
-        if (empleado != null && empleado.getId() != null) {
-            this.administrador = (empleado.getId() == 1L);
+        if (empleado != null) {
+            this.usuarioLogueado = empleado;
         }
     }
     
@@ -70,16 +69,5 @@ public class ControlSesion {
      */
     public void cerrarSesion() {
         this.usuarioLogueado = null;
-        this.administrador = false;
     }
-    
-    /**
-     * Indica si la sesión actual le pertenece a un administrador
-     *
-     * @return
-     */
-    public boolean esAdministrador() {
-        return administrador;
-    }
-    
 }

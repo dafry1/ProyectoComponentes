@@ -4,6 +4,8 @@ import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
+import excepciones.NegocioException;
+import excepciones.PresentacionException;
 import fachada.FachadaInicioSesion;
 import fachadas.FachadaSolicitudes;
 import fachadas.FachadaVentas;
@@ -70,16 +72,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     }
 
     //----- MÉTODOS DE TRABAJADORES -----//
-    /**
-     * Guarda el empleado actual de manera global
-     * 
-     * @param empleado dueño de la sesión
-     */
-    @Override
-    public void establecerSesion(EmpleadoDTO empleado) {
-        fachadaSesion.establecerSesion(empleado);
-    }
-
+ 
     /**
      * Regresa el empleado que está usando el sistema actualmente
      *
@@ -89,17 +82,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     public EmpleadoDTO getUsuarioLogueado() {
         return fachadaSesion.getUsuarioLogueado();
     }
-
-    /**
-     * Indica si la sesión actual le pertenece a un administrador
-     *
-     * @return
-     */
-    @Override
-    public boolean esAdministrador() {
-        return fachadaSesion.esAdministrador();
-    }
-
+    
     /**
      * Cierra la sesión limpiando los datos
      */
@@ -182,22 +165,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     public int calcularStockAntesVenta(Long id) {
         return fachadaVentas.calcularStockAntesVenta(id);
     }
-
-    //----- MÉTODOS INICIO SESION -----//
-
     
-    /**
-     * Verifica la existencia de un empleado
-     * 
-     * @param usuario
-     * @param contra
-     * @return 
-     */
-    @Override
-    public EmpleadoDTO verificarEmpleado(String usuario, String contra) {
-        return fachadaSesion.verificarEmpleado(usuario, contra);
-    }
-   
     //----- MÉTODOS SOLICITUD-----//
      /**
      * Consulta las piezas del sistema
@@ -263,6 +231,21 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     public void limpiarCarritoSolicitud() {
         fachadaSolicitud.limpiarCarritoSolicitud();
     }
-    
-    
+
+    /**
+     * Establece la sesión actual del empleado ingresado
+     * 
+     * @param nombreUsuario
+     * @param contra
+     * @return 
+     */
+    @Override
+    public EmpleadoDTO iniciarSesion(String nombreUsuario, String contra) {
+        String MENSAJE = "Error al iniciar sesión";
+        try {
+            return fachadaSesion.iniciarSesion(nombreUsuario, contra);
+       } catch (NegocioException e) {
+           throw new PresentacionException(MENSAJE);
+       }
+    }
 }

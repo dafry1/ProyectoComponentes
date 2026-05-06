@@ -13,8 +13,6 @@ import java.util.List;
  */
 public interface IFachadaInicioSesion {
     EmpleadoDTO getUsuarioLogueado();
-    EmpleadoDTO verificarEmpleado(String usuario, String contra);
-    void establecerSesion(EmpleadoDTO empleado);
+    EmpleadoDTO iniciarSesion(String usuario, String contra);
     public void cerrarSesion();
-    public boolean esAdministrador();
 }

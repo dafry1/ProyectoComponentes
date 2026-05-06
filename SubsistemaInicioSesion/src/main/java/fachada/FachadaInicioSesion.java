@@ -2,6 +2,7 @@ package fachada;
 
 import DTOS.EmpleadoDTO;
 import controles.ControlSesion;
+import excepciones.NegocioException;
 import fabricas.FabricaBO;
 import fabricas.IFabricaBO;
 import java.util.List;
@@ -12,12 +13,31 @@ import java.util.List;
  * @author Andre
  */
 public class FachadaInicioSesion implements IFachadaInicioSesion {
+
+    private static final System.Logger LOG = System.getLogger(FachadaInicioSesion.class.getName());
+    
     
     //Fábrica que inyecta a los controles
     IFabricaBO fabricaBO = FabricaBO.singleton();
     
     //Controles
     private ControlSesion controlSesion = new ControlSesion(fabricaBO.fabricarEmpleado());
+    
+    @Override
+    public EmpleadoDTO iniciarSesion(String usuario, String contra) {
+        try {
+            EmpleadoDTO empleado = controlSesion.verificarEmpleado(usuario, contra);
+            if (empleado == null) {
+                throw new NegocioException("No se encontró el usuario");
+            }
+            controlSesion.establecerSesion(empleado);
+            return empleado;
+        } catch (NegocioException e) {
+            String MSJ = "Error al iniciar sesión: " + e.getMessage();
+            LOG.log(System.Logger.Level.ALL, MSJ);
+            throw new NegocioException(MSJ);
+        }
+    }
     
     /**
      * Regresa el empleado que está usando el sistema actualmente
@@ -28,43 +48,10 @@ public class FachadaInicioSesion implements IFachadaInicioSesion {
     public EmpleadoDTO getUsuarioLogueado() {
         return controlSesion.getUsuarioLogueado();
     }
- 
     
-    /**
-     * Verifica la existencia de un empleado
-     * 
-     * @param usuario
-     * @param contra
-     * @return 
-     */
-    @Override
-    public EmpleadoDTO verificarEmpleado(String usuario, String contra) {
-        return controlSesion.verificarEmpleado(usuario, contra);
-    }
-    
-     /**
-     * Guarda el empleado actual de manera global
-     * 
-     * @param empleado dueño de la sesión
-     */
-    @Override
-    public void establecerSesion(EmpleadoDTO empleado) {
-        controlSesion.establecerSesion(empleado);
-    }
-    
+    /** Cierra la sesión */
     @Override
     public void cerrarSesion() {
         controlSesion.cerrarSesion();
     }
-    
-    /**
-     * Indica si la sesión actual le pertenece a un administrador
-     *
-     * @return
-     */
-    @Override
-    public boolean esAdministrador() {
-        return controlSesion.esAdministrador();
-    }
-    
 }

@@ -58,7 +58,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
     public Empleado verificarEmpleado(String nombreUsuario, String password) {
         
         //Excepción si los campos están vacíos
-        if (nombreUsuario == null || nombreUsuario.trim().isEmpty() || password == null) {
+        if (nombreUsuario == null || nombreUsuario.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             LOG.warning(">> " + CAMPOS_VACIOS);
             throw new PersistenciaException(CAMPOS_VACIOS);
         }

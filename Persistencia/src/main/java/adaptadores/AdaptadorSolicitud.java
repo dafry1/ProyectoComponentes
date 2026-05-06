@@ -12,7 +12,7 @@ import org.bson.Document;
  * 
  * @author aron
  */
-public class AdaptadorSolicitud {
+public class AdaptadorSolicitud extends Adaptador{
     private AdaptadorCliente adaptadorCliente;
     private AdaptadorEmpleado adaptadorEmpleado;
     private AdaptadorDetallesVenta adaptadorDetallesVenta;

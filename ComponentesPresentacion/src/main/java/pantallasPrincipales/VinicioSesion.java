@@ -15,6 +15,7 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import utilEstilos.UtilSwing;
 import utilPresentacion.UtilBoton;
 import utilPresentacion.UtilGeneral;
 
@@ -105,20 +106,36 @@ public class VinicioSesion extends JFrame {
                 JOptionPane.showMessageDialog(this, "Campos vacíos", "Error", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-
+            
             try {
-                CoordinadorEstados.singleton().verificarEmpleado(user, pass);
-                EmpleadoDTO empleado = coordinadorNegocio.iniciarSesion(user, pass);
+                EmpleadoDTO empleado = coordinadorEstados.iniciarSesion(user, pass);
+                if (empleado != null) {
+                    String nombreEmpleado = empleado.getNombres() + " " + empleado.getApellidoPaterno() + " " + empleado.getApellidoMaterno();
+                    JOptionPane.showMessageDialog(this, "Bienvenido " + nombreEmpleado + " (" + empleado.getNombreUsuario() + ")");
+                    coordinador.mostrarVentanaInicio();
+                    this.dispose();
+                }
+                
+            } catch (Exception exc) {
+                UtilSwing.dialogoError(this, "Error: " + exc.getMessage());
+            }
+            
+            
+            
+            /*
+            JOptionPane.showMessageDialog(this, "Bienvenido " + nombreEmpleado + " (" + empleado.getNombreUsuario() + ")");
+            coordinador.mostrarVentanaInicio();
+            this.dispose();
+            
+            try {
+                coordinadorEstados.verificarEmpleado(user, pass);
+                EmpleadoDTO empleado = coordinadorEstados.iniciarSesion(user, pass);
 
                 
             if (empleado != null) {
-                coordinadorEstados.singleton().establecerSesion(empleado);
+                coordinadorEstados.establecerSesion(empleado);
 
-                String nombreEmpleado = empleado.getNombres() + " " + empleado.getApellidoPaterno() + " " + empleado.getApellidoMaterno();
                 
-                JOptionPane.showMessageDialog(this, "Bienvenido " + nombreEmpleado + " (" + empleado.getNombreUsuario() + ")");
-                coordinador.mostrarVentanaInicio();
-                this.dispose();
 
                 } else {
                     JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
@@ -127,6 +144,9 @@ public class VinicioSesion extends JFrame {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             }
+            
+            
+            */
         });
     
 

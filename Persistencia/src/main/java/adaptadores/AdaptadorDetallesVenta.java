@@ -9,7 +9,7 @@ import org.bson.Document;
  * 
  * @author aron
  */
-public class AdaptadorDetallesVenta {
+public class AdaptadorDetallesVenta extends Adaptador {
     private AdaptadorPieza adaptadorPieza;
     
     public AdaptadorDetallesVenta(AdaptadorPieza adaptadorPieza){

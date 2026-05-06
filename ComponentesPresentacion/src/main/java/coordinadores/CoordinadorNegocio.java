@@ -161,28 +161,6 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
         return venta;
     }
     
-    /**
-     * Valida que el usuario con los datos ingresados
-     * exista dentro del sistema y en caso de éxito lo
-     * almacena en el CoordinadorEstados
-     * 
-     * @param nombreUsuario que quier acceder al sistema
-     * @param contra del usuario
-     * 
-     * @return el empleado DTO en caso de que exista 
-     */
-    @Override
-    public EmpleadoDTO iniciarSesion(String nombreUsuario, String contra) {
-        try {
-            EmpleadoDTO empleado = fachadaInicioSesion.verificarEmpleado(nombreUsuario, contra);
-            coordinadorEstados.establecerSesion(empleado);
-            LOG.log(System.Logger.Level.INFO, ">> Sesión iniciada con éxito; " + nombreUsuario); 
-            return empleado;
-        } catch (NegocioException e){
-            throw new PresentacionException("No existe el empleado");
-        }
-    }
-
     @Override
     public List<PiezaDTO> filtrarPorNombre(String nombre) {
         return fachadaVentas.filtrarPorNombre(nombre);

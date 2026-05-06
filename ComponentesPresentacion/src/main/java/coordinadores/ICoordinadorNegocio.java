@@ -88,17 +88,6 @@ public interface ICoordinadorNegocio {
      */
     VentaDTO procesarVenta(VentaDTO venta, IObservador observador);
     
-    /**
-     * Valida que el usuario con los datos ingresados
-     * exista dentro del sistema
-     * 
-     * @param nombreUsuario que quiere acceder al sistema
-     * @param contra del usuario
-     * 
-     * @return el empleado DTO en caso de que exista 
-     */
-    EmpleadoDTO iniciarSesion(String nombreUsuario, String contra);
-    
     public List<PiezaDTO> filtrarPorNombre(String nombre);
 
     public List<PiezaDTO> filtrarPorCategoria(String categoria);

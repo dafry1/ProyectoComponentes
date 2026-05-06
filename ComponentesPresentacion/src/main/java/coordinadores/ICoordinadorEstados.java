@@ -15,13 +15,8 @@ public interface ICoordinadorEstados {
 
     //----- MÉTODOS DE TRABAJADORES -----//
     
-    /**
-     * Indica si la sesión actual le pertenece a un administrador
-     *
-     * @return
-     */
-    boolean esAdministrador();
-
+    EmpleadoDTO iniciarSesion(String nombreUsuario, String contra);
+    
     /**
      * Cierra la sesión limpiando los datos
      */
@@ -76,24 +71,6 @@ public interface ICoordinadorEstados {
      * @return cantidad de stock de dicha pieza
      */
     int calcularStockAntesVenta(Long id);
-    
-
-    
-     /**
-     * Verifica la existencia de un empleado
-     * 
-     * @param usuario
-     * @param contra
-     * @return 
-     */
-    public EmpleadoDTO verificarEmpleado(String usuario, String contra);
-    
-    /**
-     * Guarda el empleado actual de manera global
-     * 
-     * @param empleado dueño de la sesión
-     */
-    public void establecerSesion(EmpleadoDTO empleado);
     
     /**
      * Regresa el empleado que está usando el sistema actualmente

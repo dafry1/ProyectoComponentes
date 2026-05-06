@@ -40,9 +40,6 @@ public class ConexionBodegaAPI {
      */
     public List<PiezaDTO> consultarBodega() {
         
-        //Crea la colección donde se guardará lo extraído de la API
-        List<PiezaDTO> bodega = new ArrayList<>();
-        
         //Motor que envía la petición como abrir en el navegador
         HttpClient cliente = HttpClient.newHttpClient();
         
@@ -65,8 +62,8 @@ public class ConexionBodegaAPI {
              */
             String[] piezasJSON = json.split("\"nombre\": \"");
 
-            //Habita la lista de piezasDTO directo del JSON
-            bodega = convertirPiezas(piezasJSON);
+            //Regresa la lista de piezas convertidas
+            return convertirPiezas(piezasJSON);
         } 
         
         //Excepción si hubo problemas al conectarse
@@ -75,9 +72,6 @@ public class ConexionBodegaAPI {
             LOG.log(System.Logger.Level.ERROR, DEBUG);
             throw new InfraestructuraException(DEBUG);
         }
-        
-        //Regresa la lista
-        return bodega;
     }
     
     /**
