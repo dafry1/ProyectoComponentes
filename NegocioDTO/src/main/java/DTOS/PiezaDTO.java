@@ -31,12 +31,12 @@ public class PiezaDTO extends DTO {
     }
     
     //CONSTRUCTOR BASICO TEMPORAL
-    public PiezaDTO(String nombre, String categoria, String marcaPieza, double costoPieza) {
-        this.nombre = nombre;
-        this.categoria = categoria;
-        this.marcaPieza = marcaPieza;
-        this.costoPieza = costoPieza;
-    }
+//    public PiezaDTO(String nombre, String categoria, String marcaPieza, double costoPieza) {
+//        this.nombre = nombre;
+//        this.categoria = categoria;
+//        this.marcaPieza = marcaPieza;
+//        this.costoPieza = costoPieza;
+//    }
     
     
     /**

@@ -30,6 +30,7 @@ public class PiezaBO implements IPiezaBO {
      * 
      * @param piezaDAO
      * @param adaptadorPieza 
+     * @param adaptadorDetalles 
      */
     public PiezaBO(IPiezaDAO piezaDAO, IAdaptadorPieza adaptadorPieza, IAdaptadorDetallesVenta adaptadorDetalles) {
         this.piezaDAO = piezaDAO;
@@ -60,6 +61,7 @@ public class PiezaBO implements IPiezaBO {
             throw new NegocioException(">>" + DEBUG);
         }
         return adaptadorPieza.DTO(piezaEncontrada);
+        
     }
     
     /** Centraliza la forma en la que se adaptan las piezas de Entidad a DTO */

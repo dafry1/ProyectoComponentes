@@ -156,7 +156,7 @@ public class PantallaResumenSolicitud extends JFrame implements IObservador {
 
             BotonAlmacenador botonInfo = new BotonAlmacenador("Detalles", detalle);
             botonInfo.addActionListener(e -> {
-                coordinadorPresentacion.abrirInfoDetalle(this, detalle);
+                coordinadorPresentacion.abrirInfoDetalleSolicitud(this, detalle);
             });
 
             panelDerecho.add(lblSubtotal);

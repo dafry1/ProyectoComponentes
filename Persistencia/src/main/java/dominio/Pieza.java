@@ -19,13 +19,14 @@ public class Pieza {
     public Pieza(){}
     
     public Pieza(Long id, String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza) {
+        this.id = id;
         this.nombre = nombre;
         this.categoria = categoria;
         this.marcaPieza = marcaPieza;
         this.modeloPieza = modeloPieza;
         this.costoPieza = costoPieza;
         this.stockPieza = stockPieza;
-        this.id = id;
+        
     }
 
     public Long getId() {

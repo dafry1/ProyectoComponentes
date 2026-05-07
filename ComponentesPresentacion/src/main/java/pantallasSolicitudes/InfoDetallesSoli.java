@@ -19,12 +19,12 @@ import utilPresentacion.UtilGeneral;
  * Diálogo para editar la cantidad de una pieza ya presente en el carrito
  * @author Andre
  */
-public class InfoDetallesVentaSoli extends JDialog {
+public class InfoDetallesSoli extends JDialog {
 
     private IObservador observador;
     ICoordinadorEstados coordinadorEstados;
 
-    public InfoDetallesVentaSoli(ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados, IObservador observador, DetallesVentaDTO detalle) {
+    public InfoDetallesSoli(ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados, IObservador observador, DetallesVentaDTO detalle) {
         this.coordinadorEstados = coordinadorEstados;
         
         // Configuración inicial
@@ -93,7 +93,7 @@ public class InfoDetallesVentaSoli extends JDialog {
                 coordinadorEstados.eliminarCarritoSolicitud(detalle);
                 observador.observar();
                 UtilSwing.dialogoAviso(this, "Pieza eliminada correctamente");
-                InfoDetallesVentaSoli.this.dispose();
+                InfoDetallesSoli.this.dispose();
             });
         });
         panelPrincipal.add(botonEliminar);

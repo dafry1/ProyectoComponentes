@@ -17,7 +17,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import observadores.IObservador;
 import pantallasSolicitudes.InfoClienteSolicitud;
-import pantallasSolicitudes.InfoDetallesVentaSoli;
+import pantallasSolicitudes.InfoDetallesSoli;
 import pantallasSolicitudes.InfoPiezaBodega;
 import pantallasSolicitudes.PantallaResumenSolicitud;
 import pantallasVentas.DetalleVenta;
@@ -205,8 +205,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
 
     @Override
     public void abrirInfoDetalleSolicitud(IObservador observador, DetallesVentaDTO detalle) {
-        abrirDialogo(() -> new InfoDetallesVentaSoli(coordinadorNegocio, coordinadorEstados, observador, detalle));
+        abrirDialogo(() -> new InfoDetallesSoli(coordinadorNegocio, coordinadorEstados, observador, detalle));
     }
-    
     
 }

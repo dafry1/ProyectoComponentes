@@ -267,7 +267,7 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
             
             //Parte de ícono y descripción
             String desc = "<html><body style='width: 120px'>" +
-                          "<font color='white' size='3'><b>["+categoria+"] "+nombre+"</b> ("+modelo+")</font><br>" +
+                          "<font color='white' size='3'><b>["+categoria+"] "+nombre+"</b>" +
                           "<font color='white' size='2'>$ "+marca+"</font></body></html>";
             panelInfoBasica.add(new JLabel(desc));
 

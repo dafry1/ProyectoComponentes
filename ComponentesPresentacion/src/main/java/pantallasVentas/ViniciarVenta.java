@@ -357,7 +357,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
             //Parte de ícono y descripción
             String desc = "<html><body style='width: 65%'>" +
                           "<font color='white' size='3'><b>"+nombre+"</b> ("+cantidad+")</font><br>" +
-                          "<font color='white' size='2'>$ "+costo+"</font></body></html>";
+                          "<font color='white' size='2'> "+costo+"</font></body></html>";
             panelInfoBasica.add(new JLabel(desc));
             
             //Sección para mostrar información adicional: el precio y el botón de detalles

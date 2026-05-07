@@ -63,7 +63,9 @@ public class InfoClienteSolicitud extends JDialog {
         agregarTitulo("Información del Cliente");
         agregarCampo("Nombre(s)", "Ej. Juan");
         agregarCampo("Apellido Paterno", "Ej. Pérez");
+        agregarCampo("Apellido Materno", "Ej. Dominguez");
         agregarCampo("Teléfono", "10 dígitos");
+        agregarCampo("Correo", "Ej. example@Gmail.com");
 
         panelPrincipal.add(Box.createRigidArea(new Dimension(0, 15)));
         panelPrincipal.add(new JSeparator());
@@ -134,7 +136,9 @@ public class InfoClienteSolicitud extends JDialog {
             ClienteDTO cliente = new ClienteDTO.Builder()
                     .nombres(campos.get("Nombre(s)").getText().trim())
                     .apellidoPaterno(campos.get("Apellido Paterno").getText().trim())
+                    .apellidoMaterno(campos.get("Apellido Materno").getText().trim())
                     .telefono(campos.get("Teléfono").getText().trim())
+                    .correo(campos.get("Correo").getText().trim())
                     .build();
 
             DireccionDTO direccion = new DireccionDTO(

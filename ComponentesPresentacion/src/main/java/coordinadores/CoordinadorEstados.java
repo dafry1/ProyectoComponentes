@@ -31,34 +31,33 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     private final IFachadaSolicitudes fachadaSolicitud = new FachadaSolicitudes();
     //Instancia de sí mismo
     private static CoordinadorEstados instancia = null;
-    
-    
+
     /**
-     * IMPLEMENTACION SUPERULTRAMEGAHIPER TEMPORAL SOLO PARA QUE
-     * FUNCIONE AHORITITITA EL RESTO DE ESTADOS VOLÁTILES COMO
-     * EL CARRITO O EL EMPLEADO SE MANEJA EN NEGOCIO
+     * IMPLEMENTACION SUPERULTRAMEGAHIPER TEMPORAL SOLO PARA QUE FUNCIONE
+     * AHORITITITA EL RESTO DE ESTADOS VOLÁTILES COMO EL CARRITO O EL EMPLEADO
+     * SE MANEJA EN NEGOCIO
      */
     private static ClienteDTO clienteActual = null;
-    
+
     @Override
     public void setCliente(ClienteDTO cliente) {
         this.clienteActual = cliente;
     }
-    
+
     @Override
     public ClienteDTO getCliente() {
         return clienteActual;
     }
-    
+
     @Override
     public boolean existePiezaCarrito(Long id) {
-        return fachadaVentas.existePiezaCarrito(id);
+        try {
+            return fachadaVentas.existePiezaCarrito(id);
+        } catch (NegocioException e) {
+            throw new PresentacionException("Error al verificar el carrito: " + e.getMessage());
+        }
     }
-    
-    
-    
-    
-    
+
     /**
      * Sinleton que asegura trabajar con una única instancia
      *
@@ -72,7 +71,6 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     }
 
     //----- MÉTODOS DE TRABAJADORES -----//
- 
     /**
      * Regresa el empleado que está usando el sistema actualmente
      *
@@ -80,47 +78,70 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      */
     @Override
     public EmpleadoDTO getUsuarioLogueado() {
-        return fachadaSesion.getUsuarioLogueado();
+        try {
+            return fachadaSesion.getUsuarioLogueado();
+        } catch (NegocioException e) {
+            throw new PresentacionException("Error al obtener datos del usuario: " + e.getMessage());
+        }
     }
-    
+
     /**
      * Cierra la sesión limpiando los datos
      */
     @Override
     public void cerrarSesion() {
-        fachadaSesion.cerrarSesion();
-        fachadaVentas.limpiarCarritoVenta();
+        try {
+            fachadaSesion.cerrarSesion();
+            fachadaVentas.limpiarCarritoVenta();
+        } catch (NegocioException e) {
+            throw new PresentacionException("Error al cerrar la sesión: " + e.getMessage());
+        }
     }
 
     //----- MÉTODOS DEL CARRITO DE VENTAS -----//
     /**
      * Regresa una lista inmutable del carrito. Solo el coordinador la puede
      * modificar
-     * @return 
+     *
+     * @return
      */
     @Override
-     public List<DetallesVentaDTO> getCarritoVenta() {
-        return fachadaVentas.getCarritoVenta();
+    public List<DetallesVentaDTO> getCarritoVenta() {
+        try {
+            return fachadaVentas.getCarritoVenta();
+        } catch (NegocioException e) {
+            throw new PresentacionException("No se pudo recuperar el carrito de ventas.");
+        }
     }
 
     /**
      * Agrega una pieza al carrito sin tocar directamente la referencia a la
      * lista
+     *
      * @param detalle
      */
     @Override
     public void agregarCarritoVenta(DetallesVentaDTO detalle) {
-        fachadaVentas.agregarCarritoVenta(detalle);
+        try {
+            fachadaVentas.agregarCarritoVenta(detalle);
+        } catch (NegocioException e) {
+            throw new PresentacionException("No se pudo agregar el producto: " + e.getMessage());
+        }
     }
 
     /**
      * Elimina una pieza del carrito sin tocar directamente la referencia a la
      * lista
+     *
      * @param detalle
      */
     @Override
     public void eliminarCarritoVenta(DetallesVentaDTO detalle) {
-        fachadaVentas.eliminarCarritoVenta(detalle);
+        try {
+            fachadaVentas.eliminarCarritoVenta(detalle);
+        } catch (NegocioException e) {
+            throw new PresentacionException("No se pudo eliminar el producto del carrito.");
+        }
     }
 
     /**
@@ -130,17 +151,25 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      */
     @Override
     public double totalCarritoVenta() {
-        return fachadaVentas.totalCarritoVenta();
+        try {
+            return fachadaVentas.totalCarritoVenta();
+        } catch (NegocioException e) {
+            return 0.0;
+        }
     }
-    
+
     /**
      * Determina si el carrito de venta está vacío
-     * 
+     *
      * @return true si está vacío, false de lo contrario
      */
     @Override
     public boolean carritoVentaVacio() {
-        return fachadaVentas.carritoVentaVacio();
+        try {
+            return fachadaVentas.carritoVentaVacio();
+        } catch (NegocioException e) {
+            return true;
+        }
     }
 
     /**
@@ -148,7 +177,11 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      */
     @Override
     public void limpiarCarritoVenta() {
-        fachadaVentas.limpiarCarritoVenta();
+        try {
+            fachadaVentas.limpiarCarritoVenta();
+        } catch (NegocioException e) {
+            throw new PresentacionException("Error al vaciar el carrito.");
+        }
     }
 
     /**
@@ -163,89 +196,121 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      */
     @Override
     public int calcularStockAntesVenta(Long id) {
-        return fachadaVentas.calcularStockAntesVenta(id);
+        try {
+            return fachadaVentas.calcularStockAntesVenta(id);
+        } catch (NegocioException e) {
+            throw new PresentacionException("Error al calcular disponibilidad.");
+        }
     }
-    
+
     //----- MÉTODOS SOLICITUD-----//
-     /**
+    /**
      * Consulta las piezas del sistema
-     * 
+     *
      * @return lista de tipo PiezaDTO
      */
     @Override
     public List<PiezaDTO> consultarPiezas() {
-        return fachadaSolicitud.consultarPiezas();
+        try {
+            return fachadaSolicitud.consultarPiezas();
+        } catch (NegocioException e) {
+            throw new PresentacionException("Error al consultar catálogo de bodega.");
+        }
     }
-    
-    
+
     /**
      * Regresa el carrito
-     * 
+     *
      * @return lista de detalles
      */
     @Override
     public List<DetallesVentaDTO> getCarritoSolicitud() {
-        return fachadaSolicitud.getCarritoSolicitud();
+        try {
+            return fachadaSolicitud.getCarritoSolicitud();
+        } catch (NegocioException e) {
+            throw new PresentacionException("Error al obtener el carrito de solicitud.");
+        }
     }
 
-    
     /**
      * Agrega un detalle
-     * 
-     * @param detalle 
+     *
+     * @param detalle
      */
     @Override
     public void agregarCarritoSolicitud(DetallesVentaDTO detalle) {
-        fachadaSolicitud.agregarCarritoSolicitud(detalle);
+        try {
+            fachadaSolicitud.agregarCarritoSolicitud(detalle);
+        } catch (NegocioException e) {
+            throw new PresentacionException("Error al agregar a la solicitud: " + e.getMessage());
+        }
     }
-    
+
     /**
      * Elimina un detalle
-     * 
-     * @param detalle 
+     *
+     * @param detalle
      */
     @Override
     public void eliminarCarritoSolicitud(DetallesVentaDTO detalle) {
-        fachadaSolicitud.eliminarCarritoSolicitud(detalle);
+        try {
+            fachadaSolicitud.eliminarCarritoSolicitud(detalle);
+        } catch (NegocioException e) {
+            throw new PresentacionException("Error al eliminar de la solicitud.");
+        }
     }
 
-    /** Regresa el total
-     * @return  */
+    /**
+     * Regresa el total
+     *
+     * @return
+     */
     @Override
     public double totalCarritoSolicitud() {
-        return fachadaSolicitud.totalCarritoSolicitud();
+        try {
+            return fachadaSolicitud.totalCarritoSolicitud();
+        } catch (NegocioException e) {
+            return 0.0;
+        }
     }
 
     /**
      * Determina si está vacío el carrito
-     * 
+     *
      * @return true o false
      */
     @Override
     public boolean carritoSolicitudVacio() {
-        return fachadaSolicitud.carritoSolicitudVacio();
+        try {
+            return fachadaSolicitud.carritoSolicitudVacio();
+        } catch (NegocioException e) {
+            return true;
+        }
     }
 
     //Vacía el carrito
     @Override
     public void limpiarCarritoSolicitud() {
-        fachadaSolicitud.limpiarCarritoSolicitud();
+        try {
+            fachadaSolicitud.limpiarCarritoSolicitud();
+        } catch (NegocioException e) {
+            throw new PresentacionException("Error al limpiar la solicitud.");
+        }
     }
 
     /**
      * Establece la sesión actual del empleado ingresado
-     * 
+     *
      * @param nombreUsuario
      * @param contra
-     * @return 
+     * @return
      */
     @Override
     public EmpleadoDTO iniciarSesion(String nombreUsuario, String contra) {
-        String MENSAJE = "Error al iniciar sesión";
         try {
             return fachadaSesion.iniciarSesion(nombreUsuario, contra);
-       } catch (NegocioException e) {
-           throw new PresentacionException(MENSAJE);
-       }
+        } catch (NegocioException e) {
+            throw new PresentacionException(e.getMessage());
+        }
     }
 }
