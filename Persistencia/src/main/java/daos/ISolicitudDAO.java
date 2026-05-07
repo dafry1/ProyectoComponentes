@@ -26,28 +26,4 @@ public interface ISolicitudDAO {
      * @return La solicitud creada con su ID generado, si aplica.
      */
     Solicitud registrarSolicitud(Solicitud solicitud);
-    
-    /**
-     * Filtra las solicitudes realizadas en una fecha específica.
-     * 
-     * @param fecha Día a consultar.
-     * @return Lista de solicitudes que coinciden con la fecha proporcionada.
-     */
-    List<Solicitud> filtrarSolicitudesFecha(LocalDate fecha);
-    
-    /**
-     * Filtra solicitudes cuyo monto total sea igual o mayor al mínimo proporcionado.
-     * 
-     * @param minimo El umbral inferior del total.
-     * @return Lista de solicitudes que cumplen el criterio.
-     */
-    List<Solicitud> filtrarSolicitudesTotalMinimo(double minimo);
-    
-    /**
-     * Filtra solicitudes cuyo monto total no exceda el máximo proporcionado.
-     * 
-     * @param maximo El umbral superior del total.
-     * @return Lista de solicitudes dentro del rango de precio.
-     */
-    List<Solicitud> filtrarSolicitudesTotalMaximo(double maximo);
 }

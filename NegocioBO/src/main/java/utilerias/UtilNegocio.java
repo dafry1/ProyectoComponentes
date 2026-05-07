@@ -3,6 +3,8 @@ package utilerias;
 import DTOS.ClienteDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PersonaDTO;
+import excepciones.NegocioException;
+import java.lang.System.Logger;
 
 /**
  * Diferentes validaciones de negocio

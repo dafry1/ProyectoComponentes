@@ -28,19 +28,4 @@ public class VentaDAO implements IVentaDAO {
         System.out.println("DAO DESPUES DE REGISTRAR VENTA: " + venta.getFechaHora());
         return venta;
     }
-
-    @Override
-    public List<Venta> filtrarVentasFecha(LocalDate fecha) {
-        return VENTAS;
-    }
-
-    @Override
-    public List<Venta> filtrarVentasTotalMinimo(double minimo) {
-        return VENTAS;
-    }
-
-    @Override
-    public List<Venta> filtrarVentasTotalMaximo(double maximo) {
-        return VENTAS;
-    }
 }

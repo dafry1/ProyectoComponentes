@@ -25,19 +25,4 @@ public class SolicitudDAO implements ISolicitudDAO {
         LOG.log(System.Logger.Level.INFO, ">> Venta registrada exitosamente: " + solicitud.getCliente().getNombres() + " : " + solicitud.getDetalles().size());
         return solicitud;
     }
-
-    @Override
-    public List<Solicitud> filtrarSolicitudesFecha(LocalDate fecha) {
-        return SOLICITUDES;
-    }
-
-    @Override
-    public List<Solicitud> filtrarSolicitudesTotalMinimo(double minimo) {
-        return SOLICITUDES;
-    }
-
-    @Override
-    public List<Solicitud> filtrarSolicitudesTotalMaximo(double maximo) {
-        return SOLICITUDES;
-    }
 }
