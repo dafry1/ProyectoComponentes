@@ -1,5 +1,7 @@
 package daos;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import dominio.DetallesVenta;
 import dominio.Pieza;
 import excepciones.PersistenciaException;
@@ -15,6 +17,18 @@ public class PiezaDAO implements IPiezaDAO {
     private static final System.Logger LOG = System.getLogger(PiezaDAO.class.getName());
     private static String CARRITO_VACIO = "No se puede procesar una venta con un carrito vacío";
     private static final String NO_FILTRADO = " inválido para filtrar piezas";
+    
+    //Colección mongo
+    private MongoCollection<Pieza> coleccion;
+    
+    /**
+     * Constructor
+     * 
+     * @param coleccion 
+     */
+    public PiezaDAO(MongoCollection coleccion) {
+        this.coleccion = coleccion;
+    }
     
     //MEDIDAS TEMPORALES PARA MOCKEO
     private static List<Pieza> PIEZAS = new ArrayList<>();
