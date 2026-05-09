@@ -9,6 +9,7 @@ import adaptadores.IAdaptadorPieza;
 import adaptadores.IAdaptadorVenta;
 import daos.IPiezaDAO;
 import daos.IVentaDAO;
+import excepciones.PersistenciaException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -107,8 +108,12 @@ public class VentaBO implements IVentaBO {
         venta.setFechaHora(generarFecha());
         
         //Registra la venta
-        Venta v = adaptadorVenta.Entidad(venta);
-        return adaptadorVenta.DTO(ventaDAO.registrarVenta(v));
+        try {
+            Venta v = adaptadorVenta.Entidad(venta);
+            return adaptadorVenta.DTO(ventaDAO.registrarVenta(v));  
+        } catch (PersistenciaException e) {
+            throw new NegocioException("");
+        }
     }
     
     /**

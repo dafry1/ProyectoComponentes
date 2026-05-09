@@ -1,7 +1,9 @@
 package controles;
 
+import DTO.AdaptadorPiezaDTO;
+import DTO.PiezaInfraestructuraDTO;
 import DTOS.PiezaDTO;
-import conexiones.ConexionBodegaAPI;
+import conexiones.ProcesadorJSON;
 import excepciones.InfraestructuraException;
 import java.util.List;
 
@@ -13,61 +15,31 @@ import java.util.List;
  */
 public class ControlBodega {
     private static final System.Logger LOG = System.getLogger(ControlBodega.class.getName());
-    String DEBUG = "Depuración";
-    String NO_FILTRADO = "No hay resultados para filtrar por: ";
+    private static String DEBUG = "Depuración";
+    private static final String NO_FILTRADO = "No hay resultados para filtrar por: ";
     
-    //Singleton de la conexión a la API
-    ConexionBodegaAPI api = ConexionBodegaAPI.singleton();
+    //Singleton de la clase que se conecta con la API
+    ProcesadorJSON pjson = ProcesadorJSON.singleton();
     
     /**
      * Obtiene las piezas directamente de la API
      * 
      * @return lista de PiezaDTO
      */
-    public List<PiezaDTO> consultarBodega() {
-        return api.consultarBodega();
+    public List<PiezaInfraestructuraDTO> consultarBodega() {
+        return pjson.obtenerBodega();
     }
     
     /**
-     * Consulta una pieza por id
-     * 
-     * @param id
-     * 
-     * @return la PiezaDTO
-     */
-    public PiezaDTO consultarPieza(Long id) {
-        if (id == null) {
-            DEBUG = "Id inválida";
-            debugExcepcion();
-        }
-        PiezaDTO pieza = null;
-        for (PiezaDTO p: consultarBodega()) {
-            if (p.getId().equals(id)) {
-                pieza = p;
-            }
-        }
-        if (pieza == null) {
-            DEBUG = "No se halló pieza con el Id " + id;
-            debugExcepcion();
-        }
-        return pieza;
-    }
-    
-    /**
-     * Filtra por nombre
+     * Filtra por nombre 
      * 
      * @param nombre para filtrar
      * 
      * @return piezas filtradas
      */
-    public List<PiezaDTO> filtrarPorNombre(String nombre) {
-        if (nombre.isBlank()) {
-            DEBUG = NO_FILTRADO + nombre;
-            debugExcepcion();
-        }
-        return consultarBodega().stream().filter(p -> p.getNombre().toLowerCase()
-                                .contains(nombre.toLowerCase()))
-                                .toList();
+    public List<PiezaInfraestructuraDTO> filtrarPorNombre(String nombre) {
+        validarEntrada(nombre);
+        return pjson.obtenerBodegaFiltrada("nombre", nombre);
     }
     
     /**
@@ -77,14 +49,9 @@ public class ControlBodega {
      * 
      * @return lista filtrada
      */
-    public List<PiezaDTO> filtrarPorCategoria(String categoria) {
-        if (categoria == null || categoria.isBlank()) {
-            DEBUG = NO_FILTRADO + categoria;
-            debugExcepcion();
-        }
-        return consultarBodega().stream().filter(p -> p.getCategoria().toLowerCase()
-                                .contains(categoria.toLowerCase()))
-                                .toList();
+    public List<PiezaInfraestructuraDTO> filtrarPorCategoria(String categoria) {
+        validarEntrada(categoria);
+        return pjson.obtenerBodegaFiltrada("categoria", categoria);
     }
     
     /**
@@ -94,15 +61,10 @@ public class ControlBodega {
      * @param marca para filtrar
      * 
      * @return piezas filtradas 
-     */
-    public List<PiezaDTO> filtrarPorMarca(String marca) {
-        if (marca.isBlank()) {
-            DEBUG = NO_FILTRADO + marca;
-            debugExcepcion();
-        }
-        return consultarBodega().stream().filter(p -> p.getMarcaPieza().toLowerCase()
-                                .contains(marca.toLowerCase()))
-                                .toList();
+     */ 
+    public List<PiezaInfraestructuraDTO> filtrarPorMarca(String marca) {
+        validarEntrada(marca);
+        return pjson.obtenerBodegaFiltrada("marca", marca);
     }
     
     /**
@@ -113,17 +75,23 @@ public class ControlBodega {
      * 
      * @return piezas filtradas 
      */
-    public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo) {
-        if (precioMaximo < 1) {
-            DEBUG = NO_FILTRADO + precioMaximo;
-            debugExcepcion();
+    public List<PiezaInfraestructuraDTO> filtrarPorPrecioMax(double precioMaximo) {
+        if (precioMaximo < 0) {
+            throw lanzar();
         }
-        return consultarBodega().stream().filter(p -> p.getCostoPieza() <= precioMaximo).toList();
+        return pjson.obtenerBodegaFiltrada("precio", String.valueOf(precioMaximo));
     }
     
     /** Centraliza el arrojo de excepción y depuración */
-    private void debugExcepcion() {
+    private InfraestructuraException lanzar() {
+        DEBUG = "Filtro inválido";
         LOG.log(System.Logger.Level.ERROR, ">> " + DEBUG);
-        throw new InfraestructuraException(DEBUG);
+        return new InfraestructuraException(DEBUG);
+    }
+    
+    private void validarEntrada(String valor) {
+        if (valor == null || valor.isBlank()) {
+            throw lanzar();
+        }
     }
 }

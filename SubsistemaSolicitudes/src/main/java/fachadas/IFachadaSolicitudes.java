@@ -17,7 +17,7 @@ public interface IFachadaSolicitudes {
 
     List<PiezaDTO> consultarPiezas();
 
-    PiezaDTO consultarPieza(Long id);
+    //PiezaDTO consultarPieza(Long id);
 
     List<PiezaDTO> filtrarPorNombre(String nombre);
 

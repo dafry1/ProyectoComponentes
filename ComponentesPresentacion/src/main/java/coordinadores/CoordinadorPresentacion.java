@@ -153,7 +153,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     // Método para arrancar el sistema
     @Override
     public void arrancar() {
-        mostrarVentanaVenta();
+        mostrarVentanaInicioSesion();
     }
 
     @Override

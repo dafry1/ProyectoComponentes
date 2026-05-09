@@ -39,7 +39,7 @@ public class FabricaDAO implements IFabricaDAO {
      * 
      * @return la instancia única
      */
-    public static FabricaDAO singleton() {
+    public static IFabricaDAO singleton() {
         if (instancia == null) {
             instancia = new FabricaDAO();
         }

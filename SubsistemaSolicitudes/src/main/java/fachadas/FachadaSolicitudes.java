@@ -50,6 +50,7 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
         }
     }
     
+    /*
     @Override
     public PiezaDTO consultarPieza(Long id) {
         try {
@@ -58,6 +59,7 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
             throw new NegocioException(e.getMessage());
         }
     }
+    */
 
     @Override
     public List<PiezaDTO> filtrarPorNombre(String nombre) {

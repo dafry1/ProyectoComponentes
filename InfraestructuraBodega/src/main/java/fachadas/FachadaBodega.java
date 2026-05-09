@@ -1,5 +1,6 @@
 package fachadas;
 
+import DTO.PiezaInfraestructuraDTO;
 import DTOS.PiezaDTO;
 import controles.ControlBodega;
 import java.util.List;
@@ -17,32 +18,27 @@ public class FachadaBodega implements IFachadaBodega{
     }
     
     @Override
-    public List<PiezaDTO> consultarBodega() {
+    public List<PiezaInfraestructuraDTO> consultarBodega() {
         return controlBodega.consultarBodega();
     }
-
+    
     @Override
-    public PiezaDTO consultarPieza(Long id) {
-        return controlBodega.consultarPieza(id);
-    }
-
-    @Override
-    public List<PiezaDTO> filtrarPorNombre(String nombre) {
+    public List<PiezaInfraestructuraDTO> filtrarPorNombre(String nombre) {
         return controlBodega.filtrarPorNombre(nombre);
     }
 
     @Override
-    public List<PiezaDTO> filtrarPorCategoria(String categoria) {
+    public List<PiezaInfraestructuraDTO> filtrarPorCategoria(String categoria) {
         return controlBodega.filtrarPorCategoria(categoria);
     }
 
     @Override
-    public List<PiezaDTO> filtrarPorMarca(String marca) {
+    public List<PiezaInfraestructuraDTO> filtrarPorMarca(String marca) {
         return controlBodega.filtrarPorMarca(marca);
     }
 
     @Override
-    public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo) {
+    public List<PiezaInfraestructuraDTO> filtrarPorPrecioMax(double precioMaximo) {
         return controlBodega.filtrarPorPrecioMax(precioMaximo);
     }
 }

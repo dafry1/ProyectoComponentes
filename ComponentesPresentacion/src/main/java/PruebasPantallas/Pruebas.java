@@ -22,6 +22,6 @@ public class Pruebas {
         
         //Los asigna al coordinador de presentación, que lo suministra al resto de ventanas
         ICoordinadorPresentacion coordinadorPresentacion = new CoordinadorPresentacion(coordinadorNegocio, coordinadorEstados, ensambladorDTO);
-        coordinadorPresentacion.mostrarVentanaInicioSesion();
+        coordinadorPresentacion.arrancar();
     }
 }

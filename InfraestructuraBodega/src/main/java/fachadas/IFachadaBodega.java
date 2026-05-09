@@ -1,5 +1,6 @@
 package fachadas;
 
+import DTO.PiezaInfraestructuraDTO;
 import DTOS.PiezaDTO;
 import java.util.List;
 
@@ -17,23 +18,15 @@ public interface IFachadaBodega {
      * 
      * @return lista de PiezaDTO con todos los productos.
      */
-    List<PiezaDTO> consultarBodega();
-
-    /**
-     * Busca una pieza específica mediante su identificador único.
-     * 
-     * @param id El identificador de la pieza.
-     * @return El objeto PiezaDTO encontrado.
-     */
-    PiezaDTO consultarPieza(Long id);
-
+    List<PiezaInfraestructuraDTO> consultarBodega();
+    
     /**
      * Filtra las piezas cuyo nombre contenga la cadena proporcionada.
      * 
      * @param nombre Texto a buscar en el nombre de la pieza.
      * @return Lista de piezas que coinciden con el filtro.
      */
-    List<PiezaDTO> filtrarPorNombre(String nombre);
+    List<PiezaInfraestructuraDTO> filtrarPorNombre(String nombre);
 
     /**
      * Filtra las piezas pertenecientes a una categoría específica.
@@ -41,7 +34,7 @@ public interface IFachadaBodega {
      * @param categoria Categoría a buscar.
      * @return Lista de piezas que pertenecen a dicha categoría.
      */
-    List<PiezaDTO> filtrarPorCategoria(String categoria);
+    List<PiezaInfraestructuraDTO> filtrarPorCategoria(String categoria);
 
     /**
      * Filtra las piezas fabricadas por una marca específica.
@@ -49,7 +42,7 @@ public interface IFachadaBodega {
      * @param marca Marca de la pieza a buscar.
      * @return Lista de piezas de esa marca.
      */
-    List<PiezaDTO> filtrarPorMarca(String marca);
+    List<PiezaInfraestructuraDTO> filtrarPorMarca(String marca);
 
     /**
      * Filtra las piezas que tengan un costo menor o igual al precio máximo.
@@ -57,5 +50,5 @@ public interface IFachadaBodega {
      * @param precioMaximo Límite superior de precio.
      * @return Lista de piezas dentro del rango de precio.
      */
-    List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo);
+    List<PiezaInfraestructuraDTO> filtrarPorPrecioMax(double precioMaximo);
 }

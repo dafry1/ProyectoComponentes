@@ -1,6 +1,7 @@
 package controles;
 
 import DTOS.PiezaDTO;
+import adaptadores.AdaptadorPiezaDTO;
 import fabricas.IFabricaBO;
 import bo.IPiezaBO;
 import excepciones.InfraestructuraException;
@@ -16,7 +17,6 @@ import java.util.List;
  * @author Andre
  */
 public class ControlCatalogoBodega{
-    private static String DEBUG = "Depuración";
     
     private static final System.Logger LOG = System.getLogger(ControlCatalogoBodega.class.getName());
     
@@ -35,12 +35,13 @@ public class ControlCatalogoBodega{
     
     public List<PiezaDTO> consultarBodega() {
         try {
-            return fachadaBodega.consultarBodega();
+            return AdaptadorPiezaDTO.piezas(fachadaBodega.consultarBodega());
         } catch (InfraestructuraException e) {
             throw atrapar(e);
         }
     }
 
+    /*
     public PiezaDTO consultarPieza(Long id) {
         try {
             return fachadaBodega.consultarPieza(id);
@@ -48,10 +49,11 @@ public class ControlCatalogoBodega{
             throw atrapar(e);
         }
     }
+    */
 
     public List<PiezaDTO> filtrarPorNombre(String nombre) {
         try {
-            return fachadaBodega.filtrarPorNombre(nombre);
+            return AdaptadorPiezaDTO.piezas(fachadaBodega.filtrarPorNombre(nombre));
         } catch (InfraestructuraException e) {
             throw atrapar(e);
         }
@@ -59,7 +61,7 @@ public class ControlCatalogoBodega{
 
     public List<PiezaDTO> filtrarPorCategoria(String categoria) {
         try {
-            return fachadaBodega.filtrarPorCategoria(categoria);
+            return AdaptadorPiezaDTO.piezas(fachadaBodega.filtrarPorCategoria(categoria));
         } catch (InfraestructuraException e) {
             throw atrapar(e);
         }
@@ -67,7 +69,7 @@ public class ControlCatalogoBodega{
 
     public List<PiezaDTO> filtrarPorMarca(String marca) {
         try {
-            return fachadaBodega.filtrarPorMarca(marca);
+            return AdaptadorPiezaDTO.piezas(fachadaBodega.filtrarPorMarca(marca));
         } catch (InfraestructuraException e) {
             throw atrapar(e);
         }
@@ -75,7 +77,7 @@ public class ControlCatalogoBodega{
 
     public List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo) {
         try {
-            return fachadaBodega.filtrarPorPrecioMax(precioMaximo);
+            return AdaptadorPiezaDTO.piezas(fachadaBodega.filtrarPorPrecioMax(precioMaximo));
         } catch (InfraestructuraException e) {
             throw atrapar(e);
         }
@@ -90,8 +92,8 @@ public class ControlCatalogoBodega{
      * @return NegocioException
      */
     private NegocioException atrapar(InfraestructuraException excepcion) {
-        DEBUG = excepcion.getMessage();
-        LOG.log(System.Logger.Level.ALL, DEBUG);
+        String DEBUG = excepcion.getMessage();
+        LOG.log(System.Logger.Level.ERROR, DEBUG);
         return new NegocioException(DEBUG);
     }
 }
