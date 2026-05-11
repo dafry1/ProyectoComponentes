@@ -13,6 +13,7 @@ public class Venta {
     private double total;
     private String fechaHora;
     private String folio;
+    private String id;
 
     public Venta() {
     }
@@ -25,6 +26,18 @@ public class Venta {
         this.folio = folio;
         this.empleado = empleado;
     }
+
+    public Venta(Cliente cliente, Empleado empleado, List<DetallesVenta> detalles, double total, String fechaHora, String folio, String id) {
+        this.cliente = cliente;
+        this.empleado = empleado;
+        this.detalles = detalles;
+        this.total = total;
+        this.fechaHora = fechaHora;
+        this.folio = folio;
+        this.id = id;
+    }
+    
+    
 
     public Cliente getCliente() {
         return cliente;
@@ -73,4 +86,15 @@ public class Venta {
     public void setEmpleado(Empleado empleado) {
         this.empleado = empleado;
     } 
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    
+    
 }

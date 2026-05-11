@@ -34,7 +34,7 @@ public class ControlCatalogo{
      * @param id
      * @return 
      */
-    public PiezaDTO consultarPieza(Long id) {
+    public PiezaDTO consultarPieza(String id) {
         return piezaBO.consultarPieza(id);
     }
     

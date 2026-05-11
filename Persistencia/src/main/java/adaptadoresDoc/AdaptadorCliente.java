@@ -1,4 +1,4 @@
-package adaptadores;
+package adaptadoresDoc;
 
 import dominio.Cliente;
 import org.bson.Document;

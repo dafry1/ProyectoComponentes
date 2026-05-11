@@ -14,11 +14,11 @@ public class Pieza {
     private String modeloPieza;
     private double costoPieza;
     private int stockPieza;
-    private Long id;
+    private String id;
 
     public Pieza(){}
     
-    public Pieza(Long id, String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza) {
+    public Pieza(String id, String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza) {
         this.id = id;
         this.nombre = nombre;
         this.categoria = categoria;
@@ -26,14 +26,24 @@ public class Pieza {
         this.modeloPieza = modeloPieza;
         this.costoPieza = costoPieza;
         this.stockPieza = stockPieza;
-        
     }
 
-    public Long getId() {
+    public Pieza(String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza) {
+        this.nombre = nombre;
+        this.categoria = categoria;
+        this.marcaPieza = marcaPieza;
+        this.modeloPieza = modeloPieza;
+        this.costoPieza = costoPieza;
+        this.stockPieza = stockPieza;
+    }
+    
+    
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
     

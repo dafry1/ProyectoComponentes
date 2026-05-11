@@ -20,7 +20,7 @@ public interface IPiezaBO {
      * 
      * @return la pieza
      */
-    PiezaDTO consultarPieza(Long id);
+    PiezaDTO consultarPieza(String id);
     
     /**
      * Consulta todas las piezas registradas en el sistema

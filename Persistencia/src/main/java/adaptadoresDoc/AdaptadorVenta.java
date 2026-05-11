@@ -1,4 +1,4 @@
-package adaptadores;
+package adaptadoresDoc;
 
 import dominio.DetallesVenta;
 import dominio.Venta;

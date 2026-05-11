@@ -45,7 +45,7 @@ public class VentaDTO extends DTO {
      * @param fechaHora
      * @param folio 
      */
-    public VentaDTO(Long id, EmpleadoDTO empleado, ClienteDTO cliente, List<DetallesVentaDTO> detalles, double total, String fechaHora, String folio) {
+    public VentaDTO(String id, EmpleadoDTO empleado, ClienteDTO cliente, List<DetallesVentaDTO> detalles, double total, String fechaHora, String folio) {
         super(id);
         this.cliente = cliente;
         this.detalles = detalles;

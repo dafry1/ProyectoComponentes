@@ -115,6 +115,7 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
     @Override
     public void agregarCarritoSolicitud(DetallesVentaDTO detalle) {
         controlCarrito.agregarCarritoSolicitud(detalle);
+        controlCarrito.agruparDetalles();
     }
 
     /**
@@ -125,6 +126,7 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
     @Override
     public void eliminarCarritoSolicitud(DetallesVentaDTO detalle) {
         controlCarrito.eliminarCarritoSolicitud(detalle);
+        controlCarrito.agruparDetalles();
     }
 
     /** Regresa el total
@@ -154,24 +156,10 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
     public SolicitudDTO procesarSolicitud(SolicitudDTO solicitud) {
         return controlSolicitudes.procesarSolicitud(solicitud);
     }
-
-    @Override
-    public List<SolicitudDTO> consultarHistorialSolicitudes() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List<SolicitudDTO> filtrarSolicitudesPorFecha(LocalDate fecha) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List<SolicitudDTO> filtrarSolicitudesPorMontoMinimo(double minimo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
     
     @Override
     public List<SolicitudDTO> consultarSolicitudes(){
         return controlSolicitudes.consultarSolicitudes();
     }
+
 }

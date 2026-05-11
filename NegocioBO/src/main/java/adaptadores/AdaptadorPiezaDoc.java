@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
  *
  * @author Andre
  */
-public class AdaptadorPieza implements IAdaptadorPieza {
+public class AdaptadorPiezaDoc implements IAdaptadorPieza {
 
     private static IAdaptadorPieza instancia;
-    private AdaptadorPieza(){}
+    private AdaptadorPiezaDoc(){}
     
     /**
      * Singleton del adaptador
@@ -21,7 +21,7 @@ public class AdaptadorPieza implements IAdaptadorPieza {
      */
     public static IAdaptadorPieza singleton() {
         if (instancia == null) {
-            instancia = new AdaptadorPieza();
+            instancia = new AdaptadorPiezaDoc();
         }
         return instancia;
     }

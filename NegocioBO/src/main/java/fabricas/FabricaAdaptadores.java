@@ -3,7 +3,7 @@ package fabricas;
 import adaptadores.AdaptadorCliente;
 import adaptadores.AdaptadorDetallesVenta;
 import adaptadores.AdaptadorEmpleado;
-import adaptadores.AdaptadorPieza;
+import adaptadores.AdaptadorPiezaDoc;
 import adaptadores.AdaptadorVenta;
 import adaptadores.IAdaptadorCliente;
 import adaptadores.IAdaptadorDetallesVenta;
@@ -41,7 +41,7 @@ public class FabricaAdaptadores implements IFabricaAdaptadores {
      */
     @Override
     public IAdaptadorPieza fabricarAdaptadorPieza() {
-        return AdaptadorPieza.singleton();
+        return AdaptadorPiezaDoc.singleton();
     }
 
     /**

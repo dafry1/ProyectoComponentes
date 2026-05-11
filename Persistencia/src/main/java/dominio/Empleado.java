@@ -8,9 +8,18 @@ public class Empleado extends Persona {
     
     private String nombreUsuario;
     private String contrasenia;
+    private String id;
 
     public Empleado() {
     }
+
+    public Empleado(String nombreUsuario, String contrasenia, String id, String nombres, String apellidoPaterno, String apellidoMaterno) {
+        super(nombres, apellidoPaterno, apellidoMaterno);
+        this.nombreUsuario = nombreUsuario;
+        this.contrasenia = contrasenia;
+        this.id = id;
+    }
+    
     
     public Empleado(String nombreUsuario, String contrasenia, String nombres, String apellidoPaterno, String apellidoMaterno) {
         super(nombres, apellidoPaterno, apellidoMaterno);
@@ -33,4 +42,14 @@ public class Empleado extends Persona {
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    
 }

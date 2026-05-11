@@ -70,7 +70,7 @@ public interface ICoordinadorEstados {
      *
      * @return cantidad de stock de dicha pieza
      */
-    int calcularStockAntesVenta(Long id);
+    int calcularStockAntesVenta(String id);
     
     /**
      * Regresa el empleado que está usando el sistema actualmente
@@ -83,7 +83,7 @@ public interface ICoordinadorEstados {
     
     public ClienteDTO getCliente();
     
-    boolean existePiezaCarrito(Long id);
+    boolean existePiezaCarrito(String id);
     
     public List<PiezaDTO> consultarPiezas();
     

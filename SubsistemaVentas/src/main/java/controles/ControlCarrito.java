@@ -90,7 +90,7 @@ public class ControlCarrito {
      *
      * @return cantidad de stock de dicha pieza
      */
-    public int calcularStockAntesVenta(Long id) {
+    public int calcularStockAntesVenta(String id) {
         return carrito.stream()
                 .filter(d -> d.getPieza().getId().equals(id))
                 .mapToInt(DetallesVentaDTO::getCantidad).sum();
@@ -102,7 +102,7 @@ public class ControlCarrito {
      * @param id
      * @return 
      */
-    public boolean existePiezaCarrito(Long id) {
+    public boolean existePiezaCarrito(String id) {
         if (id == null) {
             LOG.log(System.Logger.Level.ERROR, () -> ">> " + DETALLE_VACIO);
             throw new NegocioException(DETALLE_VACIO);
@@ -118,7 +118,7 @@ public class ControlCarrito {
     /**
      * Agrupa detalles de la misma pieza para evitar duplicación
      * innecesaria, ayudándose de un mapa temporal del juego
-     * <Long, DetallesVentaDTO>, o aplicado a negocio, <idPieza, detalle>
+     * <String, DetallesVentaDTO>, o aplicado a negocio, <idPieza, detalle>
      * y así agrupar correctamente qué id de pieza tiene un detalle. Va
      * agregando a ese mapa o actualizando cantidad recorriendo el
      * carrito. Al final limpia el carrito y actualiza con los datos
@@ -127,11 +127,11 @@ public class ControlCarrito {
     public void agruparDetalles() {
         
         //Mapa de juego idPieza, detalle para saber qué piezas tienen qué detalles
-        Map<Long, DetallesVentaDTO> mapaDetalles = new HashMap<>();
+        Map<String, DetallesVentaDTO> mapaDetalles = new HashMap<>();
         
         //Por cada detalle del carrito...
         for (DetallesVentaDTO detalle: carrito) {
-            Long idPieza = detalle.getPieza().getId();
+            String idPieza = detalle.getPieza().getId();
             
             //Si no existe un detalle con esa pieza, solo lo agrega
             if (!mapaDetalles.containsKey(idPieza)) {

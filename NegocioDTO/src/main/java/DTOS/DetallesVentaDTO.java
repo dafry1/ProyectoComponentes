@@ -14,7 +14,7 @@ public class DetallesVentaDTO extends DTO {
 
     public DetallesVentaDTO(){}
     
-    public DetallesVentaDTO(Long id, double costo, int cantidad, double subtotal, PiezaDTO pieza) {
+    public DetallesVentaDTO(String id, double costo, int cantidad, double subtotal, PiezaDTO pieza) {
         super(id);
         this.costo = costo;
         this.cantidad = cantidad;

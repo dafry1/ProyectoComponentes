@@ -45,7 +45,7 @@ public class PiezaBO implements IPiezaBO {
      * @return 
      */
     @Override
-    public PiezaDTO consultarPieza(Long id) {
+    public PiezaDTO consultarPieza(String id) {
         //Id inválida
         if (id == null) {
             String DEBUG = "Id inválida";

@@ -1,4 +1,4 @@
-package adaptadores;
+package adaptadoresDoc;
 
 import dominio.DetallesVenta;
 import org.bson.Document;
@@ -10,9 +10,9 @@ import org.bson.Document;
  * @author aron
  */
 public class AdaptadorDetallesVenta extends Adaptador {
-    private AdaptadorPieza adaptadorPieza;
+    private PiezaDoc adaptadorPieza;
     
-    public AdaptadorDetallesVenta(AdaptadorPieza adaptadorPieza){
+    public AdaptadorDetallesVenta(PiezaDoc adaptadorPieza){
         this.adaptadorPieza = adaptadorPieza;
     }
     

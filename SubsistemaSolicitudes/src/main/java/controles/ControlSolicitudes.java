@@ -71,9 +71,6 @@ public class ControlSolicitudes {
             throw new NegocioException(SIN_CLIENTE);
         }
         
-        // 2. Actualizar stock (Se asume que las solicitudes también afectan el inventario disponible)
-        piezaBO.actualizarStockTrasVenta(solicitud.getDetalles());
-        
         // 3. Persistir la solicitud a través del BO
         SolicitudDTO solicitudRegistrada = solicitudBO.registrarSolicitud(solicitud);
         

@@ -22,7 +22,7 @@ public class SolicitudDTO extends VentaDTO {
     public SolicitudDTO() {
     }
 
-    public SolicitudDTO(String fechaEntrega, String fechaEntregaEstimada, String estado, String direccion, Long id, EmpleadoDTO empleado, ClienteDTO cliente, List<DetallesVentaDTO> detalles, double total, String fechaHora, String folio) {
+    public SolicitudDTO(String fechaEntrega, String fechaEntregaEstimada, String estado, String direccion, String id, EmpleadoDTO empleado, ClienteDTO cliente, List<DetallesVentaDTO> detalles, double total, String fechaHora, String folio) {
         super(id, empleado, cliente, detalles, total, fechaHora, folio);
         this.fechaEntrega = fechaEntrega;
         this.fechaEntregaEstimada = fechaEntregaEstimada;

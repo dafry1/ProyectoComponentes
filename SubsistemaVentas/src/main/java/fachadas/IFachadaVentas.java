@@ -13,7 +13,7 @@ import java.util.List;
  * @author Andre
  */
 public interface IFachadaVentas {
-    PiezaDTO consultarPieza(Long id);
+    PiezaDTO consultarPieza(String id);
     
     /**
      * Determina si esa pieza ya fue agregada al carrito
@@ -21,7 +21,7 @@ public interface IFachadaVentas {
      * @param id
      * @return 
      */
-    boolean existePiezaCarrito(Long id);
+    boolean existePiezaCarrito(String id);
     
     /**
      * Consulta todas las piezas del sistema
@@ -123,7 +123,7 @@ public interface IFachadaVentas {
      *
      * @return cantidad de stock de dicha pieza
      */
-    int calcularStockAntesVenta(Long id);
+    int calcularStockAntesVenta(String id);
     
     public List<PiezaDTO> filtrarPorNombre(String nombre);
 

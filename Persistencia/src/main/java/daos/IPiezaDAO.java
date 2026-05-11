@@ -19,7 +19,7 @@ public interface IPiezaDAO {
      * 
      * @return la pieza
      */
-    Pieza consultarPieza(Long id);
+    Pieza consultarPieza(String id);
     
     /**
      * Consulta todas las piezas registradas en el sistema
@@ -108,4 +108,7 @@ public interface IPiezaDAO {
      * @param detalles de la venta y el stock se debe actualizar
      */
     void actualizarStockTrasVenta(List<DetallesVenta> detalles);
+    
+    void insertar(Pieza pieza);
+
 }

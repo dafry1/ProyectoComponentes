@@ -51,7 +51,7 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
      * @return la pieza
      */
     @Override
-    public PiezaDTO consultarPieza(Long id) {
+    public PiezaDTO consultarPieza(String id) {
         try {
             return fachadaVentas.consultarPieza(id);
         } catch (NegocioException e) {

@@ -24,7 +24,7 @@ public class DireccionDTO extends DTO {
         this.codigoPostal = codigoPostal;
     }
 
-    public DireccionDTO(String calle, String colonia, String numero, String codigoPostal, Long id) {
+    public DireccionDTO(String calle, String colonia, String numero, String codigoPostal, String id) {
         super(id);
         this.calle = calle;
         this.colonia = colonia;

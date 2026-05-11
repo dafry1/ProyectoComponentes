@@ -16,6 +16,7 @@ public class Solicitud {
     private double total;
     private String fechaHora;
     private String folio;
+    private String id;
     
     // Atributos logísticos solicitados
     private String fechaEntrega;
@@ -38,6 +39,21 @@ public class Solicitud {
         this.fechaEntregaEstimada = fechaEntregaEstimada;
         this.direccion = direccion;
     }
+
+    public Solicitud(Cliente cliente, Empleado empleado, List<DetallesVenta> detalles, double total, String fechaHora, String folio, String id, String fechaEntrega, String fechaEntregaEstimada, String direccion) {
+        this.cliente = cliente;
+        this.empleado = empleado;
+        this.detalles = detalles;
+        this.total = total;
+        this.fechaHora = fechaHora;
+        this.folio = folio;
+        this.id = id;
+        this.fechaEntrega = fechaEntrega;
+        this.fechaEntregaEstimada = fechaEntregaEstimada;
+        this.direccion = direccion;
+    }
+    
+    
 
     // Getters y Setters
     public Cliente getCliente() {
@@ -111,4 +127,14 @@ public class Solicitud {
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    
 }

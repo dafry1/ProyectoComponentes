@@ -1,4 +1,4 @@
-package adaptadores;
+package adaptadoresDoc;
 
 import excepciones.PersistenciaException;
 import org.bson.Document;
@@ -17,7 +17,7 @@ public abstract class Adaptador {
     private static final System.Logger LOG = System.getLogger(Adaptador.class.getName());
     
     //Atributo para depurar y excepciones. Valor por defecto
-    String DEBUG = "Depuración";
+    private static String DEBUG = "Depuración";
     
     /**
      * Adapta una Id de mongo a un String

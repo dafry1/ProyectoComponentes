@@ -1,5 +1,6 @@
 package daos;
 
+import adaptadoresDoc.PiezaDoc;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import dominio.DetallesVenta;
@@ -7,6 +8,7 @@ import dominio.Pieza;
 import excepciones.PersistenciaException;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.Document;
 
 /**
  * Objeto que habla con la BD para las piezas
@@ -21,6 +23,12 @@ public class PiezaDAO implements IPiezaDAO {
     //Colección mongo
     private MongoCollection<Pieza> coleccion;
     
+    
+    private static final PiezaDoc adaptadorPieza = PiezaDoc.singleton();
+    
+    
+   
+    
     /**
      * Constructor
      * 
@@ -33,33 +41,46 @@ public class PiezaDAO implements IPiezaDAO {
     //MEDIDAS TEMPORALES PARA MOCKEO
     private static List<Pieza> PIEZAS = new ArrayList<>();
     static {
-        PIEZAS.add(new Pieza(1L, "Ryzen 5 9600X", "Procesador", "AMD", "Zen 5", 2500.0, 50));
-        PIEZAS.add(new Pieza(2L, "Core i9-14900K", "Procesador", "Intel", "Raptor Lake", 5500.0, 40));
-        PIEZAS.add(new Pieza(3L, "Trident Z5 RGB", "RAM", "G.Skill", "DDR5-6400", 1800.0, 30));
-        PIEZAS.add(new Pieza(4L, "Vengeance RGB Frosted", "RAM", "Corsair", "DDR5-6000", 2100.0, 25));
-        PIEZAS.add(new Pieza(5L, "GeForce RTX 4090", "Tarjeta Gráfica", "NVIDIA", "Founders Edition", 35000.0, 10));
-        PIEZAS.add(new Pieza(6L, "Radeon RX 7800 XT", "Tarjeta Gráfica", "AMD", "Steel Legend", 9800.0, 15));
+        PIEZAS.add(new Pieza("Ryzen 5 9600X", "Procesador", "AMD", "Zen 5", 2500.0, 50));
+        PIEZAS.add(new Pieza("Core i9-14900K", "Procesador", "Intel", "Raptor Lake", 5500.0, 40));
+        PIEZAS.add(new Pieza("Trident Z5 RGB", "RAM", "G.Skill", "DDR5-6400", 1800.0, 30));
+        PIEZAS.add(new Pieza("Vengeance RGB Frosted", "RAM", "Corsair", "DDR5-6000", 2100.0, 25));
+        PIEZAS.add(new Pieza("GeForce RTX 4090", "Tarjeta Gráfica", "NVIDIA", "Founders Edition", 35000.0, 10));
+        PIEZAS.add(new Pieza("Radeon RX 7800 XT", "Tarjeta Gráfica", "AMD", "Steel Legend", 9800.0, 15));
+    }
+    
+    @Override
+    public Pieza consultarPieza(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            LOG.log(System.Logger.Level.WARNING, "Se intentó consultar una pieza con ID nulo o vacío");
+            return null;
+        }
+        try {
+            Pieza cascaron = new Pieza();
+            cascaron.setId(id);
+            Document docConId = adaptadorPieza.toDocument(cascaron);
+            Document filtro = new Document("_id", docConId.get("_id"));
+            Document docResultado = coleccion.find(filtro, Document.class).first();
+            return (docResultado != null) ? adaptadorPieza.toEntity(docResultado) : null;
+
+        } catch (Exception e) {
+            LOG.log(System.Logger.Level.ERROR, "Error al consultar pieza: " + e.getMessage());
+            return null;
+        }
     }
     
     /**
-     * Consulta una piez por su Id
+     * Consulta todas las piezas de la BD
      * 
-     * @param id
      * @return 
      */
     @Override
-    public Pieza consultarPieza(Long id) {
-        for (Pieza p: PIEZAS) {
-            if (p.getId().equals(id)) {
-                return p;
-            }
-        }
-        return null;
-    }
-    
-    @Override
     public List<Pieza> consultarPiezas() {
-        return PIEZAS;
+        List<Pieza> lista = new ArrayList<>();
+        for (Document doc : coleccion.find(new Document(), Document.class)) {
+            lista.add(adaptadorPieza.toEntity(doc));
+        }
+        return lista;
     }
 
     @Override
@@ -82,24 +103,32 @@ public class PiezaDAO implements IPiezaDAO {
         return PIEZAS;
     }
 
+    /**
+     * Actualiza el stock, convierte la pieza en Doc y obtiene la
+     * cantidad del detalle y la hace negativa para restar a la 
+     * pieza
+     * 
+     * @param detalle 
+     */
     @Override
     public void actualizarStock(DetallesVenta detalle) {
-        for (Pieza pieza: PIEZAS) {
-            
-            if (pieza.equals(detalle.getPieza())) {
-                int stockActual = pieza.getStockPieza();
-                int cantidadVendida = detalle.getCantidad();
-                
-                if (stockActual >= cantidadVendida) {
-                    pieza.setStockPieza(stockActual - cantidadVendida);
-                    LOG.log(System.Logger.Level.DEBUG, "Stock actualizado: " + pieza.getNombre() + " ahora tiene " + pieza.getStockPieza());
-                } else {
-                    LOG.log(System.Logger.Level.ERROR, CARRITO_VACIO);
-                }
-                return;
-            }
+        Document docPieza = adaptadorPieza.toDocument(detalle.getPieza());
+        if (docPieza == null || !docPieza.containsKey("_id")) {
+            LOG.log(System.Logger.Level.ERROR, "La pieza no tiene un ID válido para actualizar stock");
+            throw new PersistenciaException("ID de pieza faltante");
         }
-;
+        try {
+            Document filtro = new Document("_id", docPieza.get("_id"));
+            int cantidadARestar = -detalle.getCantidad();
+            Document actualizacion = new Document("$inc", new Document("stockPieza", cantidadARestar));
+            var resultado = coleccion.updateOne(filtro, actualizacion);
+            if (resultado.getModifiedCount() == 0) {
+                 LOG.log(System.Logger.Level.WARNING, "No se modificó el stock");
+            }
+        } catch (Exception e) {
+            LOG.log(System.Logger.Level.ERROR, "Error en MongoDB: " + e.getMessage());
+            throw new PersistenciaException("Error al actualizar stock");
+        }
     }
 
     @Override
@@ -126,14 +155,7 @@ public class PiezaDAO implements IPiezaDAO {
      */
     @Override
     public List<Pieza> filtrarPorNombre(String nombre) {
-        if (nombre.isBlank()) {
-            String DEBUG = "Nombre " + NO_FILTRADO;
-            LOG.log(System.Logger.Level.ERROR, DEBUG);
-            throw new PersistenciaException(DEBUG);
-        }
-        return PIEZAS.stream().filter(p -> p.getNombre().toLowerCase()
-                                .contains(nombre.toLowerCase()))
-                                .toList();
+        return filtrar("nombre", nombre);
     }
 
     /**
@@ -146,14 +168,7 @@ public class PiezaDAO implements IPiezaDAO {
      */
     @Override
     public List<Pieza> filtrarPorCategoria(String categoria) {
-        if (categoria.isBlank()) {
-            String DEBUG = "Categoría " + NO_FILTRADO;
-            LOG.log(System.Logger.Level.ERROR, DEBUG);
-            throw new PersistenciaException(DEBUG);
-        }
-        return PIEZAS.stream().filter(p -> p.getCategoria().toLowerCase()
-                                .contains(categoria.toLowerCase()))
-                                .toList();
+        return filtrar("categoriaCosto", categoria);
     }
 
     /**
@@ -166,15 +181,27 @@ public class PiezaDAO implements IPiezaDAO {
      */
     @Override
     public List<Pieza> filtrarPorMarca(String marca) {
-        if (marca.isBlank()) {
-            String DEBUG = "Marca " + NO_FILTRADO;
-            LOG.log(System.Logger.Level.ERROR, DEBUG);
-            throw new PersistenciaException(DEBUG);
-        }
-        return PIEZAS.stream().filter(p -> p.getMarcaPieza().toLowerCase()
-                                .contains(marca.toLowerCase()))
-                                .toList();
+        return filtrar("marcaPieza", marca);
     }
+    
+    /**
+     * Auxiliar que centraliza la forma de filtrar
+     * piezas por cierto campo
+     * 
+     * @param campo
+     * @param valorFiltro
+     * 
+     * @return la lista filtrada
+     */
+    private List<Pieza> filtrar(String campo, String valorFiltro) {
+        List<Pieza> lista = new ArrayList<>();
+        Document filtro = new Document(campo, new Document("$regex", valorFiltro).append("$options", "i"));
+        for (Document doc : coleccion.find(filtro, Document.class)) {
+            lista.add(adaptadorPieza.toEntity(doc));
+        }
+        return lista;
+    }
+    
 
     /**
      * Consulta todas las piezas cuyo precio
@@ -186,6 +213,24 @@ public class PiezaDAO implements IPiezaDAO {
      */
     @Override
     public List<Pieza> filtrarPorPrecioMax(double precioMaximo) {
-        return PIEZAS.stream().filter(p -> p.getCostoPieza() <= precioMaximo).toList();
+        List<Pieza> listaFiltrada = new ArrayList<>();
+        Document filtro = new Document("costoPieza", new Document("$lte", precioMaximo));
+        try { for (Document doc : coleccion.find(filtro, Document.class)) {
+                listaFiltrada.add(adaptadorPieza.toEntity(doc));
+            }
+        } catch (Exception e) {
+            LOG.log(System.Logger.Level.ERROR, "Error al filtrar por precio: " + e.getMessage());
+            throw new PersistenciaException("No se pudieron filtrar las piezas por precio.");
+        }
+        return listaFiltrada;
+    }
+    
+    @Override
+    public void insertar(Pieza pieza) {
+        try {
+            coleccion.insertOne(pieza);
+        } catch (Exception e) {
+            throw new PersistenciaException(e.getMessage());
+        }
     }
 }

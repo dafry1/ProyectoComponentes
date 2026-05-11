@@ -51,7 +51,13 @@ public class UtilBuild {
                 switch (texto) {
                     case "Inicio" -> coordinador.mostrarVentanaInicio();
                     case "Iniciar venta" -> coordinador.mostrarVentanaVenta();
-                    case "Iniciar solicitud" -> coordinador.mostrarVentanaSolicitud();
+                    case "Iniciar solicitud" -> {
+                        try {
+                            coordinador.mostrarVentanaSolicitud();
+                        } catch (Exception ex) {
+                            UtilSwing.dialogoError(frame, ex.getMessage());
+                        }
+                    }
                     case "Historial de ventas" -> coordinador.mostrarHistorialVentas();
                     case "Historial de solicitudes" -> coordinador.mostrarHistorialSolicitudes();
                 }

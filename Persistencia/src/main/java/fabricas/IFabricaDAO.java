@@ -4,6 +4,7 @@ import daos.IVentaDAO;
 import daos.IPiezaDAO;
 import daos.IEmpleadoDAO;
 import daos.ISolicitudDAO;
+import dominio.Pieza;
 
 /**
  * Establece el contrato sobre cómo debería suministrar
@@ -35,4 +36,5 @@ public interface IFabricaDAO {
     IEmpleadoDAO fabricarEmpleado();
     
     ISolicitudDAO fabricarSolicitud();
+
 }

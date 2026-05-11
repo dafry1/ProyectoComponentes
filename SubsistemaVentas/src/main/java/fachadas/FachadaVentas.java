@@ -32,7 +32,7 @@ public class FachadaVentas implements IFachadaVentas {
     /** Constructor vacío */
     public FachadaVentas() {}
     
-    public PiezaDTO consultarPieza(Long id) {
+    public PiezaDTO consultarPieza(String id) {
         return controlCatalogo.consultarPieza(id);
     }
     
@@ -176,12 +176,12 @@ public class FachadaVentas implements IFachadaVentas {
      * @return cantidad de stock de dicha pieza
      */
     @Override
-    public int calcularStockAntesVenta(Long id) {
+    public int calcularStockAntesVenta(String id) {
         return controlCarrito.calcularStockAntesVenta(id);
     } 
 
     @Override
-    public boolean existePiezaCarrito(Long id) {
+    public boolean existePiezaCarrito(String id) {
         return controlCarrito.existePiezaCarrito(id);
     }
 

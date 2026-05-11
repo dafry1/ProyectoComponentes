@@ -50,7 +50,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     }
 
     @Override
-    public boolean existePiezaCarrito(Long id) {
+    public boolean existePiezaCarrito(String id) {
         try {
             return fachadaVentas.existePiezaCarrito(id);
         } catch (NegocioException e) {
@@ -195,7 +195,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      * @return cantidad de stock de dicha pieza
      */
     @Override
-    public int calcularStockAntesVenta(Long id) {
+    public int calcularStockAntesVenta(String id) {
         try {
             return fachadaVentas.calcularStockAntesVenta(id);
         } catch (NegocioException e) {

@@ -6,6 +6,7 @@ import DTOS.PiezaDTO;
 import DTOS.SolicitudDTO;
 import DTOS.VentaDTO;
 import ensambladores.IEnsambladorDTO;
+import excepciones.PresentacionException;
 import pantallasPrincipales.VinicioSesion;
 import pantallasPrincipales.Vinicio;
 import pantallasSolicitudes.VhistorialSolicitudes;
@@ -69,7 +70,11 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
      */
     @Override
     public void mostrarVentanaSolicitud() {
-        abrirNuevaVentana(() -> new ViniciarSolicitud(this, coordinadorNegocio, coordinadorEstados));
+        try {
+            abrirNuevaVentana(() -> new ViniciarSolicitud(this, coordinadorNegocio, coordinadorEstados));
+        } catch (Exception e) {
+            throw new PresentacionException("No se puede consultar a la bodega ahora mismo");
+        }
     }
 
     /**

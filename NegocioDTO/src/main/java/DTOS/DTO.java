@@ -16,15 +16,15 @@ package DTOS;
 public abstract class DTO {
     
     //Atributo, getter y setter que todos van a heredar
-    protected Long id;
-    public Long getId() {return id; }
-    public void setId(Long id) { this.id = id; }
+    protected String id;
+    public String getId() {return id; }
+    public void setId(String id) { this.id = id; }
     
     /** Constructor vacío porque las otras entidades también lo necesitan */
     public DTO() {}
     
     /** Constructor para que las subclases lo usen sin problemas */
-    public DTO(Long id) { this.id = id; }
+    public DTO(String id) { this.id = id; }
     
     @Override
     public boolean equals(Object o) {
