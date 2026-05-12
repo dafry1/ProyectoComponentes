@@ -80,5 +80,10 @@ public class EmpleadoDAO implements IEmpleadoDAO {
         String con = empleado.getContrasenia();
         return nombre.equals(usuario) && con.equals(contra);
     }
+
+    @Override
+    public void insertarEmpleado(Empleado empleado) {
+        
+    }
     
 }

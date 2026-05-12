@@ -23,4 +23,11 @@ public interface IEmpleadoDAO {
      * @return el empleado encontrado
      */
     Empleado verificarEmpleado(String nombreUsuario, String password);
+    
+    /**
+     * Inserta un empleado para poblamiento
+     * 
+     * @param empleado a insertar
+     */
+    void insertarEmpleado(Empleado empleado);
 }
