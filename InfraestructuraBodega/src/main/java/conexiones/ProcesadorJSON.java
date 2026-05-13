@@ -77,7 +77,7 @@ public class ProcesadorJSON {
                     dto.setNombre(nodo.path("nombre").asText("N/A"));
                     dto.setCategoria(nodo.path("categoria").asText("General"));
                     dto.setMarcaPieza(nodo.path("marca").asText("Genérica"));
-                    dto.setModeloPieza(nodo.path("modelo").asText(""));
+                    dto.setModeloPieza(nodo.path("modelo").asText("Estándar"));
                     
                     // asDouble() resuelve el problema del "0"
                     dto.setCostoPieza(nodo.path("precio").asDouble(0.0));

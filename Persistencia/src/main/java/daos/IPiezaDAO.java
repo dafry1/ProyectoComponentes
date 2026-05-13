@@ -85,6 +85,15 @@ public interface IPiezaDAO {
     List<Pieza> filtrarPorMarca(String marca);
     
     /**
+     * Filtra por modelo
+     * 
+     * @param marca
+     * 
+     * @return 
+     */
+    List<Pieza> filtrarPorModelo(String marca);
+    
+    /**
      * Filtra las piezas según precio máximo
      * 
      * @param precioMaximo

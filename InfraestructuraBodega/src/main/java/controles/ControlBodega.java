@@ -67,6 +67,19 @@ public class ControlBodega {
         return pjson.obtenerBodegaFiltrada("marca", marca);
     }
     
+     /**
+     * Consulta todas las piezas cuya marca
+     * coincida con el campo
+     * 
+     * @param marca para filtrar
+     * 
+     * @return piezas filtradas 
+     */ 
+    public List<PiezaInfraestructuraDTO> filtrarPorModelo(String marca) {
+        validarEntrada(marca);
+        return pjson.obtenerBodegaFiltrada("modelo", marca);
+    }
+    
     /**
      * Consulta todas las piezas cuyo precio
      * coincida con el máximo

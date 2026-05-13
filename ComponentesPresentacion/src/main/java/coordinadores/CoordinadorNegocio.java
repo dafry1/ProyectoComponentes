@@ -316,4 +316,14 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
             throw new PresentacionException("No se pudo conectar con la bodega remota.");
         }
     }
+
+    @Override
+    public List<PiezaDTO> filtrarPorModeloSoli(String modelo) {
+        try {
+            return fachadaSolicitudes.consultarPiezas();
+        } catch (NegocioException e) {
+            LOG.log(System.Logger.Level.ERROR, "Error al conectar con bodega: " + e.getMessage());
+            throw new PresentacionException("No se pudo conectar con la bodega remota.");
+        }
+    }
 }

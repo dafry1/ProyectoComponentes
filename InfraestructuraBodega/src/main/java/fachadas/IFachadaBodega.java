@@ -43,6 +43,8 @@ public interface IFachadaBodega {
      * @return Lista de piezas de esa marca.
      */
     List<PiezaInfraestructuraDTO> filtrarPorMarca(String marca);
+    
+    List<PiezaInfraestructuraDTO> filtrarPorModelo(String modelo);
 
     /**
      * Filtra las piezas que tengan un costo menor o igual al precio máximo.

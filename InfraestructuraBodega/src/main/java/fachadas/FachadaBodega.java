@@ -41,4 +41,9 @@ public class FachadaBodega implements IFachadaBodega{
     public List<PiezaInfraestructuraDTO> filtrarPorPrecioMax(double precioMaximo) {
         return controlBodega.filtrarPorPrecioMax(precioMaximo);
     }
+
+    @Override
+    public List<PiezaInfraestructuraDTO> filtrarPorModelo(String modelo) {
+        return controlBodega.filtrarPorModelo(modelo);
+    }
 }

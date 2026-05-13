@@ -213,12 +213,13 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
 
     private void inyectarLogicaFiltradoBoton(String filtro, String stringCampo) {
         switch (stringCampo) {
-            case Constantes.PIEZA_NOMBRE -> piezasMostrar = coordinadorNegocio.filtrarPorNombre(filtro);
-            case Constantes.PIEZA_CATEGORIA -> piezasMostrar = coordinadorNegocio.filtrarPorCategoria(filtro);
-            case Constantes.PIEZA_MARCA -> piezasMostrar = coordinadorNegocio.filtrarPorMarca(filtro);   
+            case Constantes.PIEZA_NOMBRE -> piezasMostrar = coordinadorNegocio.filtrarPorNombreSoli(filtro);
+            case Constantes.PIEZA_CATEGORIA -> piezasMostrar = coordinadorNegocio.filtrarPorCategoriaSoli(filtro);
+            case Constantes.PIEZA_MARCA -> piezasMostrar = coordinadorNegocio.filtrarPorMarcaSoli(filtro);   
+            case Constantes.PIEZA_MODELO -> piezasMostrar = coordinadorNegocio.filtrarPorModeloSoli(filtro);
             case Constantes.PIEZA_PRECIOMAX -> {
                 piezasMostrar = UtilFormato.numeroEnteroPositivo(filtro) 
-                    ? coordinadorNegocio.filtrarPorPrecioMax(Double.parseDouble(filtro)) 
+                    ? coordinadorNegocio.filtrarPorPrecioMaxSoli(Double.parseDouble(filtro)) 
                     : piezasMostrar;
                 if (!UtilFormato.numeroEnteroPositivo(filtro)) {
                     FachadaUtil.dialogoAlerta(ViniciarSolicitud.this, "Ingrese un número entero positivo");
@@ -267,7 +268,7 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
             
             //Parte de ícono y descripción
             String desc = "<html><body style='width: 120px'>" +
-                          "<font color='white' size='3'><b>["+categoria+"] "+nombre+"</b>" +
+                          "<font color='white' size='3'><b>["+categoria+"] "+nombre+"</b> ("+modelo+")</font><br>" +
                           "<font color='white' size='2'>$ "+marca+"</font></body></html>";
             panelInfoBasica.add(new JLabel(desc));
 

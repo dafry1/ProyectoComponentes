@@ -168,7 +168,7 @@ public class PiezaDAO implements IPiezaDAO {
      */
     @Override
     public List<Pieza> filtrarPorCategoria(String categoria) {
-        return filtrar("categoriaCosto", categoria);
+        return filtrar("categoria", categoria);
     }
 
     /**
@@ -185,6 +185,19 @@ public class PiezaDAO implements IPiezaDAO {
     }
     
     /**
+     * Consulta todas las piezas cuyo modelo
+     * coincida con el campo
+     * 
+     * @param marca para filtrar
+     * 
+     * @return piezas filtradas 
+     */
+    @Override
+    public List<Pieza> filtrarPorModelo(String marca) {
+        return filtrar("modeloPieza", marca);
+    }
+    
+    /**
      * Auxiliar que centraliza la forma de filtrar
      * piezas por cierto campo
      * 
@@ -194,6 +207,11 @@ public class PiezaDAO implements IPiezaDAO {
      * @return la lista filtrada
      */
     private List<Pieza> filtrar(String campo, String valorFiltro) {
+        if (valorFiltro == null || valorFiltro.isBlank()) {
+            String msj = "Valor del filtro vacío";
+            LOG.log(System.Logger.Level.ERROR, msj);
+            throw new PersistenciaException(msj);
+        }
         List<Pieza> lista = new ArrayList<>();
         Document filtro = new Document(campo, new Document("$regex", valorFiltro).append("$options", "i"));
         for (Document doc : coleccion.find(filtro, Document.class)) {

@@ -7,7 +7,7 @@ import org.bson.Document;
  * Adaptador auxiliar para rellenar la información de los
  * documentos o entidades de las personas, ya sea cliente
  * o empleado (Hereda de la clase Adaptador).
- * 
+ * babayii
  * @author aron
  */
 public class AdaptadorPersona extends Adaptador{

@@ -140,22 +140,8 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
         JButton botonRegresar = UtilBoton.crearBotonRegresar();
         botonRegresar.addActionListener(e -> coordinadorPresentacion.mostrarVentanaInicio());
 
-        //Creaa el botón de continuar y le agrega navegación
-        JButton botonContinuar = UtilBoton.crearBoton("Continuar");
-        botonContinuar.setPreferredSize(new Dimension(200, 50));
-        botonContinuar.addActionListener(e -> {
-
-            //Verifica que el carrito no esté vacío
-            if (coordinadorEstados.getCarritoSolicitud().isEmpty()) {
-                UtilSwing.dialogoAlerta(this, "El carrito está vacío");
-                return;
-            }
-            coordinadorPresentacion.abrirResumenSolicitud();
-        });
-
         //Agrega los botones al panel
         p.add(botonRegresar, BorderLayout.WEST);
-        p.add(botonContinuar, BorderLayout.EAST);
         return p;
     }
     

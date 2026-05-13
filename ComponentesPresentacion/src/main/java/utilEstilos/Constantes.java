@@ -25,6 +25,9 @@ public class Constantes {
     /** Constante que protege el texto que pide la categoría */
     public static final String PIEZA_CATEGORIA = "Categoría";
     
+    /** Constante que protege el texto que pide el modelo */
+    public static final String PIEZA_MODELO = "Modelo de la pieza";
+    
     /** Constante que protege el texto que pide el precio máximo */
     public static final String PIEZA_PRECIOMAX = "Precio máximo";
     

@@ -29,7 +29,7 @@ public abstract class Adaptador {
     protected String idTexto(Document documento) {
         if (documento == null || !documento.containsKey("_id")) {
             DEBUG = "Id inválida";
-            debugExcepcion(DEBUG);
+            debugExcepcion();
         }
         ObjectId idMongo = documento.getObjectId("_id");
         if (idMongo != null) {
@@ -49,13 +49,13 @@ public abstract class Adaptador {
     protected ObjectId textoId(String id) {
         if (id == null || id.trim().isEmpty()) {
             DEBUG = "Id inválida";
-            debugExcepcion(DEBUG);
+            debugExcepcion();
         }
         try {
             return new ObjectId(id);
         } catch (IllegalArgumentException e) {
             DEBUG = "Error al convertir el Id";
-            debugExcepcion(DEBUG);
+            debugExcepcion();
         }
         return null;
     }
@@ -63,11 +63,9 @@ public abstract class Adaptador {
     /**
      * Depuración centralizada que muestra un 
      * logger y una excepción
-     * 
-     * @param mensaje 
      */
-    protected void debugExcepcion(String mensaje) {
-        LOG.log(System.Logger.Level.ERROR, mensaje);
-        throw new PersistenciaException(mensaje);
+    protected void debugExcepcion() {
+        LOG.log(System.Logger.Level.ERROR, DEBUG);
+        throw new PersistenciaException(DEBUG);
     }
 }

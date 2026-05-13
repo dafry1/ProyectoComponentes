@@ -104,6 +104,8 @@ public interface ICoordinadorNegocio {
     public List<PiezaDTO> filtrarPorCategoriaSoli(String categoria);
 
     public List<PiezaDTO> filtrarPorMarcaSoli(String marca);
+    
+    List<PiezaDTO> filtrarPorModeloSoli(String modelo);
 
     public List<PiezaDTO> filtrarPorPrecioMaxSoli(double precioMaximo);
     
