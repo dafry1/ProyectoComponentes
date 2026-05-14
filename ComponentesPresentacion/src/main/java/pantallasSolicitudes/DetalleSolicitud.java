@@ -1,6 +1,6 @@
 package pantallasSolicitudes;
 
-import DTOS.DetallesVentaDTO;
+import DTOS.DetallesSolicitudDTO;
 import DTOS.PiezaDTO;
 import DTOS.SolicitudDTO;
 import ensambladores.IEnsambladorDTO;
@@ -79,7 +79,7 @@ public class DetalleSolicitud extends JDialog {
         contenedorPiezas.setLayout(new BoxLayout(contenedorPiezas, BoxLayout.Y_AXIS));
         contenedorPiezas.setBackground(Color.WHITE);
 
-        for (DetallesVentaDTO detalle : solicitud.getDetalles()) {
+        for (DetallesSolicitudDTO detalle : solicitud.getDetalles()) {
             JPanel itemPieza = crearTarjetaPieza(detalle);
             contenedorPiezas.add(itemPieza);
             contenedorPiezas.add(Box.createRigidArea(new Dimension(0, 5)));
@@ -121,7 +121,7 @@ public class DetalleSolicitud extends JDialog {
         this.setLocationRelativeTo(padre);
     }
 
-    private JPanel crearTarjetaPieza(DetallesVentaDTO detalle) {
+    private JPanel crearTarjetaPieza(DetallesSolicitudDTO detalle) {
         PiezaDTO pieza = detalle.getPieza();
         JPanel p = new JPanel(new BorderLayout());
         p.setBackground(new Color(252, 252, 252));

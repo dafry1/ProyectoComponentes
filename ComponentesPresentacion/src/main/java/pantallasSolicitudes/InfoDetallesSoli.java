@@ -1,6 +1,7 @@
 package pantallasSolicitudes;
 
 import DTOS.DTO;
+import DTOS.DetallesSolicitudDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import coordinadores.CoordinadorEstados;
@@ -24,7 +25,7 @@ public class InfoDetallesSoli extends JDialog {
     private IObservador observador;
     ICoordinadorEstados coordinadorEstados;
 
-    public InfoDetallesSoli(ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados, IObservador observador, DetallesVentaDTO detalle) {
+    public InfoDetallesSoli(ICoordinadorNegocio coordinadorNegocio, ICoordinadorEstados coordinadorEstados, IObservador observador, DetallesSolicitudDTO detalle) {
         this.coordinadorEstados = coordinadorEstados;
         
         // Configuración inicial
@@ -112,7 +113,7 @@ public class InfoDetallesSoli extends JDialog {
      * @param stockDisponible
      * @param detalle 
      */
-    public void actualizarCantidad(String cantidad, DetallesVentaDTO detalle) {
+    public void actualizarCantidad(String cantidad, DetallesSolicitudDTO detalle) {
   
         //Si no es número válido
         if (!UtilFormato.numeroEnteroPositivo(cantidad)) {

@@ -1,6 +1,7 @@
 package pantallasSolicitudes;
 
 import DTOS.ClienteDTO;
+import DTOS.DetallesSolicitudDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.DireccionDTO;
 import DTOS.EmpleadoDTO;
@@ -150,7 +151,7 @@ public class InfoClienteSolicitud extends JDialog {
             
             String direccionReal = direccion.toString();
 
-            List<DetallesVentaDTO> carrito = coordinadorEstados.getCarritoSolicitud();
+            List<DetallesSolicitudDTO> carrito = coordinadorEstados.getCarritoSolicitud();
             EmpleadoDTO empleado = coordinadorEstados.getUsuarioLogueado();
 
             // Construir Solicitud

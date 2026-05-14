@@ -1,6 +1,6 @@
 package controles;
 
-import DTOS.DetallesVentaDTO;
+import DTOS.DetallesSolicitudDTO;
 import excepciones.NegocioException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,14 +18,14 @@ public class ControlCarritoSolicitudes {
     private static String DETALLE_VACIO = "El detalle está vacío";
     
     //Carritos actuales protegidos mediante los métodos
-    private List<DetallesVentaDTO> carrito = new ArrayList<>();
+    private List<DetallesSolicitudDTO> carrito = new ArrayList<>();
     
     /**
      * Regresa una lista inmutable del carrito
      * 
      * @return lista de los detalles
      */
-    public List<DetallesVentaDTO> getCarritoSolicitud() {
+    public List<DetallesSolicitudDTO> getCarritoSolicitud() {
         return Collections.unmodifiableList(carrito);
     }
 
@@ -34,7 +34,7 @@ public class ControlCarritoSolicitudes {
      * 
      * @param detalle a agregar
      */
-    public void agregarCarritoSolicitud(DetallesVentaDTO detalle) {
+    public void agregarCarritoSolicitud(DetallesSolicitudDTO detalle) {
         if (detalle != null) {
             carrito.add(detalle);
         } else {
@@ -48,7 +48,7 @@ public class ControlCarritoSolicitudes {
      * 
      * @param detalle a eliminar
      */
-    public void eliminarCarritoSolicitud(DetallesVentaDTO detalle) {
+    public void eliminarCarritoSolicitud(DetallesSolicitudDTO detalle) {
         if (detalle != null) {
             carrito.remove(detalle);
         } else {
@@ -63,7 +63,7 @@ public class ControlCarritoSolicitudes {
      * @return la suma del subtotal de todos los detalles
      */
     public double totalCarritoSolicitud() {
-        return carrito.stream().mapToDouble(DetallesVentaDTO::getSubtotal).sum();
+        return carrito.stream().mapToDouble(DetallesSolicitudDTO::getSubtotal).sum();
     }
 
     /**
@@ -83,7 +83,7 @@ public class ControlCarritoSolicitudes {
     /**
      * Agrupa detalles de la misma pieza para evitar duplicación
      * innecesaria, ayudándose de un mapa temporal del juego
-     * <String, DetallesVentaDTO>, o aplicado a negocio, <idPieza, detalle>
+     * <String, DetallesSolicitudDTO>, o aplicado a negocio, <idPieza, detalle>
      * y así agrupar correctamente qué id de pieza tiene un detalle. Va
      * agregando a ese mapa o actualizando cantidad recorriendo el
      * carrito. Al final limpia el carrito y actualiza con los datos
@@ -92,10 +92,10 @@ public class ControlCarritoSolicitudes {
     public void agruparDetalles() {
         
         //Mapa de juego idPieza, detalle para saber qué piezas tienen qué detalles
-        Map<String, DetallesVentaDTO> mapaDetalles = new HashMap<>();
+        Map<String, DetallesSolicitudDTO> mapaDetalles = new HashMap<>();
         
         //Por cada detalle del carrito...
-        for (DetallesVentaDTO detalle: carrito) {
+        for (DetallesSolicitudDTO detalle: carrito) {
             String idPieza = detalle.getPieza().getId();
             
             //Si no existe un detalle con esa pieza, solo lo agrega
@@ -105,7 +105,7 @@ public class ControlCarritoSolicitudes {
             
             //Si ya existe, busca el detalle en el mapa con ese ID y lo suma al detalle de la iteración
             else {
-                DetallesVentaDTO detalleExistente = mapaDetalles.get(idPieza);
+                DetallesSolicitudDTO detalleExistente = mapaDetalles.get(idPieza);
                 int cantidadActualizada = detalleExistente.getCantidad() + detalle.getCantidad();
                 detalleExistente.setCantidad(cantidadActualizada);
             }

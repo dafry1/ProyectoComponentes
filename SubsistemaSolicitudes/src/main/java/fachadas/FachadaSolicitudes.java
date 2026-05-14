@@ -1,7 +1,7 @@
 package fachadas;
 
 import DTOS.ClienteDTO;
-import DTOS.DetallesVentaDTO;
+import DTOS.DetallesSolicitudDTO;
 import DTOS.PiezaDTO;
 import DTOS.SolicitudDTO;
 import DTOS.VentaDTO;
@@ -103,7 +103,7 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
      * @return lista de detalles
      */
     @Override
-    public List<DetallesVentaDTO> getCarritoSolicitud() {
+    public List<DetallesSolicitudDTO> getCarritoSolicitud() {
         return controlCarrito.getCarritoSolicitud();
     }
 
@@ -113,7 +113,7 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
      * @param detalle 
      */
     @Override
-    public void agregarCarritoSolicitud(DetallesVentaDTO detalle) {
+    public void agregarCarritoSolicitud(DetallesSolicitudDTO detalle) {
         controlCarrito.agregarCarritoSolicitud(detalle);
         controlCarrito.agruparDetalles();
     }
@@ -124,7 +124,7 @@ public class FachadaSolicitudes implements IFachadaSolicitudes {
      * @param detalle 
      */
     @Override
-    public void eliminarCarritoSolicitud(DetallesVentaDTO detalle) {
+    public void eliminarCarritoSolicitud(DetallesSolicitudDTO detalle) {
         controlCarrito.eliminarCarritoSolicitud(detalle);
         controlCarrito.agruparDetalles();
     }

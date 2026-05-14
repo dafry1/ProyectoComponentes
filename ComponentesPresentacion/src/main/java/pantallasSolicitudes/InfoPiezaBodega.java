@@ -4,6 +4,7 @@
  */
 package pantallasSolicitudes;
 
+import DTOS.DetallesSolicitudDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import coordinadores.ICoordinadorEstados;
@@ -151,7 +152,7 @@ public class InfoPiezaBodega extends JDialog {
         int cantidad = Integer.parseInt(cantidadString);
         
         //Crea el detalle
-        DetallesVentaDTO detalle = ensambladorDTO.ensamblarDetalleVentaDTO(cantidad, pieza);
+        DetallesSolicitudDTO detalle = ensambladorDTO.ensamblarDetalleSolicitudDTO(cantidad, pieza);
 
         //Agrega el detalle al carrito y notifica al observador
         coordinadorEstados.agregarCarritoSolicitud(detalle);

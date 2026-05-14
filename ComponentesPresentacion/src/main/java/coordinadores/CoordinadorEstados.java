@@ -1,6 +1,7 @@
 package coordinadores;
 
 import DTOS.ClienteDTO;
+import DTOS.DetallesSolicitudDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
@@ -224,7 +225,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      * @return lista de detalles
      */
     @Override
-    public List<DetallesVentaDTO> getCarritoSolicitud() {
+    public List<DetallesSolicitudDTO> getCarritoSolicitud() {
         try {
             return fachadaSolicitud.getCarritoSolicitud();
         } catch (NegocioException e) {
@@ -238,7 +239,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      * @param detalle
      */
     @Override
-    public void agregarCarritoSolicitud(DetallesVentaDTO detalle) {
+    public void agregarCarritoSolicitud(DetallesSolicitudDTO detalle) {
         try {
             fachadaSolicitud.agregarCarritoSolicitud(detalle);
         } catch (NegocioException e) {
@@ -252,7 +253,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
      * @param detalle
      */
     @Override
-    public void eliminarCarritoSolicitud(DetallesVentaDTO detalle) {
+    public void eliminarCarritoSolicitud(DetallesSolicitudDTO detalle) {
         try {
             fachadaSolicitud.eliminarCarritoSolicitud(detalle);
         } catch (NegocioException e) {

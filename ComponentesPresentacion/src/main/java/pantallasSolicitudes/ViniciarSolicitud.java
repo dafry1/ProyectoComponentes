@@ -1,5 +1,6 @@
 package pantallasSolicitudes;
 
+import DTOS.DetallesSolicitudDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import coordinadores.CoordinadorEstados;
@@ -312,7 +313,7 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
         double costo;
         double subtotal;
         
-        for (DetallesVentaDTO detalle: coordinadorEstados.getCarritoSolicitud()) {
+        for (DetallesSolicitudDTO detalle: coordinadorEstados.getCarritoSolicitud()) {
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
             
             //Asigna valores
@@ -344,7 +345,7 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
             
             //Crea un botón de información adicional
             Color colorBoton = new Color(50, 255, 100);
-            UtilBoton.BotonAlmacenador botonInfo = new BotonAlmacenador("Info", detalle);
+            UtilBoton.BotonAlmacenador botonInfo = new BotonAlmacenador("Info", null,detalle);
             botonInfo.setBackground(colorBoton);
             UtilBoton.asignarHoverBoton(botonInfo, colorBoton.darker());
             panelMostrarInfo.add(botonInfo);

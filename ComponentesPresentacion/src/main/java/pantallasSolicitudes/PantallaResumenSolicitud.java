@@ -1,6 +1,6 @@
 package pantallasSolicitudes;
 
-import DTOS.DetallesVentaDTO;
+import DTOS.DetallesSolicitudDTO;
 import coordinadores.ICoordinadorEstados;
 import coordinadores.ICoordinadorNegocio;
 import coordinadores.ICoordinadorPresentacion;
@@ -126,7 +126,7 @@ public class PantallaResumenSolicitud extends JFrame implements IObservador {
     }
 
     private void dibujarTarjetasCarrito() {
-        for (DetallesVentaDTO detalle : coordinadorEstados.getCarritoSolicitud()) {
+        for (DetallesSolicitudDTO detalle : coordinadorEstados.getCarritoSolicitud()) {
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
             tarjeta.setLayout(new BorderLayout(10, 10));
             

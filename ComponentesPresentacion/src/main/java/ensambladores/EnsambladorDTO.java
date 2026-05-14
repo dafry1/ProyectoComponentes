@@ -1,6 +1,7 @@
 package ensambladores;
 
 import DTOS.ClienteDTO;
+import DTOS.DetallesSolicitudDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PersonaDTO;
@@ -33,6 +34,17 @@ public class EnsambladorDTO implements IEnsambladorDTO {
     public DetallesVentaDTO ensamblarDetalleVentaDTO(int cantidad, PiezaDTO pieza) {
         double costo = pieza.getCostoPieza();
         DetallesVentaDTO detalle = new DetallesVentaDTO();
+        detalle.setCantidad(cantidad);
+        detalle.setCosto(costo);
+        detalle.setPieza(pieza);
+        detalle.setSubtotal(costo*cantidad);
+        return detalle;
+    }
+    
+    @Override
+    public DetallesSolicitudDTO ensamblarDetalleSolicitudDTO(int cantidad, PiezaDTO pieza) {
+        double costo = pieza.getCostoPieza();
+        DetallesSolicitudDTO detalle = new DetallesSolicitudDTO();
         detalle.setCantidad(cantidad);
         detalle.setCosto(costo);
         detalle.setPieza(pieza);

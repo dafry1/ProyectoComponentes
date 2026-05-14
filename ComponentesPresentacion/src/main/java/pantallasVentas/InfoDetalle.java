@@ -140,7 +140,7 @@ public class InfoDetalle extends JDialog {
         //Si todo está bien inicia el proceso de verdad
         UtilSwing.dialogoConfirmacion(this, "¿Actualizar cantidad?", () -> {
             if (nuevaCantidad == 0) {
-                coordinadorEstados.eliminarCarritoSolicitud(detalle);
+                coordinadorEstados.eliminarCarritoVenta(detalle);
                 UtilSwing.dialogoAviso(this, "Pieza eliminada del carrito.");
             } else {
                 detalle.setCantidad(nuevaCantidad);

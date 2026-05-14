@@ -1,6 +1,6 @@
 package fachadas;
 
-import DTOS.DetallesVentaDTO;
+import DTOS.DetallesSolicitudDTO;
 import DTOS.PiezaDTO;
 import DTOS.SolicitudDTO;
 import java.time.LocalDate;
@@ -28,11 +28,11 @@ public interface IFachadaSolicitudes {
     List<PiezaDTO> filtrarPorPrecioMax(double precioMaximo);
 
 
-    List<DetallesVentaDTO> getCarritoSolicitud();
+    List<DetallesSolicitudDTO> getCarritoSolicitud();
 
-    void agregarCarritoSolicitud(DetallesVentaDTO detalle);
+    void agregarCarritoSolicitud(DetallesSolicitudDTO detalle);
 
-    void eliminarCarritoSolicitud(DetallesVentaDTO detalle);
+    void eliminarCarritoSolicitud(DetallesSolicitudDTO detalle);
 
     double totalCarritoSolicitud();
 

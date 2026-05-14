@@ -1,6 +1,7 @@
 package coordinadores;
 
 import DTOS.DTO;
+import DTOS.DetallesSolicitudDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import DTOS.SolicitudDTO;
@@ -17,6 +18,7 @@ import java.util.function.Supplier;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import observadores.IObservador;
+import pantallasSolicitudes.DetalleSolicitud;
 import pantallasSolicitudes.InfoClienteSolicitud;
 import pantallasSolicitudes.InfoDetallesSoli;
 import pantallasSolicitudes.InfoPiezaBodega;
@@ -190,7 +192,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
 
     @Override
     public void abrirDetalleSolicitud(SolicitudDTO solicitud) {
-        abrirDialogo(() -> new DetalleVenta(ventanaActual, solicitud, ensambladorDTO));
+        abrirDialogo(() -> new DetalleSolicitud(ventanaActual, solicitud, ensambladorDTO));
     }
 
     @Override
@@ -209,7 +211,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     }
 
     @Override
-    public void abrirInfoDetalleSolicitud(IObservador observador, DetallesVentaDTO detalle) {
+    public void abrirInfoDetalleSolicitud(IObservador observador, DetallesSolicitudDTO detalle) {
         abrirDialogo(() -> new InfoDetallesSoli(coordinadorNegocio, coordinadorEstados, observador, detalle));
     }
     

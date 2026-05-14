@@ -1,6 +1,7 @@
 package coordinadores;
 
 import DTOS.ClienteDTO;
+import DTOS.DetallesSolicitudDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
@@ -87,11 +88,11 @@ public interface ICoordinadorEstados {
     
     public List<PiezaDTO> consultarPiezas();
     
-    public List<DetallesVentaDTO> getCarritoSolicitud();
+    public List<DetallesSolicitudDTO> getCarritoSolicitud();
     
-    public void agregarCarritoSolicitud(DetallesVentaDTO detalle);
+    public void agregarCarritoSolicitud(DetallesSolicitudDTO detalle);
     
-    public void eliminarCarritoSolicitud(DetallesVentaDTO detalle);
+    public void eliminarCarritoSolicitud(DetallesSolicitudDTO detalle);
     
     public double totalCarritoSolicitud();
     

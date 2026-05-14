@@ -1,5 +1,6 @@
 package ensambladores;
 
+import DTOS.DetallesSolicitudDTO;
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 
@@ -22,4 +23,6 @@ public interface IEnsambladorDTO {
      * @return DTO listo
      */
     DetallesVentaDTO ensamblarDetalleVentaDTO(int cantidad, PiezaDTO pieza);
+    
+    DetallesSolicitudDTO ensamblarDetalleSolicitudDTO(int cantidad, PiezaDTO pieza);
 }
