@@ -12,6 +12,7 @@ import daos.ISolicitudDAO;
 import daos.IVentaDAO;
 import daos.SolicitudDAO;
 import dominio.Pieza;
+import dominio.Venta;
 
 /**
  * Maneja a los DAO del sistema en un lugar centralizado, por
@@ -29,6 +30,7 @@ public class FabricaDAO implements IFabricaDAO {
     
     //Strings que declaran una colección en específico
     private static final String PIEZAS = "piezas";
+    private static final String VENTAS = "ventas";
     
     //Privados
     private static FabricaDAO instancia;
@@ -60,8 +62,12 @@ public class FabricaDAO implements IFabricaDAO {
     
     @Override
     public IVentaDAO fabricarVenta() {
-        return new VentaDAO();
+        if (venta == null) {
+            venta = new VentaDAO(BD.getCollection(VENTAS, Venta.class));
+        }
+        return venta;
     }
+    private IVentaDAO venta;
 
     @Override
     public IEmpleadoDAO fabricarEmpleado() {

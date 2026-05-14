@@ -36,6 +36,33 @@ public class AdaptadorVenta extends Adaptador{
         Document empleadoDoc = doc.get("empleado", Document.class);
         
         venta.setCliente(adaptadorCliente.toEntity(clienteDoc));
+        venta.setEmpleado(adaptadorEmpleado.toEntity(empleadoDoc));
+        
+        List<Document> detallesDoc = doc.getList("detalles", Document.class);
+        
+        if (detallesDoc != null) {
+            List<DetallesVenta> detallesVenta = detallesDoc.stream()
+                    .map(adaptadorDetallesVenta::toEntity)
+                    .collect(Collectors.toList());
+
+            venta.setDetalles(detallesVenta);
+        }
+        
+        venta.setTotal(Double.parseDouble(doc.getString("total")));
+        venta.setFechaHora(doc.getString("fechaHora"));
+        venta.setFolio(doc.getString("folio"));
+        
+        return venta;
+    }
+    
+    // Método que transforma un documento a una entidad Venta (de forma embebida)
+    public Venta toEntityEmbebido(Document doc) {
+        Venta venta = new Venta();
+        
+        Document clienteDoc = doc.get("cliente", Document.class);
+        Document empleadoDoc = doc.get("empleado", Document.class);
+        
+        venta.setCliente(adaptadorCliente.toEntity(clienteDoc));
         
         Empleado empleado = new Empleado();
         
@@ -72,6 +99,8 @@ public class AdaptadorVenta extends Adaptador{
             }
         }
         
+        venta.setDetalles(detallesVenta);
+        
         venta.setTotal(Double.parseDouble(doc.getString("total")));
         venta.setFechaHora(doc.getString("fechaHora"));
         venta.setFolio(doc.getString("folio"));
@@ -81,6 +110,27 @@ public class AdaptadorVenta extends Adaptador{
 
     // Método que transforma una entidad Venta a un documento
     public Document toDocument(Venta venta) {
+        Document doc = new Document();
+
+        doc.put("cliente", adaptadorCliente.toDocument(venta.getCliente()));
+        doc.put("empleado", adaptadorEmpleado.toDocument(venta.getEmpleado()));
+
+        if (venta.getDetalles() != null) {
+            List<Document> detallesVentaDoc = venta.getDetalles().stream()
+                    .map(adaptadorDetallesVenta::toDocument)
+                    .collect(Collectors.toList());
+            doc.put("detalles", detallesVentaDoc);
+        }
+
+        doc.put("total", String.valueOf(venta.getTotal()));
+        doc.put("fechaHora", venta.getFechaHora());
+        doc.put("folio", venta.getFolio());
+
+        return doc;
+    }
+    
+    // Método que transforma una entidad Venta a un documento (de forma embebida)
+    public Document toDocumentEmbebido(Venta venta) {
         Document doc = new Document();
 
         doc.put("cliente", adaptadorCliente.toDocument(venta.getCliente()));

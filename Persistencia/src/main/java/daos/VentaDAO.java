@@ -5,10 +5,13 @@ import adaptadoresDoc.AdaptadorDetallesVenta;
 import adaptadoresDoc.AdaptadorEmpleado;
 import adaptadoresDoc.AdaptadorVenta;
 import adaptadoresDoc.PiezaDoc;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.result.InsertOneResult;
 import dominio.Venta;
-import java.time.LocalDate;
+import excepciones.PersistenciaException;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.Document;
 
 /**
  *
@@ -25,17 +28,42 @@ public class VentaDAO implements IVentaDAO {
     private static final AdaptadorDetallesVenta adaptadorDetallesVenta = new AdaptadorDetallesVenta(PiezaDoc.singleton());
     private static final AdaptadorVenta adaptadorVenta = new AdaptadorVenta(adaptadorCliente, adaptadorEmpleado, adaptadorDetallesVenta);
     
+    private MongoCollection<Venta> coleccion;
+    
+    /**
+     * Constructor
+     *
+     * @param coleccion
+     */
+    public VentaDAO(MongoCollection coleccion) {
+        this.coleccion = coleccion;
+    }
+    
     @Override
     public List<Venta> consultarVentas() {
-        return VENTAS;
+        List<Venta> lista = new ArrayList<>();
+        for (Document doc : coleccion.find(new Document(), Document.class)) {
+            lista.add(adaptadorVenta.toEntity(doc));
+        }
+        return lista;
     }
 
     @Override
     public Venta registrarVenta(Venta venta) {
-        System.out.println("DAO ANTES DE REGISTRAR VENTA: " + venta.getFechaHora());
-        VENTAS.add(venta);
-        LOG.log(System.Logger.Level.INFO, ">> Venta registrada exitosamente: " + venta.getCliente().getNombres() + " : " + venta.getDetalles().size());
-        System.out.println("DAO DESPUES DE REGISTRAR VENTA: " + venta.getFechaHora());
-        return venta;
+        if (venta == null) {
+            LOG.log(System.Logger.Level.WARNING, "Se intentó registrar una venta nula o vacía");
+            return null;
+        }
+        try {
+            InsertOneResult resultado = coleccion.insertOne(venta);
+            if (resultado.getInsertedId() != null) {
+                return venta;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            LOG.log(System.Logger.Level.ERROR, "Error al registrar la venta " + e.getMessage());
+            throw new PersistenciaException("No se registrar la venta correctamente.");
+        }
     }
 }
