@@ -8,7 +8,7 @@ package DTOS;
  *
  * @author Andre
  */
-public class DetallesSolicitudDTO {
+public class DetallesSolicitudDTO extends DTO{
     private double costo;
     private int cantidad;
     private double subtotal;

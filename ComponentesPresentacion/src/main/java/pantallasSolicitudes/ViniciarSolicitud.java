@@ -345,7 +345,7 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
             
             //Crea un botón de información adicional
             Color colorBoton = new Color(50, 255, 100);
-            UtilBoton.BotonAlmacenador botonInfo = new BotonAlmacenador("Info", null,detalle);
+            UtilBoton.BotonAlmacenador botonInfo = new BotonAlmacenador("Info", detalle);
             botonInfo.setBackground(colorBoton);
             UtilBoton.asignarHoverBoton(botonInfo, colorBoton.darker());
             panelMostrarInfo.add(botonInfo);
