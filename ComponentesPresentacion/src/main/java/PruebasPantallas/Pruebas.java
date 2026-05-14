@@ -20,6 +20,7 @@ public class Pruebas {
         ICoordinadorNegocio coordinadorNegocio = new CoordinadorNegocio(coordinadorEstados);
         IEnsambladorDTO ensambladorDTO = new EnsambladorDTO();
         
+        
         //Los asigna al coordinador de presentación, que lo suministra al resto de ventanas
         ICoordinadorPresentacion coordinadorPresentacion = new CoordinadorPresentacion(coordinadorNegocio, coordinadorEstados, ensambladorDTO);
         coordinadorPresentacion.arrancar();

@@ -4,6 +4,9 @@
  */
 package daos;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import conexiones.ConexionMongo;
 import dominio.Empleado;
 import excepciones.PersistenciaException;
 import java.util.ArrayList;
@@ -20,9 +23,13 @@ public class EmpleadoDAO implements IEmpleadoDAO {
     private static final String EMPLEADO_INEXISTENTE = "No existe el empleado en el sistema";
     
     private static final List<Empleado> EMPLEADOS = new ArrayList<>();
+    
+    private MongoCollection<Empleado> coleccion;
 
-    public EmpleadoDAO() {}
-
+    public EmpleadoDAO() {
+    this.coleccion = ConexionMongo.obtenerBD().getCollection("empleados", Empleado.class);;
+    }
+    
     static {
         Empleado empleado1 = new Empleado();
         empleado1.setNombreUsuario("juanperes1");
@@ -83,7 +90,11 @@ public class EmpleadoDAO implements IEmpleadoDAO {
 
     @Override
     public void insertarEmpleado(Empleado empleado) {
-        
+        try{
+            coleccion.insertOne(empleado);
+        }catch(Exception ex){
+            throw new PersistenciaException(ex.getMessage()); 
+        }
     }
     
 }
