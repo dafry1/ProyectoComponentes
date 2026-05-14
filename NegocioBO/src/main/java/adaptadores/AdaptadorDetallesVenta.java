@@ -2,7 +2,6 @@ package adaptadores;
 
 import DTOS.DetallesVentaDTO;
 import dominio.DetallesVenta;
-import fabricas.FabricaAdaptadores;
 import java.util.List;
 import java.util.stream.Collectors;
 

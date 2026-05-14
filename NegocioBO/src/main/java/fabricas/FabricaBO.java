@@ -58,7 +58,8 @@ public class FabricaBO implements IFabricaBO {
             instanciaPieza = new PiezaBO(
                     fabricaDAO.fabricarPieza(), 
                     fabricaAdaptadores.fabricarAdaptadorPieza(), 
-                    fabricaAdaptadores.fabricarAdaptadorDetallesVenta()
+                    fabricaAdaptadores.fabricarAdaptadorDetallesVenta(),
+                    fabricaAdaptadores.fabricarAdaptadorDetallesSolicitud()
                 );
         }
         return instanciaPieza;
@@ -93,7 +94,7 @@ public class FabricaBO implements IFabricaBO {
     @Override
     public ISolicitudBO fabricarSolicitud() {
         if (instanciaSolicitud == null) {
-            instanciaSolicitud = new SolicitudBO(fabricaDAO.fabricarSolicitud(), new AdaptadorSolicitud(fabricaAdaptadores.fabricarAdaptadorEmpleado(), fabricaAdaptadores.fabricarAdaptadorCliente(), fabricaAdaptadores.fabricarAdaptadorDetallesVenta()));
+            instanciaSolicitud = new SolicitudBO(fabricaDAO.fabricarSolicitud(), new AdaptadorSolicitud(fabricaAdaptadores.fabricarAdaptadorEmpleado(), fabricaAdaptadores.fabricarAdaptadorCliente(), fabricaAdaptadores.fabricarAdaptadorDetallesSolicitud()));
         }
         return instanciaSolicitud;
     }

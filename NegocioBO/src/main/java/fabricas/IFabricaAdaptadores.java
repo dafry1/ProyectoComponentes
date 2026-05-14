@@ -4,6 +4,7 @@ import adaptadores.IAdaptadorVenta;
 import adaptadores.IAdaptadorDetallesVenta;
 import adaptadores.IAdaptadorPieza;
 import adaptadores.IAdaptadorCliente;
+import adaptadores.IAdaptadorDetallesSolicitud;
 import adaptadores.IAdaptadorEmpleado;
 
 /**
@@ -28,4 +29,6 @@ public interface IFabricaAdaptadores {
      IAdaptadorEmpleado fabricarAdaptadorEmpleado();
     
     IAdaptadorDetallesVenta fabricarAdaptadorDetallesVenta();
+    
+    IAdaptadorDetallesSolicitud fabricarAdaptadorDetallesSolicitud();
 }

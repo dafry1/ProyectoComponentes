@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 public class AdaptadorSolicitud implements IAdaptadorSolicitud { 
     private IAdaptadorEmpleado adaptadorEmpleado;
     private IAdaptadorCliente adaptadorCliente;
-    private IAdaptadorDetallesVenta adaptadorDetallesVenta;
+    private IAdaptadorDetallesSolicitud adaptadorDetallesSolicitud;
 
-    public AdaptadorSolicitud(IAdaptadorEmpleado adaptadorEmpleado, IAdaptadorCliente adaptadorCliente, IAdaptadorDetallesVenta adaptadorDetallesVenta){
+    public AdaptadorSolicitud(IAdaptadorEmpleado adaptadorEmpleado, IAdaptadorCliente adaptadorCliente, IAdaptadorDetallesSolicitud adaptadorDetallesSolicitud){
         this.adaptadorEmpleado = adaptadorEmpleado;
         this.adaptadorCliente = adaptadorCliente;
-        this.adaptadorDetallesVenta = adaptadorDetallesVenta;
+        this.adaptadorDetallesSolicitud = adaptadorDetallesSolicitud;
     }
     
     @Override
@@ -29,9 +29,10 @@ public class AdaptadorSolicitud implements IAdaptadorSolicitud {
         entidad.setCliente(adaptadorCliente.Entidad(dto.getCliente()));
         entidad.setEmpleado(adaptadorEmpleado.Entidad(dto.getEmpleado()));
         entidad.setTotal(dto.getTotal());
+        entidad.setEstado(dto.getEstado());
         entidad.setFechaHora(dto.getFechaHora());
         entidad.setFolio(dto.getFolio());
-        entidad.setDetalles(adaptadorDetallesVenta.listaEntidad(dto.getDetalles()));
+        entidad.setDetalles(adaptadorDetallesSolicitud.listaEntidad(dto.getDetalles()));
         
         // Atributos especiales de Solicitud
         entidad.setDireccion(dto.getDireccion());
@@ -53,9 +54,10 @@ public class AdaptadorSolicitud implements IAdaptadorSolicitud {
         dto.setCliente(adaptadorCliente.DTO(entidad.getCliente()));
         dto.setEmpleado(adaptadorEmpleado.DTO(entidad.getEmpleado()));
         dto.setTotal(entidad.getTotal());
+        dto.setEstado(entidad.getEstado());
         dto.setFechaHora(entidad.getFechaHora());
         dto.setFolio(entidad.getFolio());
-        dto.setDetalles(adaptadorDetallesVenta.listaDTO(entidad.getDetalles()));
+        dto.setDetalles(adaptadorDetallesSolicitud.listaDTO(entidad.getDetalles()));
         
         // Atributos especiales de Solicitud
         dto.setDireccion(entidad.getDireccion());

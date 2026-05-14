@@ -60,6 +60,22 @@ public class SolicitudBO implements ISolicitudBO {
      */
     @Override
     public SolicitudDTO registrarSolicitud(SolicitudDTO solicitud) {
+        
+        // Asigna folio y fecha y hora
+        solicitud.setFolio(generarFolio());
+        solicitud.setFechaEntrega(generarFecha());
+        
+        solicitud.setEstado("PENDIENTE");
+
+        double totalCalculado = solicitud.getDetalles().stream()
+                .mapToDouble(d -> d.getSubtotal())
+                .sum();
+        solicitud.setTotal(totalCalculado);
+        
+        if (solicitud.getFechaEntregaEstimada() == null) {
+            solicitud.setFechaEntregaEstimada("3 a 5 días hábiles");
+        }
+        
         // Solicitud inválida (mantiene lógica de DetallesVenta/Detalles)
         if (solicitud == null || solicitud.getDetalles().isEmpty()) {
             DEBUG = "Solicitud vacía o sin detalles";
@@ -96,10 +112,6 @@ public class SolicitudBO implements ISolicitudBO {
             LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
             throw new NegocioException(DEBUG); 
         }
-        
-        // Asigna folio y fecha y hora
-        solicitud.setFolio(generarFolio());
-        solicitud.setFechaEntrega(generarFecha());
         
         // Registra la solicitud
         Solicitud s = adaptadorSolicitud.Entidad(solicitud);

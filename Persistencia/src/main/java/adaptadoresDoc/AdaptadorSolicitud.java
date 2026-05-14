@@ -1,5 +1,6 @@
 package adaptadoresDoc;
 
+import dominio.DetallesSolicitud;
 import dominio.DetallesVenta;
 import dominio.Solicitud;
 import java.util.List;
@@ -15,14 +16,14 @@ import org.bson.Document;
 public class AdaptadorSolicitud extends Adaptador{
     private AdaptadorCliente adaptadorCliente;
     private AdaptadorEmpleado adaptadorEmpleado;
-    private AdaptadorDetallesVenta adaptadorDetallesVenta;
+    private AdaptadorDetallesSolicitud adaptadorDetallesSolicitud;
     
     public AdaptadorSolicitud(AdaptadorCliente adaptadorCliente,
             AdaptadorEmpleado adaptadorEmpleado,
-            AdaptadorDetallesVenta adaptadorDetallesVenta){
+            AdaptadorDetallesSolicitud adaptadorDetallesSolicitud){
         this.adaptadorCliente = adaptadorCliente;
         this.adaptadorEmpleado = adaptadorEmpleado;
-        this.adaptadorDetallesVenta = adaptadorDetallesVenta;
+        this.adaptadorDetallesSolicitud = adaptadorDetallesSolicitud;
     }
     
     // Método que transforma un documento a una entidad Solicitud
@@ -38,11 +39,11 @@ public class AdaptadorSolicitud extends Adaptador{
         List<Document> detallesDoc = doc.getList("detalles", Document.class);
 
         if (detallesDoc != null) {
-            List<DetallesVenta> detallesVenta = detallesDoc.stream()
-                    .map(adaptadorDetallesVenta::toEntity)
+            List<DetallesSolicitud> detallesSolicitud = detallesDoc.stream()
+                    .map(adaptadorDetallesSolicitud::toEntity)
                     .collect(Collectors.toList());
 
-            solicitud.setDetalles(detallesVenta);
+            solicitud.setDetalles(detallesSolicitud);
         }
         
         solicitud.setTotal(Double.parseDouble(doc.getString("total")));
@@ -64,7 +65,7 @@ public class AdaptadorSolicitud extends Adaptador{
         doc.put("empleado", adaptadorEmpleado.toDocument(solicitud.getEmpleado()));
         if (solicitud.getDetalles() != null) {
             List<Document> detallesVentaDoc = solicitud.getDetalles().stream()
-                    .map(adaptadorDetallesVenta::toDocument)
+                    .map(adaptadorDetallesSolicitud::toDocument)
                     .collect(Collectors.toList());
 
             doc.put("detalles", detallesVentaDoc);

@@ -2,6 +2,7 @@ package bo;
 
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
+import adaptadores.IAdaptadorDetallesSolicitud;
 import dominio.Pieza;
 import excepciones.NegocioException;
 import adaptadores.IAdaptadorDetallesVenta;
@@ -24,21 +25,24 @@ public class PiezaBO implements IPiezaBO {
     //Atributos
     private IPiezaDAO piezaDAO;
     private IAdaptadorPieza adaptadorPieza;
-    private IAdaptadorDetallesVenta adaptadorDetalles;
+    private IAdaptadorDetallesVenta adaptadorDetallesVenta;
+    private IAdaptadorDetallesSolicitud adaptadorDetallesSolicitud;
     
     /**
      * Constructor que inyecta DAO y adaptador
      * 
      * @param piezaDAO
      * @param adaptadorPieza 
-     * @param adaptadorDetalles 
+     * @param adaptadorDetallesVenta 
+     * @param adaptadorDetallesSolicitud 
      */
-    public PiezaBO(IPiezaDAO piezaDAO, IAdaptadorPieza adaptadorPieza, IAdaptadorDetallesVenta adaptadorDetalles) {
+    public PiezaBO(IPiezaDAO piezaDAO, IAdaptadorPieza adaptadorPieza, IAdaptadorDetallesVenta adaptadorDetallesVenta, IAdaptadorDetallesSolicitud adaptadorDetallesSolicitud) {
         this.piezaDAO = piezaDAO;
         this.adaptadorPieza = adaptadorPieza;
-        this.adaptadorDetalles = adaptadorDetalles;
+        this.adaptadorDetallesVenta = adaptadorDetallesVenta;
+        this.adaptadorDetallesSolicitud = adaptadorDetallesSolicitud;
     }
-    
+
     /**
      * Consulta una pieza por id
      * 
@@ -61,7 +65,7 @@ public class PiezaBO implements IPiezaBO {
                 String DEBUG = "Pieza no encontrada";
                 LOG.log(System.Logger.Level.ERROR, DEBUG);
                 throw new NegocioException(">>" + DEBUG);
-            }        
+            }
             return adaptadorPieza.DTO(piezaEncontrada);        
         } catch (PersistenciaException e) {
             String MSJ = "Error al consultar la pieza específica: " + e.getMessage();
@@ -169,7 +173,7 @@ public class PiezaBO implements IPiezaBO {
                 LOG.log(System.Logger.Level.ERROR, DEBUG);
                 throw new NegocioException(">>" + DEBUG);
             }
-            piezaDAO.actualizarStock(adaptadorDetalles.Entidad(detalle));
+            piezaDAO.actualizarStock(adaptadorDetallesVenta.Entidad(detalle));
         } catch (PersistenciaException e) {
             String MSJ = "Error al actualizar el stock de esta pieza: " + e.getMessage();
             LOG.log(System.Logger.Level.ERROR, MSJ);
@@ -191,7 +195,7 @@ public class PiezaBO implements IPiezaBO {
                 LOG.log(System.Logger.Level.ERROR, DEBUG);
                 throw new NegocioException(">>" + DEBUG);
             }
-            piezaDAO.actualizarStockTrasVenta(adaptadorDetalles.listaEntidad(detalles));
+            piezaDAO.actualizarStockTrasVenta(adaptadorDetallesVenta.listaEntidad(detalles));
         } catch (PersistenciaException e) {
             String MSJ = "Error al actualizar el stock de las piezas la venta: " + e.getMessage();
             LOG.log(System.Logger.Level.ERROR, MSJ);

@@ -25,7 +25,7 @@ public class ControlCatalogoBodega{
     /** Constructor
      * @param fachadaBodega */
     public ControlCatalogoBodega(FachadaBodega fachadaBodega) {
-        this.fachadaBodega = new FachadaBodega();
+        this.fachadaBodega = fachadaBodega;
     }
 
     public ControlCatalogoBodega() {

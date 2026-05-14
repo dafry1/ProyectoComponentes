@@ -12,7 +12,8 @@ import java.util.List;
 public class Solicitud {
     private Cliente cliente;
     private Empleado empleado;
-    private List<DetallesVenta> detalles; 
+    private String estado;
+    private List<DetallesSolicitud> detalles; 
     private double total;
     private String fechaHora;
     private String folio;
@@ -26,23 +27,23 @@ public class Solicitud {
     public Solicitud() {
     }
 
-    public Solicitud(Empleado empleado, Cliente cliente, List<DetallesVenta> detalles, 
-                     double total, String fechaHora, String folio, 
-                     String fechaEntrega, String fechaEntregaEstimada, String direccion) {
-        this.cliente = cliente;
-        this.empleado = empleado;
-        this.detalles = detalles;
-        this.total = total;
-        this.fechaHora = fechaHora;
-        this.folio = folio;
-        this.fechaEntrega = fechaEntrega;
-        this.fechaEntregaEstimada = fechaEntregaEstimada;
-        this.direccion = direccion;
-    }
+        public Solicitud(Cliente cliente, Empleado empleado, String estado, List<DetallesSolicitud> detalles, double total, String fechaHora, String folio, String fechaEntrega, String fechaEntregaEstimada, String direccion) {
+            this.cliente = cliente;
+            this.empleado = empleado;
+            this.estado = estado;
+            this.detalles = detalles;
+            this.total = total;
+            this.fechaHora = fechaHora;
+            this.folio = folio;
+            this.fechaEntrega = fechaEntrega;
+            this.fechaEntregaEstimada = fechaEntregaEstimada;
+            this.direccion = direccion;
+        }
 
-    public Solicitud(Cliente cliente, Empleado empleado, List<DetallesVenta> detalles, double total, String fechaHora, String folio, String id, String fechaEntrega, String fechaEntregaEstimada, String direccion) {
+    public Solicitud(Cliente cliente, Empleado empleado, String estado, List<DetallesSolicitud> detalles, double total, String fechaHora, String folio, String id, String fechaEntrega, String fechaEntregaEstimada, String direccion) {
         this.cliente = cliente;
         this.empleado = empleado;
+        this.estado = estado;
         this.detalles = detalles;
         this.total = total;
         this.fechaHora = fechaHora;
@@ -53,11 +54,17 @@ public class Solicitud {
         this.direccion = direccion;
     }
     
-    
-
     // Getters y Setters
     public Cliente getCliente() {
         return cliente;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public void setCliente(Cliente cliente) {
@@ -72,11 +79,11 @@ public class Solicitud {
         this.empleado = empleado;
     }
 
-    public List<DetallesVenta> getDetalles() {
+    public List<DetallesSolicitud> getDetalles() {
         return detalles;
     }
 
-    public void setDetalles(List<DetallesVenta> detalles) {
+    public void setDetalles(List<DetallesSolicitud> detalles) {
         this.detalles = detalles;
     }
 

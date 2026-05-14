@@ -21,10 +21,10 @@ import utilPresentacion.UtilPanel;
 
 /**
  * Pantalla que muestra el historial de solicitudes realizadas.
- * 
+ *
  * @author Aaron
  */
-public class VhistorialSolicitudes extends JFrame implements IObservador{
+public class VhistorialSolicitudes extends JFrame implements IObservador {
 
     JPanel panelPrincipal;
 
@@ -85,14 +85,15 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
         g.gridx = 1;
         g.weightx = 0.30;
         contenido.add(panelSeccionCentral, g);
-        
+
         //Añade al frame
         add(contenido, BorderLayout.CENTER);
         add(crearPanelInferior(), BorderLayout.SOUTH);
     }
 
     /**
-     * Crea la sección central, donde aparecen las tarjetas de todas las solicitudes
+     * Crea la sección central, donde aparecen las tarjetas de todas las
+     * solicitudes
      *
      * @param piezas en una lista
      *
@@ -127,7 +128,7 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
         //Regresa el panel
         return p;
     }
-    
+
     /**
      * Crea la barra inferior para continuar y regresar
      */
@@ -144,7 +145,7 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
         p.add(botonRegresar, BorderLayout.WEST);
         return p;
     }
-    
+
     /**
      * Dibuja y habita cada tarjeta que le corresponde una pieza en específico
      * Crea la tarjeta de UtilPanel Extrae los datos de la pieza Configura cómo
@@ -154,20 +155,24 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
      * @param pieza específica
      */
     private void dibujarTarjetasSolicitud(java.util.List<SolicitudDTO> solicitudes) {
-        
+
         //Declara variables
         String fechaHora;
         String folio;
         int cantidadDetalles;
-        
-        
+
         for (SolicitudDTO solicitud : solicitudes) {
-             
+
             JPanel tarjeta = UtilPanel.dibujarTarjeta();
             tarjeta.setLayout(new BorderLayout(20, 0));
 
             //Asigna valores
             double supertotal = solicitud.getTotal();
+            if (supertotal <= 0 && solicitud.getDetalles() != null) {
+                for (DTOS.DetallesSolicitudDTO d : solicitud.getDetalles()) {
+                    supertotal += d.getSubtotal();
+                }
+            }
             System.out.println("LA FECHA HORA: " + solicitud.getFechaHora());
             fechaHora = solicitud.getFechaHora();
             folio = solicitud.getFolio();
@@ -186,7 +191,7 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
             JPanel panelMostrarInfo = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 8));
             panelMostrarInfo.setOpaque(false);
 
-            JLabel lblP = new JLabel("$" + supertotal);
+            JLabel lblP = new JLabel("$" + String.format("%.2f", supertotal));
             lblP.setForeground(new Color(50, 255, 100));
             lblP.setFont(new Font("Segoe UI", Font.BOLD, 22));
 
@@ -194,13 +199,13 @@ public class VhistorialSolicitudes extends JFrame implements IObservador{
             UtilBoton.BotonAlmacenador botonInfo = new UtilBoton.BotonAlmacenador("Detalles", solicitud);
             botonInfo.setBackground(colorBoton);
             UtilBoton.asignarHoverBoton(botonInfo, colorBoton.darker());
-            
+
             panelMostrarInfo.add(lblP);
             panelMostrarInfo.add(botonInfo);
 
             // FUNCIONALIDAD DEL BOTÓN: Detectar si es Venta o Solicitud
             botonInfo.addActionListener(e -> {
-               coordinadorPresentacion.abrirDetalleSolicitud(solicitud);
+                coordinadorPresentacion.abrirDetalleSolicitud(solicitud);
             });
 
             tarjeta.add(panelInfoBasica, BorderLayout.WEST);
