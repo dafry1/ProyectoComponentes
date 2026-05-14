@@ -1,5 +1,10 @@
 package daos;
 
+import adaptadoresDoc.AdaptadorCliente;
+import adaptadoresDoc.AdaptadorDetallesVenta;
+import adaptadoresDoc.AdaptadorEmpleado;
+import adaptadoresDoc.AdaptadorVenta;
+import adaptadoresDoc.PiezaDoc;
 import dominio.Venta;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,6 +19,11 @@ public class VentaDAO implements IVentaDAO {
     private static final System.Logger LOG = System.getLogger(VentaDAO.class.getName());
     
     private static List<Venta> VENTAS = new ArrayList<>();
+    
+    private static final AdaptadorCliente adaptadorCliente = new AdaptadorCliente();
+    private static final AdaptadorEmpleado adaptadorEmpleado = new AdaptadorEmpleado();
+    private static final AdaptadorDetallesVenta adaptadorDetallesVenta = new AdaptadorDetallesVenta(PiezaDoc.singleton());
+    private static final AdaptadorVenta adaptadorVenta = new AdaptadorVenta(adaptadorCliente, adaptadorEmpleado, adaptadorDetallesVenta);
     
     @Override
     public List<Venta> consultarVentas() {

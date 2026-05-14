@@ -43,7 +43,13 @@ public class EmpleadoBO implements IEmpleadoBO {
      */
     @Override
     public List<EmpleadoDTO> consultarEmpleados() {
-        return adaptarEmpleadosInternamente(empleadoDAO.consultarEmpleados());
+        try {
+            return adaptarEmpleadosInternamente(empleadoDAO.consultarEmpleados());
+        } catch (PersistenciaException e) {
+            String MSJ = "Error al consultar los empleados: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new NegocioException(MSJ);
+        }
     }
     
     /**

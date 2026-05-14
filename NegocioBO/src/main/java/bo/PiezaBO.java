@@ -7,6 +7,7 @@ import excepciones.NegocioException;
 import adaptadores.IAdaptadorDetallesVenta;
 import adaptadores.IAdaptadorPieza;
 import daos.IPiezaDAO;
+import excepciones.PersistenciaException;
 import java.util.List;
 import utilerias.UtilNegocio;
 
@@ -46,22 +47,27 @@ public class PiezaBO implements IPiezaBO {
      */
     @Override
     public PiezaDTO consultarPieza(String id) {
-        //Id inválida
-        if (id == null) {
-            String DEBUG = "Id inválida";
-            LOG.log(System.Logger.Level.ERROR, DEBUG);
-            throw new NegocioException(">>" + DEBUG);
+        try {
+            //Id inválida
+            if (id == null) {
+                String DEBUG = "Id inválida";
+                LOG.log(System.Logger.Level.ERROR, DEBUG);
+                throw new NegocioException(">>" + DEBUG);
+            }
+
+            //Intenta hallar la pieza
+            Pieza piezaEncontrada = piezaDAO.consultarPieza(id);
+            if (piezaEncontrada == null) {
+                String DEBUG = "Pieza no encontrada";
+                LOG.log(System.Logger.Level.ERROR, DEBUG);
+                throw new NegocioException(">>" + DEBUG);
+            }        
+            return adaptadorPieza.DTO(piezaEncontrada);        
+        } catch (PersistenciaException e) {
+            String MSJ = "Error al consultar la pieza específica: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new NegocioException(MSJ);
         }
-        
-        //Intenta hallar la pieza
-        Pieza piezaEncontrada = piezaDAO.consultarPieza(id);
-        if (piezaEncontrada == null) {
-            String DEBUG = "Pieza no encontrada";
-            LOG.log(System.Logger.Level.ERROR, DEBUG);
-            throw new NegocioException(">>" + DEBUG);
-        }
-        return adaptadorPieza.DTO(piezaEncontrada);
-        
     }
     
     /** Centraliza la forma en la que se adaptan las piezas de Entidad a DTO */
@@ -76,7 +82,13 @@ public class PiezaBO implements IPiezaBO {
      */
     @Override
     public List<PiezaDTO> consultarPiezas() {
-        return adaptarPiezasInternamente(piezaDAO.consultarPiezas());
+        try {
+            return adaptarPiezasInternamente(piezaDAO.consultarPiezas());
+        } catch (PersistenciaException e) {
+            String MSJ = "Error al consultar las piezas: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new NegocioException(MSJ);
+        }
     }
     
     /**
@@ -85,8 +97,14 @@ public class PiezaBO implements IPiezaBO {
      * @return la lista de piezas en DTO
      */
     @Override
-    public List<PiezaDTO> consultarTopDiaPiezas(){
-        return adaptarPiezasInternamente(piezaDAO.consultarTopDiaPiezas());
+    public List<PiezaDTO> consultarTopDiaPiezas() {
+        try {
+            return adaptarPiezasInternamente(piezaDAO.consultarTopDiaPiezas());
+        } catch (PersistenciaException e) {
+            String MSJ = "Error al consultar las piezas más vendidas al día: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new NegocioException(MSJ);
+        }
     }
     
     /**
@@ -95,8 +113,14 @@ public class PiezaBO implements IPiezaBO {
      * @return la lista de piezas en DTO
      */
     @Override
-    public List<PiezaDTO> consultarTopSemanaPiezas(){
-        return adaptarPiezasInternamente(piezaDAO.consultarTopSemanaPiezas());
+    public List<PiezaDTO> consultarTopSemanaPiezas() {
+        try {
+            return adaptarPiezasInternamente(piezaDAO.consultarTopSemanaPiezas());
+        } catch (PersistenciaException e) {
+            String MSJ = "Error al consultar las piezas más vendidas a la semana: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new NegocioException(MSJ);
+        }
     }
     
     /**
@@ -105,8 +129,14 @@ public class PiezaBO implements IPiezaBO {
      * @return la lista de piezas en DTO
      */
     @Override
-    public List<PiezaDTO> consultarTopMesPiezas(){
-        return adaptarPiezasInternamente(piezaDAO.consultarTopMesPiezas());
+    public List<PiezaDTO> consultarTopMesPiezas() {
+        try {
+            return adaptarPiezasInternamente(piezaDAO.consultarTopMesPiezas());
+        } catch (PersistenciaException e) {
+            String MSJ = "Error al consultar las piezas más vendidas al mes: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new NegocioException(MSJ);
+        }
     }
     
     /**
@@ -116,8 +146,14 @@ public class PiezaBO implements IPiezaBO {
      * @return la lista de piezas en DTO
      */
     @Override
-    public List<PiezaDTO> consultarTopTodoPiezas(){
-        return adaptarPiezasInternamente(piezaDAO.consultarTopTodoPiezas());
+    public List<PiezaDTO> consultarTopTodoPiezas() {
+        try {
+            return adaptarPiezasInternamente(piezaDAO.consultarTopTodoPiezas());
+        } catch (PersistenciaException e) {
+            String MSJ = "Error al consultar las piezas más vendidas en todo el tiempo: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new NegocioException(MSJ);
+        }
     }
     
     /**
@@ -127,12 +163,18 @@ public class PiezaBO implements IPiezaBO {
      */
     @Override
     public void actualizarStock(DetallesVentaDTO detalle) {
-        if (detalle == null) {
-            String DEBUG = "Detalle vacío";
-            LOG.log(System.Logger.Level.ERROR, DEBUG);
-            throw new NegocioException(">>" + DEBUG);
+        try {
+            if (detalle == null) {
+                String DEBUG = "Detalle vacío";
+                LOG.log(System.Logger.Level.ERROR, DEBUG);
+                throw new NegocioException(">>" + DEBUG);
+            }
+            piezaDAO.actualizarStock(adaptadorDetalles.Entidad(detalle));
+        } catch (PersistenciaException e) {
+            String MSJ = "Error al actualizar el stock de esta pieza: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new NegocioException(MSJ);
         }
-        piezaDAO.actualizarStock(adaptadorDetalles.Entidad(detalle));
     }
     
     /**
@@ -143,32 +185,50 @@ public class PiezaBO implements IPiezaBO {
      */
     @Override
     public void actualizarStockTrasVenta(List<DetallesVentaDTO> detalles) {
-        if (detalles == null || detalles.isEmpty()) {
-            String DEBUG = "Lista de detalles vacía";
-            LOG.log(System.Logger.Level.ERROR, DEBUG);
-            throw new NegocioException(">>" + DEBUG);
+        try {
+            if (detalles == null) {
+                String DEBUG = "Lista de detalles vacía";
+                LOG.log(System.Logger.Level.ERROR, DEBUG);
+                throw new NegocioException(">>" + DEBUG);
+            }
+            piezaDAO.actualizarStockTrasVenta(adaptadorDetalles.listaEntidad(detalles));
+        } catch (PersistenciaException e) {
+            String MSJ = "Error al actualizar el stock de las piezas la venta: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new NegocioException(MSJ);
         }
-        piezaDAO.actualizarStockTrasVenta(adaptadorDetalles.listaEntidad(detalles));
     }
 
-    @Override 
+    @Override
     public List<PiezaDTO> filtrarPorNombre(String nombre) {
-        if (nombre == null || nombre.isBlank()) {
-            String DEBUG = "Nombre vacío";
-            LOG.log(System.Logger.Level.ERROR, DEBUG);
-            throw new NegocioException(">>" + DEBUG);
+        try {
+            if (nombre == null) {
+                String DEBUG = "Nombre vacío";
+                LOG.log(System.Logger.Level.ERROR, DEBUG);
+                throw new NegocioException(">>" + DEBUG);
+            }
+            return adaptarPiezasInternamente(piezaDAO.filtrarPorNombre(nombre));
+        } catch (PersistenciaException e) {
+            String MSJ = "Error al filtrar las piezas por nombre: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new NegocioException(MSJ);
         }
-        return adaptarPiezasInternamente(piezaDAO.filtrarPorNombre(nombre));
     }
 
     @Override
     public List<PiezaDTO> filtrarPorCategoria(String categoria) {
-        if (categoria == null || categoria.isBlank()) {
-            String DEBUG = "Categoría vacía";
-            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
-            throw new NegocioException(DEBUG);
+        try {
+            if (categoria == null) {
+                String DEBUG = "Categoría vacía";
+                LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+                throw new NegocioException(DEBUG);
+            }
+            return adaptarPiezasInternamente(piezaDAO.filtrarPorCategoria(categoria));
+        } catch (PersistenciaException e) {
+            String MSJ = "Error al filtrar las piezas por categoria: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new NegocioException(MSJ);
         }
-        return adaptarPiezasInternamente(piezaDAO.filtrarPorCategoria(categoria));
     }
 
     @Override
