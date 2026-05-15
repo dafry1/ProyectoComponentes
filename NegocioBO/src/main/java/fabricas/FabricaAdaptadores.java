@@ -1,11 +1,13 @@
 package fabricas;
 
 import adaptadores.AdaptadorCliente;
+import adaptadores.AdaptadorDetallesSolicitud;
 import adaptadores.AdaptadorDetallesVenta;
 import adaptadores.AdaptadorEmpleado;
 import adaptadores.AdaptadorPiezaDoc;
 import adaptadores.AdaptadorVenta;
 import adaptadores.IAdaptadorCliente;
+import adaptadores.IAdaptadorDetallesSolicitud;
 import adaptadores.IAdaptadorDetallesVenta;
 import adaptadores.IAdaptadorEmpleado;
 import adaptadores.IAdaptadorPieza;
@@ -72,4 +74,10 @@ public class FabricaAdaptadores implements IFabricaAdaptadores {
     public IAdaptadorDetallesVenta fabricarAdaptadorDetallesVenta() {
         return new AdaptadorDetallesVenta(fabricarAdaptadorPieza());
     }
+    
+    @Override
+    public IAdaptadorDetallesSolicitud fabricarAdaptadorDetallesSolicitud() {
+        return new AdaptadorDetallesSolicitud(fabricarAdaptadorPieza());
+    }
+    
 }

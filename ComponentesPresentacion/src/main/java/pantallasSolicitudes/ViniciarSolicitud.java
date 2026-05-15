@@ -1,7 +1,6 @@
 package pantallasSolicitudes;
 
 import DTOS.DetallesSolicitudDTO;
-import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
 import coordinadores.CoordinadorEstados;
 import coordinadores.ICoordinadorEstados;
