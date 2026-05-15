@@ -9,7 +9,7 @@ import daos.IEmpleadoDAO;
 import daos.IPiezaDAO;
 import fabricas.FabricaDAO;
 import fabricas.IFabricaDAO;
-import poblamientos.PoblamientoMongo;
+import poblamientos.PoblamientoMongoPiezas;
 import poblamientos.poblamientoMongoEmpleados;
 
 /**
@@ -22,11 +22,12 @@ public class Persistencia {
 
     public static void main(String[] args) {
         IFabricaDAO fabrica = FabricaDAO.singleton();
+        
         IPiezaDAO piezaDAO = fabrica.fabricarPieza();
-        PoblamientoMongo pm = new PoblamientoMongo(piezaDAO);
+        PoblamientoMongoPiezas pm = new PoblamientoMongoPiezas(piezaDAO);
         pm.poblar();
         
-        IEmpleadoDAO empleadoDAO = new EmpleadoDAO();
+        IEmpleadoDAO empleadoDAO = fabrica.fabricarEmpleado();
         poblamientoMongoEmpleados pme = new poblamientoMongoEmpleados(empleadoDAO);
         pme.poblarEmpleados();
     }

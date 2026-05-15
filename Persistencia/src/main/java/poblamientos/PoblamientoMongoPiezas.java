@@ -10,10 +10,10 @@ import java.util.List;
  * 
  * @author Andre
  */
-public class PoblamientoMongo {
+public class PoblamientoMongoPiezas {
     private IPiezaDAO piezaDAO;
 
-    public PoblamientoMongo(IPiezaDAO piezaDAO) {
+    public PoblamientoMongoPiezas(IPiezaDAO piezaDAO) {
         this.piezaDAO = piezaDAO;
     }
     
