@@ -21,6 +21,15 @@ public class AdaptadorEmpleado extends AdaptadorPersona{
 
         return empleado;
     }
+    
+    // Método que transforma un documento a una entidad Empleado (de forma embebida)
+    public Empleado toEntityEmbebido(Document doc) {
+        Empleado empleado = new Empleado();
+
+        super.llenarPersonaDesdeDoc(doc, empleado);
+
+        return empleado;
+    }
 
     // Método que transforma una entidad Empleado a un documento
     public Document toDocument(Empleado empleado) {
@@ -28,6 +37,15 @@ public class AdaptadorEmpleado extends AdaptadorPersona{
 
         doc.put("nombreUsuario", empleado.getNombreUsuario());
         doc.put("contrasenia", empleado.getContrasenia());
+
+        super.llenarDocDesdePersona(doc, empleado);
+
+        return doc;
+    }
+
+    // Método que transforma una entidad Empleado a un documento (de forma embebida)
+    public Document toDocumentEmbebido(Empleado empleado) {
+        Document doc = new Document();
 
         super.llenarDocDesdePersona(doc, empleado);
 

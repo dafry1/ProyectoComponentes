@@ -17,6 +17,13 @@ public interface IVentaDAO {
     List<Venta> consultarVentas();
     
     /**
+     * Muestra la cantidad de ventas registradas el mismo dia de la consulta en la BD
+     *
+     * @return cantidad de ventas
+     */
+    int cantidadVentas();
+    
+    /**
      * Registra una venta en el sistema
      * 
      * @param venta

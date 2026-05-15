@@ -17,6 +17,13 @@ public interface IVentaBO {
      * @return lista de VentaDTO mapeadas
      */
     List<VentaDTO> consultarVentas();
+
+    /**
+     * Devuelve la cantidad de ventas del dia de la consulta, desde la BD
+     *
+     * @return cantidad de ventas registradas
+     */
+    int cantidadVentasDiarias();
     
     /**
      * Filtra las ventas por fecha

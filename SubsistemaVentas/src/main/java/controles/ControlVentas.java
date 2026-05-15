@@ -7,7 +7,10 @@ import excepciones.NegocioException;
 import fabricas.IFabricaBO;
 import bo.IPiezaBO;
 import bo.IVentaBO;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import utilerias.UtilNegocio;
 
 /**
  * Control dedicado a todo lo relacionado a una transacción: registrar
@@ -60,8 +63,48 @@ public class ControlVentas {
         
         //Actualiza stock y registra la venta
         piezaBO.actualizarStockTrasVenta(venta.getDetalles());
+        
+        //Datos del cliente inválidos
+        if (!UtilNegocio.validarCliente(venta.getCliente())) {
+            String DEBUG = "Cliente con datos inválidos";
+            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+            throw new NegocioException(DEBUG); 
+        }
+        
+        //Datos del empleado inválidos
+        if (!UtilNegocio.validarEmpleado(venta.getEmpleado())) {
+            String DEBUG = "Empleado con datos inválidos";
+            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+            throw new NegocioException(DEBUG); 
+        }
+        
+        //Asigna folio y fecha y hora
+        venta.setFolio(generarFolio());
+        venta.setFechaHora(generarFecha());
+        
         ventaBO.registrarVenta(venta);
         LOG.log(System.Logger.Level.INFO, () -> ">> Venta exitosa con la cantidad de: " + venta.getDetalles().size());
         return venta;
+    }
+    
+    /**
+     * Genera un folio para la venta
+     *
+     * @param venta
+     */
+    private String generarFolio() {
+        int numero = ventaBO.cantidadVentasDiarias() + 1;
+        return "TW - " + numero;
+    }
+
+    /**
+     * Auxiliar obtiene la fecha
+     *
+     * @param venta
+     */
+    private String generarFecha() {
+        LocalDateTime fechaHoraRegistro = LocalDateTime.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        return fechaHoraRegistro.format(formato);
     }
 }

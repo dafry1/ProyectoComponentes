@@ -22,11 +22,7 @@ public class PiezaDoc extends Adaptador{
         return instancia;
     }
     
-     private String METODOPRUEBACOMPILAR() {
-        return "hola";
-    }
-    
-
+    // Método que transforma un documento a una entidad Pieza
     public Pieza toEntity(Document doc) {
         if (doc == null) return null;
 
@@ -42,7 +38,24 @@ public class PiezaDoc extends Adaptador{
 
         return pieza;
     }
+    
+    // Método que transforma un documento a una entidad Pieza (de forma embebida)
+    public Pieza toEntityEmbebido(Document doc) {
+        if (doc == null) return null;
 
+        Pieza pieza = new Pieza();
+        
+        pieza.setId(super.idTexto(doc)); 
+        pieza.setNombre(doc.getString("nombre"));
+        pieza.setCategoria(doc.getString("categoria"));
+        pieza.setMarcaPieza(doc.getString("marcaPieza"));
+        pieza.setModeloPieza(doc.getString("modeloPieza"));
+        pieza.setCostoPieza(doc.get("costoPieza", Double.class));
+
+        return pieza;
+    }
+
+    // Método que transforma una entidad Pieza a un documento
     public Document toDocument(Pieza pieza) {
         if (pieza == null) return null;
 
@@ -62,4 +75,22 @@ public class PiezaDoc extends Adaptador{
         return doc;
     }
     
+    // Método que transforma una entidad Pieza a un documento (de forma embebida)
+    public Document toDocumentEmbebido(Pieza pieza) {
+        if (pieza == null) return null;
+
+        Document doc = new Document();
+
+        if (pieza.getId() != null && !pieza.getId().isEmpty()) {
+            doc.put("_id", super.textoId(pieza.getId()));
+        }
+
+        doc.put("nombre", pieza.getNombre());
+        doc.put("categoria", pieza.getCategoria());
+        doc.put("marcaPieza", pieza.getMarcaPieza());
+        doc.put("modeloPieza", pieza.getModeloPieza());
+        doc.put("costoPieza", pieza.getCostoPieza());
+        
+        return doc;
+    }
 }

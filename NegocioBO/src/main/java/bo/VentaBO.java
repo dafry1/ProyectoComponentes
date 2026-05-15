@@ -58,6 +58,16 @@ public class VentaBO implements IVentaBO {
     }
     
     /**
+     * Devuelve la cantidad de ventas del dia de la consulta, desde la BD
+     *
+     * @return cantidad de ventas registradas
+     */
+    @Override
+    public int cantidadVentasDiarias(){
+        return ventaDAO.cantidadVentas();
+    }
+    
+    /**
      * Registra una venta en el sistema
      * 
      * @param venta
@@ -81,13 +91,6 @@ public class VentaBO implements IVentaBO {
             throw new NegocioException(DEBUG); 
         }
         
-        //Datos del cliente inválidos
-        if (!UtilNegocio.validarCliente(cliente)) {
-            DEBUG = "Cliente con datos inválidos";
-            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
-            throw new NegocioException(DEBUG); 
-        }
-        
         //Sin empleado
         EmpleadoDTO empleado = venta.getEmpleado();
         if (empleado == null) {
@@ -95,17 +98,6 @@ public class VentaBO implements IVentaBO {
             LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
             throw new NegocioException(DEBUG); 
         }
-        
-        //Datos del empleado inválidos
-        if (!UtilNegocio.validarEmpleado(empleado)) {
-            DEBUG = "Empleado con datos inválidos";
-            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
-            throw new NegocioException(DEBUG); 
-        }
-        
-        //Asigna folio y fecha y hora
-        venta.setFolio(generarFolio());
-        venta.setFechaHora(generarFecha());
         
         //Registra la venta
         try {
@@ -115,31 +107,15 @@ public class VentaBO implements IVentaBO {
             throw new NegocioException("");
         }
     }
-    
-    /**
-     * Genera un folio para la venta
-     * 
-     * @param venta FIXME: TEMPORAL, EN FUNCIÓN REAL DEBE ACUDIR AL DAO PARA CONTAR LAS QUE LLEVAN EN EL DÍA
-     */
-    private String generarFolio() {
-        int numero = ventaDAO.consultarVentas().size() + 1;
-        return "TW - " + numero;
-    }
-    
-    /**
-     * Auxiliar obtiene la fecha
-     * 
-     * @param venta 
-     */
-    private String generarFecha() {
-        LocalDateTime fechaHoraRegistro = LocalDateTime.now();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        return fechaHoraRegistro.format(formato);
-    }
 
     @Override
     public List<VentaDTO> filtrarVentasFecha(LocalDate fecha) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (fecha.isAfter(LocalDate.now())) {
+            String DEBUG = "Fecha mayor a la actual";
+            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+            throw new NegocioException(DEBUG);
+        }
+        return adaptarPiezasInternamente(ventaDAO.consultarVentas());
     }
 
     @Override

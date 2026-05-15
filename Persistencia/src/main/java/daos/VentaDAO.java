@@ -6,9 +6,11 @@ import adaptadoresDoc.AdaptadorEmpleado;
 import adaptadoresDoc.AdaptadorVenta;
 import adaptadoresDoc.PiezaDoc;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.InsertOneResult;
 import dominio.Venta;
 import excepciones.PersistenciaException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
@@ -39,6 +41,11 @@ public class VentaDAO implements IVentaDAO {
         this.coleccion = coleccion;
     }
     
+    /**
+     * Extrae todas las ventas de la BD
+     *
+     * @return lista de ventas
+     */
     @Override
     public List<Venta> consultarVentas() {
         List<Venta> lista = new ArrayList<>();
@@ -46,6 +53,20 @@ public class VentaDAO implements IVentaDAO {
             lista.add(adaptadorVenta.toEntity(doc));
         }
         return lista;
+    }
+    
+    /**
+     * Muestra la cantidad de ventas registradas el mismo dia de la consulta en la BD
+     *
+     * @return cantidad de ventas
+     */
+    @Override
+    public int cantidadVentas() {
+        String hoy = LocalDate.now().toString();
+
+        return (int) coleccion.countDocuments(
+                Filters.regex("fechaHora", "^" + hoy)
+        );
     }
 
     @Override
