@@ -53,7 +53,7 @@ public class FachadaVentas implements IFachadaVentas {
      */
     @Override
     public List<PiezaDTO> consultarTopDiaPiezas() {
-        return controlCatalogo.consultarPiezas();
+        return controlCatalogo.consultarTopDiaPiezas();
     }
 
     /**
@@ -63,7 +63,7 @@ public class FachadaVentas implements IFachadaVentas {
      */
     @Override
     public List<PiezaDTO> consultarTopSemanaPiezas() {
-        return controlCatalogo.consultarPiezas();
+        return controlCatalogo.consultarTopSemanaPiezas();
     }
 
     /**
@@ -73,7 +73,7 @@ public class FachadaVentas implements IFachadaVentas {
      */
     @Override
     public List<PiezaDTO> consultarTopMesPiezas() {
-        return controlCatalogo.consultarPiezas();
+        return controlCatalogo.consultarTopMesPiezas();
     }
 
     /**
@@ -83,7 +83,7 @@ public class FachadaVentas implements IFachadaVentas {
      */
     @Override
     public List<PiezaDTO> consultarTopTodoPiezas() {
-        return controlCatalogo.consultarPiezas();
+        return controlCatalogo.consultarTopTodoPiezas();
     }
     
     /**

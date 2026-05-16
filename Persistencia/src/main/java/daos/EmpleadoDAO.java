@@ -1,100 +1,96 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package daos;
 
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import conexiones.ConexionMongo;
+import com.mongodb.client.model.Filters;
 import dominio.Empleado;
 import excepciones.PersistenciaException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import adaptadoresDoc.EmpleadoDoc; // <-- Importamos tu adaptador
 
 /**
- *
+ * DAO enfocado en la persistencia y consulta real de empleados en MongoDB.
+ * 
  * @author Andre
  */
 public class EmpleadoDAO implements IEmpleadoDAO {
     private static final Logger LOG = Logger.getLogger(EmpleadoDAO.class.getName());
     private static final String CAMPOS_VACIOS = "No se puede iniciar sesión con campos faltantes";
-    private static final String EMPLEADO_INEXISTENTE = "No existe el empleado en el sistema";
+    private static final String EMPLEADO_INEXISTENTE = "El usuario no existe en el sistema";
     
-    private static final List<Empleado> EMPLEADOS = new ArrayList<>();
+    // Cambiamos a MongoCollection<Document> para interceptar el flujo con tus adaptadores
+    private final MongoCollection<Document> coleccion;
     
-    private MongoCollection<Empleado> coleccion;
-
-    public EmpleadoDAO(MongoCollection<Empleado> coleccion) {
-        this.coleccion = coleccion;
+    public EmpleadoDAO(MongoCollection<?> coleccion) {
+        this.coleccion = (MongoCollection<Document>) coleccion;
     }
-    
-    static {
-        Empleado empleado1 = new Empleado();
-        empleado1.setNombreUsuario("juanperes1");
-        empleado1.setContrasenia("12345");
-        empleado1.setNombres("Daniel");
-        empleado1.setApellidoPaterno("Ruiz");
-        empleado1.setApellidoMaterno("Jocobi");
-        EMPLEADOS.add(empleado1);
-    }
-    
     
     /**
-     * Extrae todos los empleados de la BD
-     *
-     * @return lista de EmpleadoDTO mapeadas
+     * Extrae todos los empleados utilizando el mapeo manual de EmpleadoDoc.
      */
     @Override
     public List<Empleado> consultarEmpleados() {
-        return EMPLEADOS;
+        List<Empleado> listaEmpleados = new ArrayList<>();
+        try {
+            // Iteramos sobre los documentos y usamos tu adaptador manual
+            for (Document doc : coleccion.find()) {
+                listaEmpleados.add(EmpleadoDoc.toEntity(doc));
+            }
+        } catch (Exception ex) {
+            LOG.severe(">> Error al consultar empleados de la BD: " + ex.getMessage());
+            throw new PersistenciaException("Error al obtener el catálogo de empleados.");
+        }
+        return listaEmpleados;
     }
     
-    
-    //-> FIXME: OBVIAMENTE ASÍ NO FUNCIONARÁ EN EL PROGRAMA COMPLETO
     /**
-     * Consulta en la BD al empleado con los datos especificados
-     * 
-     * @param nombreUsuario del empleado
-     * @param password contraseña del empleado
-     * 
-     * @return el empleado encontrado
+     * Valida credenciales consultando un Document plano y transformándolo de forma segura.
      */
     @Override
     public Empleado verificarEmpleado(String nombreUsuario, String password) {
         
-        //Excepción si los campos están vacíos
         if (nombreUsuario == null || nombreUsuario.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             LOG.warning(">> " + CAMPOS_VACIOS);
             throw new PersistenciaException(CAMPOS_VACIOS);
         }
 
-        //Itera y valida en la lista de empleados
-        for (Empleado empleado: consultarEmpleados()) {
-            if (datosCoincidentes(empleado, nombreUsuario, password)) {
-                LOG.warning(">> Empleado encontrado: " + nombreUsuario + ", " + password);
-                return empleado;
+        try {
+            Bson filtroCredenciales = Filters.and(
+                Filters.eq("nombreUsuario", nombreUsuario.trim()),
+                Filters.eq("contrasenia", password)
+            );
+
+            // Buscamos el Document plano
+            Document docEncontrado = coleccion.find(filtroCredenciales).first();
+
+            if (docEncontrado != null) {
+                LOG.info(">> Empleado verificado con éxito: " + nombreUsuario);
+                // Tu EmpleadoDoc se encarga de usar AdaptadorDoc para procesar el ID de forma correcta
+                return EmpleadoDoc.toEntity(docEncontrado); 
             }
+            
+        } catch (Exception ex) {
+            LOG.severe(">> Error crítico de infraestructura o conexión durante la verificación de credenciales.");
+            throw new PersistenciaException("Error de conexión al verificar credenciales.");
         }
-        LOG.warning("El usuario '" + nombreUsuario + "' no existe en el sistema.");
-        throw new PersistenciaException("El usuario no existe");
-    }
-    
-    //AUXILAIR TEMPORAL NOMAS MIENTRAS ENCHUFAMOS EL DAO OE
-    private boolean datosCoincidentes(Empleado empleado, String usuario, String contra) {
-        String nombre = empleado.getNombreUsuario();
-        String con = empleado.getContrasenia();
-        return nombre.equals(usuario) && con.equals(contra);
+
+        LOG.warning("Intentó ingresar el usuario '" + nombreUsuario + "', pero no coincide el usuario o contraseña.");
+        throw new PersistenciaException(EMPLEADO_INEXISTENTE);
     }
 
+    /**
+     * Inserta un empleado transformándolo primero a Document con tu adaptador.
+     */
     @Override
     public void insertarEmpleado(Empleado empleado) {
-        try{
-            coleccion.insertOne(empleado);
-        }catch(Exception ex){
+        try {
+            Document docEmpleado = EmpleadoDoc.toDocument(empleado);
+            coleccion.insertOne(docEmpleado);
+        } catch(Exception ex) {
             throw new PersistenciaException(ex.getMessage()); 
         }
     }
-    
 }

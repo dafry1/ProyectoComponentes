@@ -78,7 +78,7 @@ public class FabricaDAO implements IFabricaDAO {
     @Override
     public IEmpleadoDAO fabricarEmpleado() {
         if (empleado == null) {
-            empleado = new EmpleadoDAO(BD.getCollection(EMPLEADOS, Empleado.class));
+            empleado = new EmpleadoDAO(BD.getCollection(EMPLEADOS, org.bson.Document.class));
         }
         return empleado;
     }

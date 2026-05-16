@@ -84,7 +84,11 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
      */
     @Override
     public void mostrarVentanaInicio() {
+        JFrame ventanaAnterior = this.ventanaActual;
         abrirNuevaVentana(() -> new Vinicio(this, coordinadorNegocio));
+        if (ventanaAnterior != null) {
+            ventanaAnterior.dispose(); 
+        }
     }
 
     /**
@@ -141,7 +145,7 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
 
         //Cierra la ventana anterior
         if (ventanaAnterior != null) {
-            ventanaAnterior.dispose();
+            ventanaAnterior.setVisible(false);
         }
     }
 

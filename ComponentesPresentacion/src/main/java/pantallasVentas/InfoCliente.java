@@ -136,6 +136,7 @@ public class InfoCliente extends JDialog {
                     procesarVentaConfirmada(cliente);
                     UtilSwing.dialogoAviso(this, "Venta procesada con éxito para el cliente: " + cliente.getNombres());
                     coordinadorPresentacion.mostrarVentanaInicio();
+                    InfoCliente.this.dispose();
                 } catch (PresentacionException ex) {
                     UtilSwing.dialogoError(InfoCliente.this, ex.getMessage());
                 }

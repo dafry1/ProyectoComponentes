@@ -1,15 +1,23 @@
 package daos;
 
 import adaptadoresDoc.PiezaDoc;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.Sorts;
 import dominio.DetallesVenta;
 import dominio.Pieza;
 import dominio.Venta;
 import excepciones.PersistenciaException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 /**
  * Objeto que habla con la BD para las piezas
@@ -23,7 +31,7 @@ public class PiezaDAO implements IPiezaDAO {
     
     //Colección mongo
     private MongoCollection<Pieza> coleccion;
-    private MongoCollection<Venta> ventas;
+    private MongoCollection<Document> ventas;
     
     /**
      * Constructor
@@ -31,20 +39,9 @@ public class PiezaDAO implements IPiezaDAO {
      * @param coleccion 
      * @param ventas 
      */
-    public PiezaDAO(MongoCollection<Pieza> coleccion, MongoCollection<Venta> ventas) {
+    public PiezaDAO(MongoCollection<Pieza> coleccion, MongoCollection ventas) {
         this.coleccion = coleccion;
         this.ventas = ventas;
-    }
-    
-    //MEDIDAS TEMPORALES PARA MOCKEO
-    private static List<Pieza> PIEZAS = new ArrayList<>();
-    static {
-        PIEZAS.add(new Pieza("Ryzen 5 9600X", "Procesador", "AMD", "Zen 5", 2500.0, 50));
-        PIEZAS.add(new Pieza("Core i9-14900K", "Procesador", "Intel", "Raptor Lake", 5500.0, 40));
-        PIEZAS.add(new Pieza("Trident Z5 RGB", "RAM", "G.Skill", "DDR5-6400", 1800.0, 30));
-        PIEZAS.add(new Pieza("Vengeance RGB Frosted", "RAM", "Corsair", "DDR5-6000", 2100.0, 25));
-        PIEZAS.add(new Pieza("GeForce RTX 4090", "Tarjeta Gráfica", "NVIDIA", "Founders Edition", 35000.0, 10));
-        PIEZAS.add(new Pieza("Radeon RX 7800 XT", "Tarjeta Gráfica", "AMD", "Steel Legend", 9800.0, 15));
     }
     
     @Override
@@ -81,24 +78,93 @@ public class PiezaDAO implements IPiezaDAO {
         return lista;
     }
 
+    /**
+     * Método genérico que centraliza la lógica de un aggregate para
+     * obtener las piezas más vendidas en orden descendente
+     * 
+     * @param fechaBuscada
+     * 
+     * @return 
+     */
+    private List<Pieza> consultarTopPiezas(String fechaBuscada) {
+        List<Pieza> topPiezas = new ArrayList<>();
+        try {
+            List<Bson> tuberia = Arrays.asList(
+                // Filtro por fecha usando la expresión regular
+                Aggregates.match(Filters.regex("fechaHora", fechaBuscada)),
+
+                // Desenrolla el array de detalles
+                Aggregates.unwind("$detalles"),
+
+                // Agrupa reteniendo las propiedades mediante Accumulators.first()
+                Aggregates.group("$detalles.pieza._id", 
+                    Accumulators.sum("totalVendido", "$detalles.cantidad"),
+                    Accumulators.first("nombre", "$detalles.pieza.nombre"),
+                    Accumulators.first("categoria", "$detalles.pieza.categoria"),
+                    Accumulators.first("marcaPieza", "$detalles.pieza.marcaPieza"),
+                    Accumulators.first("modeloPieza", "$detalles.pieza.modeloPieza"),
+                    Accumulators.first("costoPieza", "$detalles.pieza.costoPieza"),
+                    Accumulators.first("stockPieza", "$detalles.pieza.stockPieza")
+                ),
+
+                // Ordena de mayor a menor éxito de ventas
+                Aggregates.sort(Sorts.descending("totalVendido")),
+
+                // Proyección limpia para tu adaptador
+                Aggregates.project(Projections.fields(
+                    Projections.computed("id", "$_id"), 
+                    Projections.include("nombre", "categoria", "marcaPieza", "modeloPieza", "costoPieza", "stockPieza"),
+                    Projections.excludeId()
+                ))
+            );
+
+            AggregateIterable<Document> resultado = ventas.aggregate(tuberia, Document.class);
+            
+            //Mapea los resultados
+            for (Document doc : resultado) {
+                Pieza pieza = PiezaDoc.toEntity(doc); 
+                if (pieza != null) {
+                    topPiezas.add(pieza);
+                }
+            }
+        } catch (Exception e) {
+            LOG.log(System.Logger.Level.ERROR, "Error al consultar el top de piezas del día: " + e.getMessage());
+            throw new PersistenciaException("No se pudo obtener el top de piezas diarias. Motivo: " + e.getMessage());
+        }
+        return topPiezas;
+    }
+    
+    
     @Override
     public List<Pieza> consultarTopDiaPiezas() {
-        return PIEZAS;
+        java.time.format.DateTimeFormatter formateador = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String fechaBuscada = java.time.LocalDate.now().format(formateador); 
+        return consultarTopPiezas(fechaBuscada);
     }
 
     @Override
     public List<Pieza> consultarTopSemanaPiezas() {
-        return PIEZAS;
+        java.time.format.DateTimeFormatter formateador = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        java.time.LocalDate hoy = java.time.LocalDate.now();
+        StringBuilder sb = new StringBuilder("^(");
+        for (int i = 0; i < 7; i++) {
+            sb.append(hoy.minusDays(i).format(formateador));
+            if (i < 6) sb.append("|");
+        }
+        sb.append(")");
+        return consultarTopPiezas(sb.toString());  
     }
 
     @Override
     public List<Pieza> consultarTopMesPiezas() {
-        return PIEZAS;
+        java.time.format.DateTimeFormatter formateador = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM");
+        String mesBuscado = java.time.LocalDate.now().format(formateador); 
+        return consultarTopPiezas("^" + mesBuscado);
     }
 
     @Override
     public List<Pieza> consultarTopTodoPiezas() {
-        return PIEZAS;
+        return consultarTopPiezas("");
     }
 
     /**

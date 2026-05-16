@@ -26,6 +26,8 @@ public class Vinicio extends JFrame {
     private ICoordinadorPresentacion coordinadorPresentacion;
     private ICoordinadorNegocio coordinadorNegocio;
     
+    private JPanel gridContenedor;
+    
     final String MAS_VENDIDAS_DIA = "Piezas más vendidas (día)";
     final String MAS_VENDIDAS_SEMANA = "Piezas más vendidas (semana)";
     final String MAS_VENDIDAS_MES = "Piezas más vendidas (mes)";
@@ -61,6 +63,16 @@ public class Vinicio extends JFrame {
         add(gridContenedor, BorderLayout.CENTER);
     }
     
+    public void actualizarDatos() {
+        gridContenedor.removeAll();
+        gridContenedor.add(new TarjetaCarrusel(MAS_VENDIDAS_DIA));
+        gridContenedor.add(new TarjetaCarrusel(MAS_VENDIDAS_SEMANA));
+        gridContenedor.add(new TarjetaCarrusel(MAS_VENDIDAS_MES));
+        gridContenedor.add(new TarjetaCarrusel(MAS_VENDIDAS_TODO));
+        gridContenedor.revalidate();
+        gridContenedor.repaint();
+    }
+    
     
 
     class TarjetaCarrusel extends PanelRedondeado {
@@ -85,11 +97,7 @@ public class Vinicio extends JFrame {
             panelCartas = new JPanel(navegadorCartas);
             panelCartas.setOpaque(false);
 
-            for (PiezaDTO pieza: coordinadorNegocio.consultarPiezas()) {
-                panelCartas.add(generarContenidoProducto(pieza));
-            }
 
-            //Consulta el tipo de filtro para las vendidas
             List<PiezaDTO> piezasFiltradas = switch (titulo) {
                 case MAS_VENDIDAS_DIA -> coordinadorNegocio.consultarTopDiaPiezas();
                 case MAS_VENDIDAS_SEMANA -> coordinadorNegocio.consultarTopSemanaPiezas();
@@ -97,16 +105,25 @@ public class Vinicio extends JFrame {
                 case MAS_VENDIDAS_TODO -> coordinadorNegocio.consultarTopTodoPiezas();
                 default -> throw new PresentacionException("Categoría de filtrado de piezas no válida");
             };
-            
-            //Según la lista que se haya poblado, muestra cada pieza
-            for (PiezaDTO pieza: piezasFiltradas) {
-                panelCartas.add(generarContenidoProducto(pieza));
-            }
-            
-            //Saca el total de piezas
+
             TOTAL_PRODUCTOS = piezasFiltradas.size();
 
-            //Aspecto gráfico
+            if (TOTAL_PRODUCTOS > 0) {
+                for (PiezaDTO pieza: piezasFiltradas) {
+                    panelCartas.add(generarContenidoProducto(pieza));
+                }
+            } else {
+                JPanel panelVacio = new JPanel(new GridBagLayout());
+                panelVacio.setOpaque(false);
+                JLabel lblMensaje = new JLabel("Sin ventas en este periodo");
+                lblMensaje.setForeground(Color.WHITE);
+                lblMensaje.setFont(new Font("Segoe UI", Font.ITALIC, 16));
+                panelVacio.add(lblMensaje);
+                panelCartas.add(panelVacio);
+                TOTAL_PRODUCTOS = 1; 
+            }
+
+            // Aspecto gráfico continuo...
             add(panelCartas, BorderLayout.CENTER);
             add(crearBotonAccion("<", true), BorderLayout.WEST);
             add(crearBotonAccion(">", false), BorderLayout.EAST);
