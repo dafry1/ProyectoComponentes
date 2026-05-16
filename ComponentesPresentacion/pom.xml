@@ -23,11 +23,6 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>NegocioBO</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>NegocioDTO</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -45,10 +40,20 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>SubsistemaSolicitudes</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.mycompany</groupId>
+                    <artifactId>InfraestructuraBodega</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.mycompany</groupId>
+                    <artifactId>Persistencia</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>Persistencia</artifactId>
+            <artifactId>NegocioBO</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

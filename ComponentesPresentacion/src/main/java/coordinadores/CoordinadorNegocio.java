@@ -1,17 +1,12 @@
 package coordinadores;
 
-import DTOS.DetallesVentaDTO;
-import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
 import DTOS.SolicitudDTO;
 import DTOS.VentaDTO;
 import excepciones.PresentacionException;
 import excepciones.NegocioException;
-import excepciones.PersistenciaException;
-import fachada.FachadaInicioSesion;
 import fachadas.FachadaSolicitudes;
 import fachadas.FachadaVentas;
-import fachada.IFachadaInicioSesion;
 import java.util.List;
 import observadores.IObservador;
 import fachadas.IFachadaSolicitudes;
@@ -29,7 +24,6 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
 
     //Instancia de la fachada del subsistema de las ventas
     private IFachadaVentas fachadaVentas = new FachadaVentas();
-    private IFachadaInicioSesion fachadaInicioSesion = new FachadaInicioSesion();
     private IFachadaSolicitudes fachadaSolicitudes = new FachadaSolicitudes();
 
     //Coordinador auxiliar

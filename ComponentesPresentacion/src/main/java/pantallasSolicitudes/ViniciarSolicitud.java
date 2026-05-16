@@ -39,7 +39,6 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
     private final ICoordinadorEstados coordinadorEstados;
 
     private final Map<String, JButton> mapaBotonesFiltros = new HashMap<>();
-    private final JButton botonBuscar = FachadaUtil.crearBoton("Buscar");
     private final String[] campos = {Constantes.PIEZA_NOMBRE, Constantes.PIEZA_CATEGORIA, Constantes.PIEZA_MARCA, Constantes.PIEZA_PRECIOMAX};
 
     private double totalCarrito;
@@ -178,11 +177,6 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
         gbc.gridy = ordenGbc++;
         gbc.insets = new Insets(15, 20, 5, 20);
         p.add(eliminarFiltros, gbc);
-        
-        botonBuscar.setPreferredSize(new Dimension(103, 45));
-        gbc.gridy = ordenGbc++; 
-        gbc.insets = new Insets(10, 20, 30, 20);
-        p.add(botonBuscar, gbc);
         
         return p;
     }
