@@ -73,17 +73,26 @@ public class ProcesadorJSON {
                 for (JsonNode nodo : raiz) {
                     PiezaInfraestructuraDTO dto = new PiezaInfraestructuraDTO();
 
-                    dto.setId(nodo.path("id").asText("0"));
-                    
-                    // Mapeo directo y seguro
-                    dto.setNombre(nodo.path("nombre").asText("N/A"));
-                    dto.setCategoria(nodo.path("categoria").asText("General"));
-                    dto.setMarcaPieza(nodo.path("marca").asText("Genérica"));
-                    dto.setModeloPieza(nodo.path("modelo").asText("Estándar"));
-                    
-                    // asDouble() resuelve el problema del "0"
+
+                    String idReal = "0";
+                    if (nodo.has("id")) {
+                        idReal = nodo.get("id").asText().trim();
+                    } else if (nodo.has("_id")) {
+                        idReal = nodo.get("_id").asText().trim();
+                    }
+
+                    dto.setId(idReal);
+
+                    // 2. MAPEO DE LOS DEMÁS CAMPOS (Igual que antes)
+                    dto.setNombre(nodo.path("nombre").asText("N/A").trim());
+                    dto.setCategoria(nodo.path("categoria").asText("General").trim());
+                    dto.setMarcaPieza(nodo.path("marca").asText("Genérica").trim());
+                    dto.setModeloPieza(nodo.path("modelo").asText("Estándar").trim());
+
+                    // asDouble() para el precio
                     dto.setCostoPieza(nodo.path("precio").asDouble(0.0));
 
+                    // 3. AGREGAR A LA LISTA SI ES VÁLIDO
                     if (!dto.getNombre().equals("N/A")) {
                         listaResultados.add(dto);
                     }

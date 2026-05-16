@@ -8,7 +8,9 @@ import dominio.Pieza;
 import org.bson.Document;
 
 /**
- *
+ * Clase adaptadora flexible capaz de mapear piezas con ObjectIds de Mongo
+ * o con IDs numéricos/secuenciales en formato String de APIs externas.
+ * 
  * @author Andre
  */
 public final class PiezaDoc {
@@ -20,7 +22,15 @@ public final class PiezaDoc {
 
         Pieza pieza = new Pieza();
         
-        pieza.setId(AdaptadorDoc.idTexto(doc)); 
+        // Si el _id es un String simple, doc.get("_id") puede fallar si idTexto espera un ObjectId.
+        // Lo resolvemos extrayendo el valor de forma segura.
+        Object idRaw = doc.get("_id");
+        if (idRaw != null) {
+            pieza.setId(idRaw.toString());
+        } else {
+            pieza.setId(AdaptadorDoc.idTexto(doc)); 
+        }
+        
         pieza.setNombre(doc.getString("nombre"));
         pieza.setCategoria(doc.getString("categoria"));
         pieza.setMarcaPieza(doc.getString("marcaPieza"));
@@ -29,7 +39,7 @@ public final class PiezaDoc {
         Number costo = doc.get("costoPieza", Number.class);
         pieza.setCostoPieza(costo != null ? costo.doubleValue() : 0.0);
         
-        pieza.setStockPieza(doc.getInteger("stockPieza"));
+        pieza.setStockPieza(doc.getInteger("stockPieza") != null ? doc.getInteger("stockPieza") : 0);
 
         return pieza;
     }
@@ -40,7 +50,13 @@ public final class PiezaDoc {
 
         Pieza pieza = new Pieza();
         
-        pieza.setId(AdaptadorDoc.idTexto(doc)); 
+        Object idRaw = doc.get("_id");
+        if (idRaw != null) {
+            pieza.setId(idRaw.toString());
+        } else {
+            pieza.setId(AdaptadorDoc.idTexto(doc)); 
+        }
+        
         pieza.setNombre(doc.getString("nombre"));
         pieza.setCategoria(doc.getString("categoria"));
         pieza.setMarcaPieza(doc.getString("marcaPieza"));
@@ -59,7 +75,14 @@ public final class PiezaDoc {
         Document doc = new Document();
 
         if (pieza.getId() != null && !pieza.getId().isEmpty()) {
-            doc.put("_id", AdaptadorDoc.textoId(pieza.getId()));
+            String idLimpio = pieza.getId().trim();
+            
+            // FILTRO DE FLEXIBILIDAD: ¿Es un ObjectId legítimo de MongoDB? (24 caracteres hex)
+            if (idLimpio.length() == 24 && idLimpio.matches("^[0-9a-fA-F]{24}$")) {
+                doc.put("_id", AdaptadorDoc.textoId(idLimpio)); // Lo convierte a org.bson.types.ObjectId
+            } else {
+                doc.put("_id", idLimpio); // Lo guarda directo como String plano ("1", "2", etc.)
+            }
         }
 
         doc.put("nombre", pieza.getNombre());
@@ -79,7 +102,14 @@ public final class PiezaDoc {
         Document doc = new Document();
 
         if (pieza.getId() != null && !pieza.getId().isEmpty()) {
-            doc.put("_id", AdaptadorDoc.textoId(pieza.getId()));
+            String idLimpio = pieza.getId().trim();
+            
+            // FILTRO DE FLEXIBILIDAD: El mismo comportamiento para los detalles embebidos
+            if (idLimpio.length() == 24 && idLimpio.matches("^[0-9a-fA-F]{24}$")) {
+                doc.put("_id", AdaptadorDoc.textoId(idLimpio));
+            } else {
+                doc.put("_id", idLimpio);
+            }
         }
 
         doc.put("nombre", pieza.getNombre());

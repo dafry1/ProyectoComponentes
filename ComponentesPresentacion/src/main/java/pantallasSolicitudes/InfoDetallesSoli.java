@@ -132,11 +132,12 @@ public class InfoDetallesSoli extends JDialog {
                 detalle.setCantidad(nuevaCantidad);
                 UtilSwing.dialogoAviso(this, "Cantidad actualizada.");
             }
+            //Notifica al observador
+            if (observador != null) {
+                observador.observar();
+            }
         });
         
-         //Notifica al observador
-        if (observador != null) {
-            observador.observar();
-        }
+        
     }
 }

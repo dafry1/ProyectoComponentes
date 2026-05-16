@@ -31,7 +31,7 @@ public abstract class DTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DTO other = (DTO) o;
-        return id != null && id.equals(other.id);
+        return this.id != null && other.getId() != null && this.id.trim().equals(other.getId().trim());
     }
 
     @Override

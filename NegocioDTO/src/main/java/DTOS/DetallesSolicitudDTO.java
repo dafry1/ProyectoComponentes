@@ -17,13 +17,21 @@ public class DetallesSolicitudDTO extends DTO{
     public DetallesSolicitudDTO() {
     }
 
-    public DetallesSolicitudDTO(double costo, int cantidad, double subtotal, PiezaDTO pieza) {
+    public DetallesSolicitudDTO(String id, double costo, int cantidad, double subtotal, PiezaDTO pieza) {
+        super(id);
         this.costo = costo;
         this.cantidad = cantidad;
         this.subtotal = subtotal;
         this.pieza = pieza;
     }
 
+    /**
+     * Calcula el subtotal basado en costo y cantidad actual
+     */
+    private void recalcularSubtotal() {
+        this.subtotal = this.costo * this.cantidad;
+    }
+    
     public double getCosto() {
         return costo;
     }
@@ -38,6 +46,7 @@ public class DetallesSolicitudDTO extends DTO{
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+        recalcularSubtotal(); 
     }
 
     public double getSubtotal() {
@@ -54,6 +63,10 @@ public class DetallesSolicitudDTO extends DTO{
 
     public void setPieza(PiezaDTO pieza) {
         this.pieza = pieza;
+        if(pieza != null && this.costo == 0) {
+            this.costo = pieza.getCostoPieza();
+            recalcularSubtotal();
+        }
     }
     
     
