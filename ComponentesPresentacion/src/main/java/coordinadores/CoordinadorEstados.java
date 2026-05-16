@@ -32,24 +32,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
     private final IFachadaSolicitudes fachadaSolicitud = new FachadaSolicitudes();
     //Instancia de sí mismo
     private static CoordinadorEstados instancia = null;
-
-    /**
-     * IMPLEMENTACION SUPERULTRAMEGAHIPER TEMPORAL SOLO PARA QUE FUNCIONE
-     * AHORITITITA EL RESTO DE ESTADOS VOLÁTILES COMO EL CARRITO O EL EMPLEADO
-     * SE MANEJA EN NEGOCIO
-     */
-    private static ClienteDTO clienteActual = null;
-
-    @Override
-    public void setCliente(ClienteDTO cliente) {
-        this.clienteActual = cliente;
-    }
-
-    @Override
-    public ClienteDTO getCliente() {
-        return clienteActual;
-    }
-
+    
     @Override
     public boolean existePiezaCarrito(String id) {
         try {
@@ -94,6 +77,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
         try {
             fachadaSesion.cerrarSesion();
             fachadaVentas.limpiarCarritoVenta();
+            fachadaSolicitud.limpiarCarritoSolicitud();
         } catch (NegocioException e) {
             throw new PresentacionException("Error al cerrar la sesión: " + e.getMessage());
         }
@@ -155,7 +139,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
         try {
             return fachadaVentas.totalCarritoVenta();
         } catch (NegocioException e) {
-            return 0.0;
+            throw new PresentacionException("Error: " + e.getMessage());
         }
     }
 
@@ -169,7 +153,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
         try {
             return fachadaVentas.carritoVentaVacio();
         } catch (NegocioException e) {
-            return true;
+            throw new PresentacionException("Error: " + e.getMessage());
         }
     }
 
@@ -271,7 +255,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
         try {
             return fachadaSolicitud.totalCarritoSolicitud();
         } catch (NegocioException e) {
-            return 0.0;
+            throw new PresentacionException("Error al eliminar de la solicitud.");
         }
     }
 
@@ -285,7 +269,7 @@ public class CoordinadorEstados implements ICoordinadorEstados {
         try {
             return fachadaSolicitud.carritoSolicitudVacio();
         } catch (NegocioException e) {
-            return true;
+            throw new PresentacionException("Error al consultar si el carrito está vacío");
         }
     }
 

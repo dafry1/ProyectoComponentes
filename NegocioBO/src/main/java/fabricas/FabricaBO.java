@@ -26,9 +26,6 @@ public class FabricaBO implements IFabricaBO {
     //Fábrica que suministra los DAO
     private IFabricaDAO fabricaDAO = FabricaDAO.singleton();
     
-    //Fábrica que suministra los adaptadores
-    private IFabricaAdaptadores fabricaAdaptadores = FabricaAdaptadores.singleton();
-    
     //Instancias de cada BO, implementando en la práctica un singleton
     private IPiezaBO instanciaPieza;
     private IVentaBO instanciaVenta;
@@ -55,12 +52,7 @@ public class FabricaBO implements IFabricaBO {
     @Override
     public IPiezaBO fabricarPieza() {
         if (instanciaPieza == null) {
-            instanciaPieza = new PiezaBO(
-                    fabricaDAO.fabricarPieza(), 
-                    fabricaAdaptadores.fabricarAdaptadorPieza(), 
-                    fabricaAdaptadores.fabricarAdaptadorDetallesVenta(),
-                    fabricaAdaptadores.fabricarAdaptadorDetallesSolicitud()
-                );
+            instanciaPieza = new PiezaBO(fabricaDAO.fabricarPieza());
         }
         return instanciaPieza;
     }
@@ -73,7 +65,7 @@ public class FabricaBO implements IFabricaBO {
     @Override
     public IVentaBO fabricarVenta() {
         if (instanciaVenta == null) {
-            instanciaVenta = new VentaBO(fabricaDAO.fabricarVenta(), fabricaAdaptadores.fabricarAdaptadorVenta());
+            instanciaVenta = new VentaBO(fabricaDAO.fabricarVenta());
         }
         return instanciaVenta;
     }
@@ -86,7 +78,7 @@ public class FabricaBO implements IFabricaBO {
     @Override
     public IEmpleadoBO fabricarEmpleado() {
         if (instanciaEmpleado == null) {
-            instanciaEmpleado = new EmpleadoBO(fabricaDAO.fabricarEmpleado(), fabricaAdaptadores.fabricarAdaptadorEmpleado());
+            instanciaEmpleado = new EmpleadoBO(fabricaDAO.fabricarEmpleado());
         }
         return instanciaEmpleado;
     }
@@ -94,7 +86,7 @@ public class FabricaBO implements IFabricaBO {
     @Override
     public ISolicitudBO fabricarSolicitud() {
         if (instanciaSolicitud == null) {
-            instanciaSolicitud = new SolicitudBO(fabricaDAO.fabricarSolicitud(), new AdaptadorSolicitud(fabricaAdaptadores.fabricarAdaptadorEmpleado(), fabricaAdaptadores.fabricarAdaptadorCliente(), fabricaAdaptadores.fabricarAdaptadorDetallesSolicitud()));
+            instanciaSolicitud = new SolicitudBO(fabricaDAO.fabricarSolicitud());
         }
         return instanciaSolicitud;
     }

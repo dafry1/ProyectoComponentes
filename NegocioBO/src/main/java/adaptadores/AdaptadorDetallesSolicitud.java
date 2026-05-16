@@ -9,39 +9,39 @@ import java.util.stream.Collectors;
  *
  * @author Andre
  */
-public class AdaptadorDetallesSolicitud implements IAdaptadorDetallesSolicitud {
-    private IAdaptadorPieza adaptadorPieza;
-    public AdaptadorDetallesSolicitud(IAdaptadorPieza adaptadorPieza){
-        this.adaptadorPieza = adaptadorPieza;
-    }
+public final class AdaptadorDetallesSolicitud {
     
-    @Override
-    public DetallesSolicitud Entidad(DetallesSolicitudDTO dto) {
+    private AdaptadorDetallesSolicitud(){}
+    
+    public static DetallesSolicitud Entidad(DetallesSolicitudDTO dto) {
+        if (dto == null) return null;
+        
         DetallesSolicitud entidad = new DetallesSolicitud();
         entidad.setCosto(dto.getCosto());
         entidad.setSubtotal(dto.getSubtotal());
         entidad.setCantidad(dto.getCantidad());
-        entidad.setPieza(adaptadorPieza.Entidad(dto.getPieza()));
+        entidad.setPieza(AdaptadorPieza.Entidad(dto.getPieza()));
         return entidad;
     }
 
-    @Override
-    public List<DetallesSolicitud> listaEntidad(List<DetallesSolicitudDTO> dtos) {
-        return dtos.stream().map(this::Entidad).collect(Collectors.toList());
+    public static List<DetallesSolicitud> listaEntidad(List<DetallesSolicitudDTO> dtos) {
+        if (dtos == null) return null;
+        return dtos.stream().map(AdaptadorDetallesSolicitud::Entidad).collect(Collectors.toList());
     }
 
-    @Override
-    public DetallesSolicitudDTO DTO(DetallesSolicitud entidad) {
+    public static DetallesSolicitudDTO DTO(DetallesSolicitud entidad) {
+        if (entidad == null) return null;
+        
         DetallesSolicitudDTO dto = new DetallesSolicitudDTO();
         dto.setCosto(entidad.getCosto());
         dto.setSubtotal(entidad.getSubtotal());
         dto.setCantidad(entidad.getCantidad());
-        dto.setPieza(adaptadorPieza.DTO(entidad.getPieza()));
+        dto.setPieza(AdaptadorPieza.DTO(entidad.getPieza()));
         return dto;
     }
 
-    @Override
-    public List<DetallesSolicitudDTO> listaDTO(List<DetallesSolicitud> entidades) {
-        return entidades.stream().map(this::DTO).collect(Collectors.toList());
+    public static List<DetallesSolicitudDTO> listaDTO(List<DetallesSolicitud> entidades) {
+        if (entidades == null) return null;
+        return entidades.stream().map(AdaptadorDetallesSolicitud::DTO).collect(Collectors.toList());
     }
 }

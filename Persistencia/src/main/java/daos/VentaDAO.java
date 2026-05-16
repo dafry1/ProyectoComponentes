@@ -1,10 +1,6 @@
 package daos;
 
-import adaptadoresDoc.AdaptadorCliente;
-import adaptadoresDoc.AdaptadorDetallesVenta;
-import adaptadoresDoc.AdaptadorEmpleado;
-import adaptadoresDoc.AdaptadorVenta;
-import adaptadoresDoc.PiezaDoc;
+import adaptadoresDoc.VentaDoc;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.InsertOneResult;
@@ -16,59 +12,58 @@ import java.util.List;
 import org.bson.Document;
 
 /**
- *
+ * Acceso a datos para la entidad Venta utilizando MongoDB
+ * y la red de adaptadores estáticos.
+ * 
  * @author Andre
  */
 public class VentaDAO implements IVentaDAO {
 
     private static final System.Logger LOG = System.getLogger(VentaDAO.class.getName());
     
-    private static List<Venta> VENTAS = new ArrayList<>();
-    
-    private static final AdaptadorCliente adaptadorCliente = new AdaptadorCliente();
-    private static final AdaptadorEmpleado adaptadorEmpleado = new AdaptadorEmpleado();
-    private static final AdaptadorDetallesVenta adaptadorDetallesVenta = new AdaptadorDetallesVenta(PiezaDoc.singleton());
-    private static final AdaptadorVenta adaptadorVenta = new AdaptadorVenta(adaptadorCliente, adaptadorEmpleado, adaptadorDetallesVenta);
-    
-    private MongoCollection<Venta> coleccion;
+    private final MongoCollection<Document> coleccion;
     
     /**
-     * Constructor
+     * Constructor que recibe la colección de MongoDB.
      *
-     * @param coleccion
+     * @param coleccion Colección de la base de datos
      */
     public VentaDAO(MongoCollection coleccion) {
         this.coleccion = coleccion;
     }
     
     /**
-     * Extrae todas las ventas de la BD
+     * Extrae todas las ventas de la BD.
      *
-     * @return lista de ventas
+     * @return lista de ventas mapeadas a objetos de dominio
      */
     @Override
     public List<Venta> consultarVentas() {
         List<Venta> lista = new ArrayList<>();
+        
         for (Document doc : coleccion.find(new Document(), Document.class)) {
-            lista.add(adaptadorVenta.toEntity(doc));
+            lista.add(VentaDoc.toEntity(doc));
         }
+        
         return lista;
     }
     
     /**
-     * Muestra la cantidad de ventas registradas el mismo dia de la consulta en la BD
+     * Muestra la cantidad de ventas registradas el mismo día de la consulta en la BD
      *
      * @return cantidad de ventas
      */
     @Override
     public int cantidadVentas() {
         String hoy = LocalDate.now().toString();
-
         return (int) coleccion.countDocuments(
                 Filters.regex("fechaHora", "^" + hoy)
         );
     }
 
+    /**
+     * Registra una nueva venta en la base de datos transformándola a Document.
+     */
     @Override
     public Venta registrarVenta(Venta venta) {
         if (venta == null) {
@@ -76,15 +71,19 @@ public class VentaDAO implements IVentaDAO {
             return null;
         }
         try {
-            InsertOneResult resultado = coleccion.insertOne(venta);
+            Document documentoVenta = VentaDoc.toDocument(venta);
+            InsertOneResult resultado = coleccion.insertOne(documentoVenta);
             if (resultado.getInsertedId() != null) {
+                if (venta.getId() == null || venta.getId().isEmpty()) {
+                    venta.setId(resultado.getInsertedId().asObjectId().getValue().toString());
+                }
                 return venta;
             } else {
                 return null;
             }
         } catch (Exception e) {
-            LOG.log(System.Logger.Level.ERROR, "Error al registrar la venta " + e.getMessage());
-            throw new PersistenciaException("No se registrar la venta correctamente.");
+            LOG.log(System.Logger.Level.ERROR, "Error al registrar la venta: " + e.getMessage(), e);
+            throw new PersistenciaException("No se pudo registrar la venta correctamente.");
         }
     }
 }

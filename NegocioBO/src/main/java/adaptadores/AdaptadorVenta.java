@@ -9,48 +9,43 @@ import java.util.stream.Collectors;
  *
  * @author Andre
  */
-public class AdaptadorVenta implements IAdaptadorVenta { 
-    private IAdaptadorEmpleado adaptadorEmpleado;
-    private IAdaptadorCliente adaptadorCliente;
-    private IAdaptadorDetallesVenta adaptadorDetallesVenta;
-    public AdaptadorVenta(IAdaptadorEmpleado adaptadorEmpleado, IAdaptadorCliente adaptadorCliente, IAdaptadorDetallesVenta adaptadorDetallesVenta){
-        this.adaptadorEmpleado = adaptadorEmpleado;
-        this.adaptadorCliente = adaptadorCliente;
-        this.adaptadorDetallesVenta = adaptadorDetallesVenta;
-    }
+public final class AdaptadorVenta {
+
+    private AdaptadorVenta(){}
     
-    @Override
-    public Venta Entidad(VentaDTO dto) {
+    public static Venta Entidad(VentaDTO dto) {
+        if (dto == null) return null;
+        
         Venta entidad = new Venta();
-        entidad.setCliente(adaptadorCliente.Entidad(dto.getCliente()));
-        entidad.setEmpleado(adaptadorEmpleado.Entidad(dto.getEmpleado()));
+        entidad.setCliente(AdaptadorCliente.Entidad(dto.getCliente()));
+        entidad.setEmpleado(AdaptadorEmpleado.Entidad(dto.getEmpleado()));
         entidad.setTotal(dto.getTotal());
         entidad.setFechaHora(dto.getFechaHora());
         entidad.setFolio(dto.getFolio());
-        entidad.setDetalles(adaptadorDetallesVenta.listaEntidad(dto.getDetalles()));
+        entidad.setDetalles(AdaptadorDetallesVenta.listaEntidad(dto.getDetalles()));
         return entidad;
     }
 
-    @Override
-    public List<Venta> listaEntidad(List<VentaDTO> dtos) {
-        return dtos.stream().map(this::Entidad).collect(Collectors.toList());
+    public static List<Venta> listaEntidad(List<VentaDTO> dtos) {
+        if (dtos == null) return null;
+        return dtos.stream().map(AdaptadorVenta::Entidad).collect(Collectors.toList());
     }
 
-    @Override
-    public VentaDTO DTO(Venta entidad) {
+    public static VentaDTO DTO(Venta entidad) {
+        if (entidad == null) return null;
+        
         VentaDTO dto = new VentaDTO();
-        dto.setCliente(adaptadorCliente.DTO(entidad.getCliente()));
-        dto.setEmpleado(adaptadorEmpleado.DTO(entidad.getEmpleado()));
+        dto.setCliente(AdaptadorCliente.DTO(entidad.getCliente()));
+        dto.setEmpleado(AdaptadorEmpleado.DTO(entidad.getEmpleado()));
         dto.setTotal(entidad.getTotal());
         dto.setFechaHora(entidad.getFechaHora());
         dto.setFolio(entidad.getFolio());
-        dto.setDetalles(adaptadorDetallesVenta.listaDTO(entidad.getDetalles()));
+        dto.setDetalles(AdaptadorDetallesVenta.listaDTO(entidad.getDetalles()));
         return dto;
     }
 
-    @Override
-    public List<VentaDTO> listaDTO(List<Venta> entidades) {
-        return entidades.stream().map(this::DTO).collect(Collectors.toList());
+    public static List<VentaDTO> listaDTO(List<Venta> entidades) {
+        if (entidades == null) return null;
+        return entidades.stream().map(AdaptadorVenta::DTO).collect(Collectors.toList());
     }
-    
 }

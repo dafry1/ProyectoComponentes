@@ -3,10 +3,11 @@ package bo;
 import DTOS.ClienteDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.SolicitudDTO;
+import adaptadores.AdaptadorSolicitud;
 import dominio.Solicitud;
 import excepciones.NegocioException;
-import adaptadores.IAdaptadorSolicitud;
 import daos.ISolicitudDAO;
+import excepciones.PersistenciaException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,22 +25,19 @@ public class SolicitudBO implements ISolicitudBO {
     
     // Atributos
     private final ISolicitudDAO solicitudDAO;
-    private final IAdaptadorSolicitud adaptadorSolicitud;
-    
+
     /**
      * Constructor que inyecta DAO y adaptador
      * 
      * @param solicitudDAO
-     * @param adaptadorSolicitud 
      */
-    public SolicitudBO(ISolicitudDAO solicitudDAO, IAdaptadorSolicitud adaptadorSolicitud) {
+    public SolicitudBO(ISolicitudDAO solicitudDAO) {
         this.solicitudDAO = solicitudDAO;
-        this.adaptadorSolicitud = adaptadorSolicitud;
     }
     
     /** Centraliza la forma en la que se adaptan las solicitudes de Entidad a DTO */
     private List<SolicitudDTO> adaptarInternamente(List<Solicitud> solicitudes) {
-        return adaptadorSolicitud.listaDTO(solicitudes);
+        return AdaptadorSolicitud.listaDTO(solicitudes);
     }
     
     /**
@@ -52,6 +50,8 @@ public class SolicitudBO implements ISolicitudBO {
         return adaptarInternamente(solicitudDAO.consultarSolicitudes());
     }
     
+    
+    
     /**
      * Registra una solicitud en el sistema
      * 
@@ -63,7 +63,7 @@ public class SolicitudBO implements ISolicitudBO {
         
         // Asigna folio y fecha y hora
         solicitud.setFolio(generarFolio());
-        solicitud.setFechaEntrega(generarFecha());
+        solicitud.setFechaEntrega(UtilNegocio.hoyTexto());
         
         solicitud.setEstado("PENDIENTE");
 
@@ -76,46 +76,9 @@ public class SolicitudBO implements ISolicitudBO {
             solicitud.setFechaEntregaEstimada("3 a 5 días hábiles");
         }
         
-        // Solicitud inválida (mantiene lógica de DetallesVenta/Detalles)
-        if (solicitud == null || solicitud.getDetalles().isEmpty()) {
-            DEBUG = "Solicitud vacía o sin detalles";
-            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
-            throw new NegocioException(DEBUG);
-        }
-        
-        // Sin cliente
-        ClienteDTO cliente = solicitud.getCliente();
-        if (cliente == null) {
-            DEBUG = "Solicitud sin cliente";
-            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
-            throw new NegocioException(DEBUG); 
-        }
-        
-        // Datos del cliente inválidos
-        if (!UtilNegocio.validarCliente(cliente)) {
-            DEBUG = "Cliente con datos inválidos";
-            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
-            throw new NegocioException(DEBUG); 
-        }
-        
-        // Sin empleado
-        EmpleadoDTO empleado = solicitud.getEmpleado();
-        if (empleado == null) {
-            DEBUG = "Solicitud sin empleado";
-            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
-            throw new NegocioException(DEBUG); 
-        }
-        
-        // Datos del empleado inválidos
-        if (!UtilNegocio.validarEmpleado(empleado)) {
-            DEBUG = "Empleado con datos inválidos";
-            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
-            throw new NegocioException(DEBUG); 
-        }
-        
         // Registra la solicitud
-        Solicitud s = adaptadorSolicitud.Entidad(solicitud);
-        return adaptadorSolicitud.DTO(solicitudDAO.registrarSolicitud(s));
+        Solicitud s = AdaptadorSolicitud.Entidad(solicitud);
+        return AdaptadorSolicitud.DTO(solicitudDAO.registrarSolicitud(s));
     }
     
     /**
@@ -126,15 +89,7 @@ public class SolicitudBO implements ISolicitudBO {
         return "SOL - " + numero;
     }
     
-    /**
-     * Auxiliar obtiene la fecha formateada
-     */
-    private String generarFecha() {
-        LocalDateTime fechaHoraRegistro = LocalDateTime.now();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        return fechaHoraRegistro.format(formato);
-    }
-
+    
     @Override
     public List<SolicitudDTO> filtrarSolicitudesFecha(LocalDate fecha) {
         if (fecha == null) {
@@ -142,7 +97,6 @@ public class SolicitudBO implements ISolicitudBO {
             LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
             throw new NegocioException(DEBUG);
         }
-        // Aquí llamarías al método del DAO correspondiente cuando esté implementado
         return adaptarInternamente(solicitudDAO.consultarSolicitudes());
     }
 
@@ -164,5 +118,16 @@ public class SolicitudBO implements ISolicitudBO {
             throw new NegocioException(DEBUG);
         }
         return adaptarInternamente(solicitudDAO.consultarSolicitudes());
+    }
+
+    @Override
+    public int contarSolicitudesHoy() {
+        try {
+            return solicitudDAO.contarSolicitudesHoy();
+        } catch (PersistenciaException e) {
+            DEBUG = "Error al contar las solicitudes: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
+            throw new NegocioException(DEBUG);
+        }
     }
 }

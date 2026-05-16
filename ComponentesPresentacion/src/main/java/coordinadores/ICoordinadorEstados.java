@@ -80,10 +80,6 @@ public interface ICoordinadorEstados {
      */
     public EmpleadoDTO getUsuarioLogueado();
     
-    public void setCliente(ClienteDTO cliente);
-    
-    public ClienteDTO getCliente();
-    
     boolean existePiezaCarrito(String id);
     
     public List<PiezaDTO> consultarPiezas();

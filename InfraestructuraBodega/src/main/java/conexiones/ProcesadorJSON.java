@@ -73,6 +73,8 @@ public class ProcesadorJSON {
                 for (JsonNode nodo : raiz) {
                     PiezaInfraestructuraDTO dto = new PiezaInfraestructuraDTO();
 
+                    dto.setId(nodo.path("id").asText("0"));
+                    
                     // Mapeo directo y seguro
                     dto.setNombre(nodo.path("nombre").asText("N/A"));
                     dto.setCategoria(nodo.path("categoria").asText("General"));

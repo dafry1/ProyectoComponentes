@@ -26,6 +26,7 @@ public class AdaptadorPiezaDTO {
             return null;
         }
         PiezaDTO piezaDTO = new PiezaDTO();
+        piezaDTO.setId(pieza.getId());
         piezaDTO.setNombre(pieza.getNombre());
         piezaDTO.setCategoria(pieza.getCategoria());
         piezaDTO.setMarcaPieza(pieza.getMarcaPieza());

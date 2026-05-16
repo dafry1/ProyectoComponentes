@@ -5,6 +5,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import dominio.DetallesVenta;
 import dominio.Pieza;
+import dominio.Venta;
 import excepciones.PersistenciaException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,20 +23,17 @@ public class PiezaDAO implements IPiezaDAO {
     
     //Colección mongo
     private MongoCollection<Pieza> coleccion;
-    
-    
-    private static final PiezaDoc adaptadorPieza = PiezaDoc.singleton();
-    
-    
-   
+    private MongoCollection<Venta> ventas;
     
     /**
      * Constructor
      * 
      * @param coleccion 
+     * @param ventas 
      */
-    public PiezaDAO(MongoCollection coleccion) {
+    public PiezaDAO(MongoCollection<Pieza> coleccion, MongoCollection<Venta> ventas) {
         this.coleccion = coleccion;
+        this.ventas = ventas;
     }
     
     //MEDIDAS TEMPORALES PARA MOCKEO
@@ -58,10 +56,10 @@ public class PiezaDAO implements IPiezaDAO {
         try {
             Pieza cascaron = new Pieza();
             cascaron.setId(id);
-            Document docConId = adaptadorPieza.toDocument(cascaron);
+            Document docConId = PiezaDoc.toDocument(cascaron);
             Document filtro = new Document("_id", docConId.get("_id"));
             Document docResultado = coleccion.find(filtro, Document.class).first();
-            return (docResultado != null) ? adaptadorPieza.toEntity(docResultado) : null;
+            return (docResultado != null) ? PiezaDoc.toEntity(docResultado) : null;
 
         } catch (Exception e) {
             LOG.log(System.Logger.Level.ERROR, "Error al consultar pieza: " + e.getMessage());
@@ -78,7 +76,7 @@ public class PiezaDAO implements IPiezaDAO {
     public List<Pieza> consultarPiezas() {
         List<Pieza> lista = new ArrayList<>();
         for (Document doc : coleccion.find(new Document(), Document.class)) {
-            lista.add(adaptadorPieza.toEntity(doc));
+            lista.add(PiezaDoc.toEntity(doc));
         }
         return lista;
     }
@@ -112,7 +110,7 @@ public class PiezaDAO implements IPiezaDAO {
      */
     @Override
     public void actualizarStock(DetallesVenta detalle) {
-        Document docPieza = adaptadorPieza.toDocument(detalle.getPieza());
+        Document docPieza = PiezaDoc.toDocument(detalle.getPieza());
         if (docPieza == null || !docPieza.containsKey("_id")) {
             LOG.log(System.Logger.Level.ERROR, "La pieza no tiene un ID válido para actualizar stock");
             throw new PersistenciaException("ID de pieza faltante");
@@ -215,7 +213,7 @@ public class PiezaDAO implements IPiezaDAO {
         List<Pieza> lista = new ArrayList<>();
         Document filtro = new Document(campo, new Document("$regex", valorFiltro).append("$options", "i"));
         for (Document doc : coleccion.find(filtro, Document.class)) {
-            lista.add(adaptadorPieza.toEntity(doc));
+            lista.add(PiezaDoc.toEntity(doc));
         }
         return lista;
     }
@@ -234,7 +232,7 @@ public class PiezaDAO implements IPiezaDAO {
         List<Pieza> listaFiltrada = new ArrayList<>();
         Document filtro = new Document("costoPieza", new Document("$lte", precioMaximo));
         try { for (Document doc : coleccion.find(filtro, Document.class)) {
-                listaFiltrada.add(adaptadorPieza.toEntity(doc));
+                listaFiltrada.add(PiezaDoc.toEntity(doc));
             }
         } catch (Exception e) {
             LOG.log(System.Logger.Level.ERROR, "Error al filtrar por precio: " + e.getMessage());

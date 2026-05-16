@@ -9,39 +9,39 @@ import java.util.stream.Collectors;
  *
  * @author Andre
  */
-public class AdaptadorDetallesVenta implements IAdaptadorDetallesVenta {
-    private IAdaptadorPieza adaptadorPieza;
-    public AdaptadorDetallesVenta(IAdaptadorPieza adaptadorPieza){
-        this.adaptadorPieza = adaptadorPieza;
-    }
+public final class AdaptadorDetallesVenta {
     
-    @Override
-    public DetallesVenta Entidad(DetallesVentaDTO dto) {
+    private AdaptadorDetallesVenta(){}
+    
+    public static DetallesVenta Entidad(DetallesVentaDTO dto) {
+        if (dto == null) return null;
+        
         DetallesVenta entidad = new DetallesVenta();
         entidad.setCosto(dto.getCosto());
         entidad.setSubtotal(dto.getSubtotal());
         entidad.setCantidad(dto.getCantidad());
-        entidad.setPieza(adaptadorPieza.Entidad(dto.getPieza()));
+        entidad.setPieza(AdaptadorPieza.Entidad(dto.getPieza()));
         return entidad;
     }
 
-    @Override
-    public List<DetallesVenta> listaEntidad(List<DetallesVentaDTO> dtos) {
-        return dtos.stream().map(this::Entidad).collect(Collectors.toList());
+    public static List<DetallesVenta> listaEntidad(List<DetallesVentaDTO> dtos) {
+        if (dtos == null) return null;
+        return dtos.stream().map(AdaptadorDetallesVenta::Entidad).collect(Collectors.toList());
     }
 
-    @Override
-    public DetallesVentaDTO DTO(DetallesVenta entidad) {
+    public static DetallesVentaDTO DTO(DetallesVenta entidad) {
+        if (entidad == null) return null;
+        
         DetallesVentaDTO dto = new DetallesVentaDTO();
         dto.setCosto(entidad.getCosto());
         dto.setSubtotal(entidad.getSubtotal());
         dto.setCantidad(entidad.getCantidad());
-        dto.setPieza(adaptadorPieza.DTO(entidad.getPieza()));
+        dto.setPieza(AdaptadorPieza.DTO(entidad.getPieza()));
         return dto;
     }
 
-    @Override
-    public List<DetallesVentaDTO> listaDTO(List<DetallesVenta> entidades) {
-        return entidades.stream().map(this::DTO).collect(Collectors.toList());
+    public static List<DetallesVentaDTO> listaDTO(List<DetallesVenta> entidades) {
+        if (entidades == null) return null;
+        return entidades.stream().map(AdaptadorDetallesVenta::DTO).collect(Collectors.toList());
     }
 }

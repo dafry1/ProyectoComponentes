@@ -5,6 +5,7 @@ package DTO;
  * @author Andre
  */
 public class PiezaInfraestructuraDTO {
+    private String id;
     private String nombre;
     private String categoria;
     private String marcaPieza;
@@ -12,7 +13,8 @@ public class PiezaInfraestructuraDTO {
     private double costoPieza;
     private int stockPieza;
 
-    public PiezaInfraestructuraDTO(String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza) {
+    public PiezaInfraestructuraDTO(String id, String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza) {
+        this.id = id;
         this.nombre = nombre;
         this.categoria = categoria;
         this.marcaPieza = marcaPieza;
@@ -70,6 +72,14 @@ public class PiezaInfraestructuraDTO {
 
     public void setStockPieza(int stockPieza) {
         this.stockPieza = stockPieza;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
     
     

@@ -6,30 +6,20 @@ package DTOS;
  */
 public class EmpleadoDTO extends PersonaDTO {
     private String nombreUsuario;
-    private String contrasenia;
 
     public EmpleadoDTO() {
     }
 
-    public EmpleadoDTO(String nombreUsuario, String contrasenia, String nombres, String apellidoPaterno, String apellidoMaterno) {
+    public EmpleadoDTO(String nombreUsuario, String nombres, String apellidoPaterno, String apellidoMaterno) {
         super(nombres, apellidoPaterno, apellidoMaterno);
         this.nombreUsuario = nombreUsuario;
-        this.contrasenia = contrasenia;
     }
 
     public String getNombreUsuario() {
         return nombreUsuario;
     }
-
-    public String getContrasenia() {
-        return contrasenia;
-    }
     
     public void setNombreUsuario(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
-    }
-
-    public void setContrasenia(String contrasenia) {
-        this.contrasenia = contrasenia;
     }
 }

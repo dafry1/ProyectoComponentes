@@ -1,7 +1,9 @@
+
 package controles;
 
 import DTOS.ClienteDTO;
 import DTOS.DetallesVentaDTO;
+import DTOS.EmpleadoDTO;
 import DTOS.VentaDTO;
 import excepciones.NegocioException;
 import fabricas.IFabricaBO;
@@ -43,10 +45,16 @@ public class ControlVentas {
      *
      * @return lista de tipo VentaDTO
      */
-    public List<VentaDTO> consultarVentas() {
-        List<VentaDTO> ventas = ventaBO.consultarVentas();
-        LOG.log(System.Logger.Level.INFO, () -> ">> Ventas consultadas con éxito: " + ventas.size());
-        return ventas;
+    public List<VentaDTO> consultarVentas() { 
+        try {
+            List<VentaDTO> ventas = ventaBO.consultarVentas();
+            LOG.log(System.Logger.Level.INFO, () -> ">> Ventas consultadas con éxito: " + ventas.size());
+            return ventas;
+        } catch (NegocioException e) {
+            String MSJ = e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new NegocioException(MSJ);
+        }
     }
     
     /**
@@ -61,8 +69,20 @@ public class ControlVentas {
         
         LOG.log(System.Logger.Level.INFO, () -> ">> INICIANDO EL PROCESO DE UNA VENTA");
         
-        //Actualiza stock y registra la venta
-        piezaBO.actualizarStockTrasVenta(venta.getDetalles());
+        //Sin cliente
+        ClienteDTO cliente = venta.getCliente();
+        if (cliente == null) {
+            LOG.log(System.Logger.Level.ERROR, SIN_CLIENTE);
+            throw new NegocioException(SIN_CLIENTE); 
+        }
+        
+        //Sin empleado
+        EmpleadoDTO empleado = venta.getEmpleado();
+        if (empleado == null) {
+            String MSJ = "Venta sin empleado";
+            LOG.log(System.Logger.Level.ERROR, ">>" + MSJ);
+            throw new NegocioException(MSJ); 
+        }
         
         //Datos del cliente inválidos
         if (!UtilNegocio.validarCliente(venta.getCliente())) {
@@ -80,11 +100,19 @@ public class ControlVentas {
         
         //Asigna folio y fecha y hora
         venta.setFolio(generarFolio());
-        venta.setFechaHora(generarFecha());
+        venta.setFechaHora(UtilNegocio.hoyTexto());
         
-        ventaBO.registrarVenta(venta);
-        LOG.log(System.Logger.Level.INFO, () -> ">> Venta exitosa con la cantidad de: " + venta.getDetalles().size());
-        return venta;
+        //Actualiza stock y registra la venta
+        try {
+            piezaBO.actualizarStockTrasVenta(venta.getDetalles());
+            ventaBO.registrarVenta(venta);
+            LOG.log(System.Logger.Level.INFO, () -> ">> Venta exitosa con la cantidad de: " + venta.getDetalles().size());
+            return venta;
+        } catch (NegocioException e) {
+            String MSJ = e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new NegocioException(MSJ);
+        }
     }
     
     /**
@@ -94,17 +122,6 @@ public class ControlVentas {
      */
     private String generarFolio() {
         int numero = ventaBO.cantidadVentasDiarias() + 1;
-        return "TW - " + numero;
-    }
-
-    /**
-     * Auxiliar obtiene la fecha
-     *
-     * @param venta
-     */
-    private String generarFecha() {
-        LocalDateTime fechaHoraRegistro = LocalDateTime.now();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        return fechaHoraRegistro.format(formato);
+        return "VEN - " + numero;
     }
 }

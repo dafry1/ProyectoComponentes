@@ -5,13 +5,19 @@ import DTOS.EmpleadoDTO;
 import DTOS.PersonaDTO;
 import excepciones.NegocioException;
 import java.lang.System.Logger;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
- * Diferentes validaciones de negocio
+ * Diferentes validaciones y métodos de negocio
  * 
  * @author Andre
  */
-public class UtilNegocio {
+public final class UtilNegocio {
+    private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    
+    private UtilNegocio(){}
     
     /**
      * Metodo de validacion para nombres, tanto
@@ -82,5 +88,59 @@ public class UtilNegocio {
      */
     public static boolean validarEmpleado(EmpleadoDTO empleado) {
         return validarPersona(empleado);
+    }
+    
+    
+    public static String encriptar(String texto) {
+        return Encriptador.encriptar(texto);
+    }
+    
+    public static String desencrpitar(String texto) {
+        return Encriptador.desencriptar(texto);
+    }
+    
+    /**
+     * Obtiene la fecha actual
+     * 
+     * @return fecha y hora actual
+     */
+    public static LocalDateTime hoy() {
+        return LocalDateTime.now().withNano(0);
+    }
+    
+    public static String hoyTexto() {
+        return fechaString(hoy());
+    }
+    
+    /**
+     * Convierte un LocalDateTime a String usando el formato de la aplicación
+     * 
+     * @param fecha Objeto LocalDateTime a transformar
+     * 
+     * @return String formateado, o null si la fecha recibida es nula
+     */
+    public static String fechaString(LocalDateTime fecha) {
+        if (fecha == null) {
+            return null;
+        }
+        return fecha.format(FORMATO_FECHA);
+    }
+    
+    /**
+     * Convierte un String a LocalDateTime usando el formato de la aplicación
+     * 
+     * @param textoFecha Cadena de texto con la fecha
+     * 
+     * @return Objeto LocalDateTime, o null si el texto es inválido o no se puede parsear
+     */
+    public static LocalDateTime stringFecha(String textoFecha) {
+        if (textoFecha == null || textoFecha.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return LocalDateTime.parse(textoFecha, FORMATO_FECHA);
+        } catch (DateTimeParseException e) {
+            throw new NegocioException("Error al convertir el String a fecha");
+        }
     }
 }

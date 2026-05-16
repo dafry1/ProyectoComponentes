@@ -1,6 +1,7 @@
 package fabricas;
 
 import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import conexiones.ConexionMongo;
 import daos.EmpleadoDAO;
@@ -11,7 +12,9 @@ import daos.IPiezaDAO;
 import daos.ISolicitudDAO;
 import daos.IVentaDAO;
 import daos.SolicitudDAO;
+import dominio.Empleado;
 import dominio.Pieza;
+import dominio.Solicitud;
 import dominio.Venta;
 
 /**
@@ -28,9 +31,17 @@ public class FabricaDAO implements IFabricaDAO {
     //Instancia única de la base de datos
     private static final MongoDatabase BD = ConexionMongo.obtenerBD();
     
+    //Instancias de los DAO
+    private IPiezaDAO pieza;
+    private IVentaDAO venta;
+    private IEmpleadoDAO empleado;
+    private ISolicitudDAO solicitud;
+    
     //Strings que declaran una colección en específico
     private static final String PIEZAS = "piezas";
     private static final String VENTAS = "ventas";
+    private static final String SOLICITUDES = "solicitudes";
+    private static final String EMPLEADOS = "empleados";
     
     //Privados
     private static FabricaDAO instancia;
@@ -51,14 +62,10 @@ public class FabricaDAO implements IFabricaDAO {
     @Override
     public IPiezaDAO fabricarPieza() {
         if (pieza == null) {
-            pieza = new PiezaDAO(BD.getCollection(PIEZAS, Pieza.class));
+            pieza = new PiezaDAO(BD.getCollection(PIEZAS, Pieza.class), BD.getCollection(VENTAS, Venta.class));
         }
         return pieza;
     }
-    private IPiezaDAO pieza;
-
-    
-    
     
     @Override
     public IVentaDAO fabricarVenta() {
@@ -67,15 +74,20 @@ public class FabricaDAO implements IFabricaDAO {
         }
         return venta;
     }
-    private IVentaDAO venta;
-
+    
     @Override
     public IEmpleadoDAO fabricarEmpleado() {
-        return new EmpleadoDAO();
+        if (empleado == null) {
+            empleado = new EmpleadoDAO(BD.getCollection(EMPLEADOS, Empleado.class));
+        }
+        return empleado;
     }
-
+    
     @Override
     public ISolicitudDAO fabricarSolicitud() {
-        return new SolicitudDAO();
+        if (solicitud == null) {
+            solicitud = new SolicitudDAO(BD.getCollection(SOLICITUDES, Solicitud.class));
+        }
+        return solicitud;
     }
 }

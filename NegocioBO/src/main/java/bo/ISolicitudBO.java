@@ -9,6 +9,9 @@ import java.util.List;
  * @author Andre
  */
 public interface ISolicitudBO {
+    
+    int contarSolicitudesHoy();
+    
     /**
      * Extrae todas las solicitud de la BD
      *

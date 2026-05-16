@@ -30,7 +30,7 @@ public class ControlCarritoSolicitudes {
     }
 
     /**
-     * Agrega un detalle al carrito de ventas
+     * Agrega un detalle al carrito
      * 
      * @param detalle a agregar
      */
@@ -44,7 +44,7 @@ public class ControlCarritoSolicitudes {
     }
 
     /**
-     * Elimina un detalle del carrito de ventas
+     * Elimina un detalle del carrito
      * 
      * @param detalle a eliminar
      */

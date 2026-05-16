@@ -9,47 +9,31 @@ import java.util.stream.Collectors;
  *
  * @author Andre
  */
-public class AdaptadorCliente extends AdaptadorPersona implements IAdaptadorCliente {
-    private static IAdaptadorCliente instancia;
+public final class AdaptadorCliente {
     private AdaptadorCliente(){}
     
-    /**
-     * Singleton del adaptador
-     * 
-     * @return la única instancia
-     */
-    public static IAdaptadorCliente singleton() {
-        if (instancia == null) {
-            instancia = new AdaptadorCliente();
-        }
-        return instancia;
-    }
-    
-    @Override
-    public Cliente Entidad(ClienteDTO dto) {
+    public static Cliente Entidad(ClienteDTO dto) {
         Cliente entidad = new Cliente();
-        super.EntidadPersona(dto, entidad);
+        AdaptadorPersona.EntidadPersona(dto, entidad);
         entidad.setTelefono(dto.getTelefono());
         entidad.setCorreo(dto.getCorreo());
         return entidad;
     }
 
-    @Override
-    public ClienteDTO DTO(Cliente entidad) {
+    public static ClienteDTO DTO(Cliente entidad) {
         ClienteDTO dto = new ClienteDTO();
-        super.DTOPersona(entidad, dto);
+        AdaptadorPersona.DTOPersona(entidad, dto);
         dto.setTelefono(entidad.getTelefono());
         dto.setCorreo(entidad.getCorreo());
         return dto;
     }
 
-    @Override
-    public List<Cliente> listaEntidad(List<ClienteDTO> dtos) {
-         return dtos.stream().map(this::Entidad).collect(Collectors.toList());
+    public static List<Cliente> listaEntidad(List<ClienteDTO> dtos) {
+         return dtos.stream().map(AdaptadorCliente::Entidad).collect(Collectors.toList());
     }
 
-    @Override
-    public List<ClienteDTO> listaDTO(List<Cliente> entidades) {
-        return entidades.stream().map(this::DTO).collect(Collectors.toList());
+
+    public static List<ClienteDTO> listaDTO(List<Cliente> entidades) {
+        return entidades.stream().map(AdaptadorCliente::DTO).collect(Collectors.toList());
     }
-}
+} 

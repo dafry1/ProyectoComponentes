@@ -1,9 +1,9 @@
 package bo;
 
 import DTOS.EmpleadoDTO;
+import adaptadores.AdaptadorEmpleado;
 import dominio.Empleado;
 import excepciones.NegocioException;
-import adaptadores.IAdaptadorEmpleado;
 import daos.IEmpleadoDAO;
 import excepciones.PersistenciaException;
 import java.util.ArrayList;
@@ -24,16 +24,14 @@ public class EmpleadoBO implements IEmpleadoBO {
     
     //Atributos
     private IEmpleadoDAO empleadoDAO;
-    private IAdaptadorEmpleado adaptadorEmpleado;
     
-    public EmpleadoBO(IEmpleadoDAO empleadoDAO, IAdaptadorEmpleado adaptadorEmpleado) {
+    public EmpleadoBO(IEmpleadoDAO empleadoDAO) {
         this.empleadoDAO = empleadoDAO;
-        this.adaptadorEmpleado = adaptadorEmpleado;
     }
     
     /** Centraliza la forma en la que se adapta de Entidad a DTO */
     private List<EmpleadoDTO> adaptarEmpleadosInternamente(List<Empleado> empleados) {
-        return adaptadorEmpleado.listaDTO(empleados);
+        return AdaptadorEmpleado.listaDTO(empleados);
     }
     
     /**
@@ -63,7 +61,7 @@ public class EmpleadoBO implements IEmpleadoBO {
     @Override
     public EmpleadoDTO verificarEmpleado(String nombreUsuario, String password) {
         try {
-            return adaptadorEmpleado.DTO(empleadoDAO.verificarEmpleado(nombreUsuario, password));
+            return AdaptadorEmpleado.DTO(empleadoDAO.verificarEmpleado(nombreUsuario, password));
         } catch (PersistenciaException e) {
             String MSJ = "Error al verificar empleado: " + e.getMessage();
             LOG.log(System.Logger.Level.ERROR, MSJ);

@@ -134,16 +134,13 @@ public class InfoCliente extends JDialog {
                 //Procesa la venta
                 try {
                     procesarVentaConfirmada(cliente);
+                    UtilSwing.dialogoAviso(this, "Venta procesada con éxito para el cliente: " + cliente.getNombres());
+                    coordinadorPresentacion.mostrarVentanaInicio();
                 } catch (PresentacionException ex) {
                     UtilSwing.dialogoError(InfoCliente.this, ex.getMessage());
                 }
                 
-                //Notifica sobre la venta exitosa
-                UtilSwing.dialogoAviso(this, "Venta procesada con éxito para el cliente: " + cliente.getNombres());
-
-                //Regresa a la pantalla principal
-                coordinadorPresentacion.mostrarVentanaInicio();
-                this.dispose();
+                
             });
         });
 
@@ -164,13 +161,8 @@ public class InfoCliente extends JDialog {
         EmpleadoDTO empleado = coordinadorEstados.getUsuarioLogueado();
         List<DetallesVentaDTO> carrito = coordinadorEstados.getCarritoVenta();
         VentaDTO venta = new VentaDTO(cliente, empleado, carrito);
-
-        //Procesa la venta
-        try {
-            coordinadorNegocio.procesarVenta(venta, observador);
-        } catch (PresentacionException pe) {
-            UtilSwing.dialogoAlerta(this, "Error al procesar: " + pe.getMessage());
-        }
+        coordinadorNegocio.procesarVenta(venta, observador);
+  
     }
     
     /** Crea espacio gráfico */

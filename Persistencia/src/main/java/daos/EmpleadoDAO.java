@@ -26,8 +26,8 @@ public class EmpleadoDAO implements IEmpleadoDAO {
     
     private MongoCollection<Empleado> coleccion;
 
-    public EmpleadoDAO() {
-    this.coleccion = ConexionMongo.obtenerBD().getCollection("empleados", Empleado.class);;
+    public EmpleadoDAO(MongoCollection<Empleado> coleccion) {
+        this.coleccion = coleccion;
     }
     
     static {

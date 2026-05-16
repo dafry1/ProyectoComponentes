@@ -3,10 +3,9 @@ package bo;
 import DTOS.ClienteDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.VentaDTO;
+import adaptadores.AdaptadorVenta;
 import dominio.Venta;
 import excepciones.NegocioException;
-import adaptadores.IAdaptadorPieza;
-import adaptadores.IAdaptadorVenta;
 import daos.IPiezaDAO;
 import daos.IVentaDAO;
 import excepciones.PersistenciaException;
@@ -28,23 +27,19 @@ public class VentaBO implements IVentaBO {
     
     //Atributos
     private IVentaDAO ventaDAO;
-    private IAdaptadorVenta adaptadorVenta;
-    
     
     /**
      * Constructor que inyecta DAO y adaptador
      * 
      * @param ventaDAO
-     * @param adaptadorVenta 
      */
-    public VentaBO(IVentaDAO ventaDAO, IAdaptadorVenta adaptadorVenta) {
+    public VentaBO(IVentaDAO ventaDAO) {
         this.ventaDAO = ventaDAO;
-        this.adaptadorVenta = adaptadorVenta;
     }
     
-    /** Centraliza la forma en la que se adaptan las piezas de Entidad a DTO */
-    private List<VentaDTO> adaptarPiezasInternamente(List<Venta> ventas) {
-        return adaptadorVenta.listaDTO(ventas);
+    /** Centraliza la forma en la que se adaptan las ventas de Entidad a DTO */
+    private List<VentaDTO> adaptarVentasInternamente(List<Venta> ventas) {
+        return AdaptadorVenta.listaDTO(ventas);
     }
     
     /**
@@ -54,7 +49,7 @@ public class VentaBO implements IVentaBO {
      */
     @Override
     public List<VentaDTO> consultarVentas() {
-        return adaptarPiezasInternamente(ventaDAO.consultarVentas());
+        return adaptarVentasInternamente(ventaDAO.consultarVentas());
     }
     
     /**
@@ -83,26 +78,10 @@ public class VentaBO implements IVentaBO {
             throw new NegocioException(DEBUG);
         }
         
-        //Sin cliente
-        ClienteDTO cliente = venta.getCliente();
-        if (cliente == null) {
-            DEBUG = "Venta sin cliente";
-            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
-            throw new NegocioException(DEBUG); 
-        }
-        
-        //Sin empleado
-        EmpleadoDTO empleado = venta.getEmpleado();
-        if (empleado == null) {
-            DEBUG = "Venta sin empleado";
-            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
-            throw new NegocioException(DEBUG); 
-        }
-        
         //Registra la venta
         try {
-            Venta v = adaptadorVenta.Entidad(venta);
-            return adaptadorVenta.DTO(ventaDAO.registrarVenta(v));  
+            Venta v = AdaptadorVenta.Entidad(venta);
+            return AdaptadorVenta.DTO(ventaDAO.registrarVenta(v));  
         } catch (PersistenciaException e) {
             throw new NegocioException("");
         }
@@ -115,7 +94,7 @@ public class VentaBO implements IVentaBO {
             LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
             throw new NegocioException(DEBUG);
         }
-        return adaptarPiezasInternamente(ventaDAO.consultarVentas());
+        return adaptarVentasInternamente(ventaDAO.consultarVentas());
     }
 
     @Override
@@ -125,7 +104,7 @@ public class VentaBO implements IVentaBO {
             LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
             throw new NegocioException(DEBUG);
         }
-        return adaptarPiezasInternamente(ventaDAO.consultarVentas());
+        return adaptarVentasInternamente(ventaDAO.consultarVentas());
     }
 
     @Override
@@ -135,6 +114,6 @@ public class VentaBO implements IVentaBO {
             LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
             throw new NegocioException(DEBUG);
         }
-        return adaptarPiezasInternamente(ventaDAO.consultarVentas());
+        return adaptarVentasInternamente(ventaDAO.consultarVentas());
     }
 }

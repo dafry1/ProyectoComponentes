@@ -11,58 +11,55 @@ import org.bson.Document;
  *
  * @author Andre
  */
-public class PiezaDoc extends Adaptador{
+public final class PiezaDoc {
     private PiezaDoc(){}
     
-    private static PiezaDoc instancia;
-    public static PiezaDoc singleton() {
-        if (instancia == null) {
-            instancia = new PiezaDoc();
-        }
-        return instancia;
-    }
-    
     // Método que transforma un documento a una entidad Pieza
-    public Pieza toEntity(Document doc) {
+    public static Pieza toEntity(Document doc) {
         if (doc == null) return null;
 
         Pieza pieza = new Pieza();
         
-        pieza.setId(super.idTexto(doc)); 
+        pieza.setId(AdaptadorDoc.idTexto(doc)); 
         pieza.setNombre(doc.getString("nombre"));
         pieza.setCategoria(doc.getString("categoria"));
         pieza.setMarcaPieza(doc.getString("marcaPieza"));
         pieza.setModeloPieza(doc.getString("modeloPieza"));
-        pieza.setCostoPieza(doc.get("costoPieza", Double.class));
+        
+        Number costo = doc.get("costoPieza", Number.class);
+        pieza.setCostoPieza(costo != null ? costo.doubleValue() : 0.0);
+        
         pieza.setStockPieza(doc.getInteger("stockPieza"));
 
         return pieza;
     }
-    
+
     // Método que transforma un documento a una entidad Pieza (de forma embebida)
-    public Pieza toEntityEmbebido(Document doc) {
+    public static Pieza toEntityEmbebido(Document doc) {
         if (doc == null) return null;
 
         Pieza pieza = new Pieza();
         
-        pieza.setId(super.idTexto(doc)); 
+        pieza.setId(AdaptadorDoc.idTexto(doc)); 
         pieza.setNombre(doc.getString("nombre"));
         pieza.setCategoria(doc.getString("categoria"));
         pieza.setMarcaPieza(doc.getString("marcaPieza"));
         pieza.setModeloPieza(doc.getString("modeloPieza"));
-        pieza.setCostoPieza(doc.get("costoPieza", Double.class));
+        
+        Number costo = doc.get("costoPieza", Number.class);
+        pieza.setCostoPieza(costo != null ? costo.doubleValue() : 0.0);
 
         return pieza;
     }
 
     // Método que transforma una entidad Pieza a un documento
-    public Document toDocument(Pieza pieza) {
+    public static Document toDocument(Pieza pieza) {
         if (pieza == null) return null;
 
         Document doc = new Document();
 
         if (pieza.getId() != null && !pieza.getId().isEmpty()) {
-            doc.put("_id", super.textoId(pieza.getId()));
+            doc.put("_id", AdaptadorDoc.textoId(pieza.getId()));
         }
 
         doc.put("nombre", pieza.getNombre());
@@ -74,15 +71,15 @@ public class PiezaDoc extends Adaptador{
         
         return doc;
     }
-    
+
     // Método que transforma una entidad Pieza a un documento (de forma embebida)
-    public Document toDocumentEmbebido(Pieza pieza) {
+    public static Document toDocumentEmbebido(Pieza pieza) {
         if (pieza == null) return null;
 
         Document doc = new Document();
 
         if (pieza.getId() != null && !pieza.getId().isEmpty()) {
-            doc.put("_id", super.textoId(pieza.getId()));
+            doc.put("_id", AdaptadorDoc.textoId(pieza.getId()));
         }
 
         doc.put("nombre", pieza.getNombre());

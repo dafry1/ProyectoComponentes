@@ -2,11 +2,10 @@ package bo;
 
 import DTOS.DetallesVentaDTO;
 import DTOS.PiezaDTO;
-import adaptadores.IAdaptadorDetallesSolicitud;
+import adaptadores.AdaptadorDetallesVenta;
+import adaptadores.AdaptadorPieza;
 import dominio.Pieza;
 import excepciones.NegocioException;
-import adaptadores.IAdaptadorDetallesVenta;
-import adaptadores.IAdaptadorPieza;
 import daos.IPiezaDAO;
 import excepciones.PersistenciaException;
 import java.util.List;
@@ -22,25 +21,10 @@ public class PiezaBO implements IPiezaBO {
     private static final System.Logger LOG = System.getLogger(PiezaBO.class.getName());
     private static String CARRITO_VACIO = "No se puede procesar una venta con un carrito vacío";
     
-    //Atributos
-    private IPiezaDAO piezaDAO;
-    private IAdaptadorPieza adaptadorPieza;
-    private IAdaptadorDetallesVenta adaptadorDetallesVenta;
-    private IAdaptadorDetallesSolicitud adaptadorDetallesSolicitud;
+    IPiezaDAO piezaDAO;
     
-    /**
-     * Constructor que inyecta DAO y adaptador
-     * 
-     * @param piezaDAO
-     * @param adaptadorPieza 
-     * @param adaptadorDetallesVenta 
-     * @param adaptadorDetallesSolicitud 
-     */
-    public PiezaBO(IPiezaDAO piezaDAO, IAdaptadorPieza adaptadorPieza, IAdaptadorDetallesVenta adaptadorDetallesVenta, IAdaptadorDetallesSolicitud adaptadorDetallesSolicitud) {
+    public PiezaBO(IPiezaDAO piezaDAO) {
         this.piezaDAO = piezaDAO;
-        this.adaptadorPieza = adaptadorPieza;
-        this.adaptadorDetallesVenta = adaptadorDetallesVenta;
-        this.adaptadorDetallesSolicitud = adaptadorDetallesSolicitud;
     }
 
     /**
@@ -66,7 +50,7 @@ public class PiezaBO implements IPiezaBO {
                 LOG.log(System.Logger.Level.ERROR, DEBUG);
                 throw new NegocioException(">>" + DEBUG);
             }
-            return adaptadorPieza.DTO(piezaEncontrada);        
+            return AdaptadorPieza.DTO(piezaEncontrada);        
         } catch (PersistenciaException e) {
             String MSJ = "Error al consultar la pieza específica: " + e.getMessage();
             LOG.log(System.Logger.Level.ERROR, MSJ);
@@ -76,7 +60,7 @@ public class PiezaBO implements IPiezaBO {
     
     /** Centraliza la forma en la que se adaptan las piezas de Entidad a DTO */
     private List<PiezaDTO> adaptarPiezasInternamente(List<Pieza> piezas) {
-        return adaptadorPieza.listaDTO(piezas);
+        return AdaptadorPieza.listaDTO(piezas);
     }
     
     /**
@@ -173,7 +157,7 @@ public class PiezaBO implements IPiezaBO {
                 LOG.log(System.Logger.Level.ERROR, DEBUG);
                 throw new NegocioException(">>" + DEBUG);
             }
-            piezaDAO.actualizarStock(adaptadorDetallesVenta.Entidad(detalle));
+            piezaDAO.actualizarStock(AdaptadorDetallesVenta.Entidad(detalle));
         } catch (PersistenciaException e) {
             String MSJ = "Error al actualizar el stock de esta pieza: " + e.getMessage();
             LOG.log(System.Logger.Level.ERROR, MSJ);
@@ -195,7 +179,7 @@ public class PiezaBO implements IPiezaBO {
                 LOG.log(System.Logger.Level.ERROR, DEBUG);
                 throw new NegocioException(">>" + DEBUG);
             }
-            piezaDAO.actualizarStockTrasVenta(adaptadorDetallesVenta.listaEntidad(detalles));
+            piezaDAO.actualizarStockTrasVenta(AdaptadorDetallesVenta.listaEntidad(detalles));
         } catch (PersistenciaException e) {
             String MSJ = "Error al actualizar el stock de las piezas la venta: " + e.getMessage();
             LOG.log(System.Logger.Level.ERROR, MSJ);
