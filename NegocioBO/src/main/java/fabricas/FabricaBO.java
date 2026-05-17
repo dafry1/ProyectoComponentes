@@ -24,7 +24,7 @@ public class FabricaBO implements IFabricaBO {
     private FabricaBO() {}
     
     //Fábrica que suministra los DAO
-    private IFabricaDAO fabricaDAO = FabricaDAO.singleton();
+    private IFabricaDAO fabricaDAO = FabricaDAO.singleton(); //-> Cambiar a FabricaJDBC.singleton() cuando se quiera
     
     //Instancias de cada BO, implementando en la práctica un singleton
     private IPiezaBO instanciaPieza;
@@ -83,6 +83,11 @@ public class FabricaBO implements IFabricaBO {
         return instanciaEmpleado;
     }
 
+    /**
+     * Fabrica el Bo de un empleado
+     * 
+     * @return el contrato de EmpleadoBO
+     */
     @Override
     public ISolicitudBO fabricarSolicitud() {
         if (instanciaSolicitud == null) {
