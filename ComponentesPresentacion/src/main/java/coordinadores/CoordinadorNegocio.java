@@ -1,12 +1,17 @@
 package coordinadores;
 
+import DTOS.ContribuyenteDTO;
+import DTOS.FacturaDTO;
+import DTOS.ParticipanteDTO;
 import DTOS.PiezaDTO;
 import DTOS.SolicitudDTO;
 import DTOS.VentaDTO;
 import excepciones.PresentacionException;
 import excepciones.NegocioException;
+import fachadas.FachadaFactura;
 import fachadas.FachadaSolicitudes;
 import fachadas.FachadaVentas;
+import fachadas.IFachadaFactura;
 import java.util.List;
 import observadores.IObservador;
 import fachadas.IFachadaSolicitudes;
@@ -25,6 +30,7 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
     //Instancia de la fachada del subsistema de las ventas
     private IFachadaVentas fachadaVentas = new FachadaVentas();
     private IFachadaSolicitudes fachadaSolicitudes = new FachadaSolicitudes();
+    private IFachadaFactura fachadaFactura = new FachadaFactura();
 
     //Coordinador auxiliar
     ICoordinadorEstados coordinadorEstados;
@@ -319,5 +325,98 @@ public class CoordinadorNegocio implements ICoordinadorNegocio {
             LOG.log(System.Logger.Level.ERROR, "Error al conectar con bodega: " + e.getMessage());
             throw new PresentacionException("No se pudo conectar con la bodega remota.");
         }
+    }
+
+    
+    
+    
+    
+    //MÉTODOS DE FACTURA
+    @Override
+    public ContribuyenteDTO obtenerContribuyente(String rfc) {
+        try {
+            return fachadaFactura.obtenerContribuyente(rfc);
+        } catch (NegocioException e) {
+            String MSJ = "Error al obtener el contribuyente: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new PresentacionException(MSJ);
+        }    
+    }
+
+    @Override
+    public boolean validarDatos(String celular, String correo) {
+        try {
+            return fachadaFactura.validarDatos(celular, correo);
+        } catch (NegocioException e) {
+            String MSJ = "Error al validar los datos: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new PresentacionException(MSJ);
+        }  
+    }
+    
+    @Override
+    public void enviarFactura(FacturaDTO factura) {
+        try {
+            fachadaFactura.enviarFactura(factura);
+        } catch (NegocioException e) {
+            String MSJ = "Error al enviar la factura: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new PresentacionException(MSJ);
+        }  
+    }
+
+    @Override
+    public boolean validarRangoFecha(String fechaHora) {
+        try {
+            return fachadaFactura.validarRangoFecha(fechaHora);
+        } catch (NegocioException e) {
+            String MSJ = "Error al validar el rango de fechas: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new PresentacionException(MSJ);
+        } 
+    }
+
+    @Override
+    public FacturaDTO obtenerFacturaMostrar(ParticipanteDTO infoFormularioReceptor, String formaPago) {
+        try {
+            return fachadaFactura.obtenerFacturaMostrar(infoFormularioReceptor, formaPago);
+        } catch (NegocioException e) {
+            String MSJ = "Error al obtener la factura: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new PresentacionException(MSJ);
+        } 
+    }
+
+    @Override
+    public String[] obtenerFormasPago() {
+        try {
+            return fachadaFactura.obtenerFormasPago();
+        } catch (NegocioException e) {
+            String MSJ = "Error al obtener las formas de pago: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new PresentacionException(MSJ);
+        }     
+    }
+
+    @Override
+    public String[] obtenerRegimenesFiscales() {
+        try {
+            return fachadaFactura.obtenerRegimenesFiscales();
+        } catch (NegocioException e) {
+            String MSJ = "Error al obtener los régimenes fiscales: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new PresentacionException(MSJ);
+        }  
+    }
+
+    @Override
+    public String[] obtenerCfdis() {
+        try {
+            return fachadaFactura.obtenerCfdis();
+        } catch (NegocioException e) {
+            String MSJ = "Error al obtener los CFDIs: " + e.getMessage();
+            LOG.log(System.Logger.Level.ERROR, MSJ);
+            throw new PresentacionException(MSJ);
+        }  
     }
 }

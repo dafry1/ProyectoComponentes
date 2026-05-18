@@ -18,6 +18,9 @@ import java.util.function.Supplier;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import observadores.IObservador;
+import pantallasFactura.IngresarDatosContribuyente;
+import pantallasFactura.IngresarRFC;
+import pantallasFactura.ResumenFactura;
 import pantallasSolicitudes.DetalleSolicitud;
 import pantallasSolicitudes.InfoClienteSolicitud;
 import pantallasSolicitudes.InfoDetallesSoli;
@@ -218,5 +221,24 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     public void abrirInfoDetalleSolicitud(IObservador observador, DetallesSolicitudDTO detalle) {
         abrirDialogo(() -> new InfoDetallesSoli(coordinadorNegocio, coordinadorEstados, observador, detalle));
     }
+
     
+    
+    
+    
+    //MÉTODOS DE FACTURA
+    @Override
+    public void abrirIngresarRFC(IObservador observador) {
+        abrirDialogo(() -> new IngresarRFC(coordinadorNegocio, observador));
+    }
+
+    @Override
+    public void abrirResumenFactura() {
+        abrirNuevaVentana(() -> new ResumenFactura(this, coordinadorNegocio));
+    }
+
+    @Override
+    public void abrirDatosContribuyente() {
+        abrirNuevaVentana(() -> new IngresarDatosContribuyente(this, coordinadorNegocio));
+    }
 }

@@ -31,4 +31,11 @@ public interface IVentaDAO {
      * @return la venta creada
      */
     Venta registrarVenta(Venta venta);
+    
+    /**
+     * Marca una venta como facturada
+     * 
+     * @param idVenta
+     */
+    void marcarFacturada(String idVenta);
 }

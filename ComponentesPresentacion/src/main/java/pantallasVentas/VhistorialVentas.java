@@ -212,16 +212,12 @@ public class VhistorialVentas extends JFrame implements IObservador {
     }
 
     /**
-     * En orden: 1. Obtiene el nuevo total del CoordinadorEstados 2. Actualiza
-     * el label con ese nuevo total 3. Vacía la lista de detalles del frame 4.
-     * Recalcula y redibuja el panel
+     * Navega automáticamente a la pantalla para
+     * ingresar los datos del contribuyente en caso
+     * de que la RFC sea encontrada
      */
     @Override
     public void observar() {
-        totalCarrito = coordinadorEstados.totalCarritoVenta();
-        labelTotal.setText("Total: $ " + totalCarrito);
-        contenedorListaDetalles.removeAll();
-        contenedorListaDetalles.revalidate();
-        contenedorListaDetalles.repaint();
+        coordinadorPresentacion.abrirDatosContribuyente();
     }
 }

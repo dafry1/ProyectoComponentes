@@ -79,4 +79,20 @@ public interface ICoordinadorPresentacion {
     void abrirInfoPiezaBodega(IObservador observador, PiezaDTO pieza);
     
     void abrirInfoDetalleSolicitud(IObservador observador, DetallesSolicitudDTO detalle);
+    
+    
+    
+    //MÉTODOS DE FACTURA
+    /**
+     * Abre el diálogo para ingresar la RFC del contribuyente
+     * 
+     * @param observador que navega hacia al formulario en caso exitoso
+     */
+    void abrirIngresarRFC(IObservador observador);
+    
+    /** Abre la ventana para ver el resumen de la factura antes de hacer el proceso */
+    void abrirResumenFactura();
+    
+    /** Abre la ventana para ingresar datos del contribuyente ya encontrado */
+    void abrirDatosContribuyente();
 }

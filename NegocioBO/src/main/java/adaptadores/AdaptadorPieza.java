@@ -24,6 +24,7 @@ public final class AdaptadorPieza {
         entidad.setModeloPieza(dto.getModeloPieza());
         entidad.setCostoPieza(dto.getCostoPieza());
         entidad.setStockPieza(dto.getStockPieza());
+        entidad.setAntesImpuestos(dto.getAntesImpuestos());
         return entidad;
     }
     
@@ -43,6 +44,7 @@ public final class AdaptadorPieza {
         dto.setModeloPieza(entidad.getModeloPieza());
         dto.setCostoPieza(entidad.getCostoPieza());
         dto.setStockPieza(entidad.getStockPieza());
+        dto.setAntesImpuestos(dto.getAntesImpuestos());
         return dto;
     }
     

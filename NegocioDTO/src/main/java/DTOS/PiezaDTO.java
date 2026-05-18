@@ -15,12 +15,13 @@ public class PiezaDTO extends DTO {
     private String modeloPieza;
     private double costoPieza;
     private int stockPieza;
+    private double antesImpuestos;
     
     /**
      * Constructor vacio de la clase PiezaDTO.
      */
     public PiezaDTO(){}
-    public PiezaDTO(String id, String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza) {
+    public PiezaDTO(String id, String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza, double antesImpuestos) {
         super(id);
         this.nombre = nombre;
         this.categoria = categoria;
@@ -28,6 +29,7 @@ public class PiezaDTO extends DTO {
         this.modeloPieza = modeloPieza;
         this.costoPieza = costoPieza;
         this.stockPieza = stockPieza;
+        this.antesImpuestos = antesImpuestos;
     }
     
     //CONSTRUCTOR BASICO TEMPORAL
@@ -126,4 +128,14 @@ public class PiezaDTO extends DTO {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public double getAntesImpuestos() {
+        return antesImpuestos;
+    }
+
+    public void setAntesImpuestos(double antesImpuestos) {
+        this.antesImpuestos = antesImpuestos;
+    }
+    
+    
 }

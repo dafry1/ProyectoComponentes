@@ -88,32 +88,7 @@ public class VentaBO implements IVentaBO {
     }
 
     @Override
-    public List<VentaDTO> filtrarVentasFecha(LocalDate fecha) {
-        if (fecha.isAfter(LocalDate.now())) {
-            String DEBUG = "Fecha mayor a la actual";
-            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
-            throw new NegocioException(DEBUG);
-        }
-        return adaptarVentasInternamente(ventaDAO.consultarVentas());
-    }
-
-    @Override
-    public List<VentaDTO> filtrarVentasTotalMinimo(double minimo) {
-        if (minimo <= 0) {
-            String DEBUG = "Total mínimo menor a 0";
-            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
-            throw new NegocioException(DEBUG);
-        }
-        return adaptarVentasInternamente(ventaDAO.consultarVentas());
-    }
-
-    @Override
-    public List<VentaDTO> filtrarVentasTotalMaximo(double maximo) {
-        if (maximo <= 0) {
-            String DEBUG = "Total máximo menor a 0";
-            LOG.log(System.Logger.Level.ERROR, ">>" + DEBUG);
-            throw new NegocioException(DEBUG);
-        }
-        return adaptarVentasInternamente(ventaDAO.consultarVentas());
+    public void marcarFacturada(String idVenta) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

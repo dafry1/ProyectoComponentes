@@ -15,7 +15,11 @@ public class Pieza {
     private double costoPieza;
     private int stockPieza;
     private String id;
-
+    
+    private double antesImpuestos;
+    
+    private static final double IVA = 1.16;
+ 
     public Pieza(){}
     
     public Pieza(String id, String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza) {
@@ -26,6 +30,7 @@ public class Pieza {
         this.modeloPieza = modeloPieza;
         this.costoPieza = costoPieza;
         this.stockPieza = stockPieza;
+        this.antesImpuestos = costoPieza/IVA;
     }
 
     public Pieza(String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza) {
@@ -94,6 +99,16 @@ public class Pieza {
     public void setStockPieza(int stockPieza) {
         this.stockPieza = stockPieza;
     }
+
+    public double getAntesImpuestos() {
+        return antesImpuestos;
+    }
+
+    public void setAntesImpuestos(double antesImpuestos) {
+        this.antesImpuestos = antesImpuestos;
+    }
+    
+    
     
     @Override
     public boolean equals(Object o) {

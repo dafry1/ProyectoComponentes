@@ -86,4 +86,9 @@ public class VentaDAO implements IVentaDAO {
             throw new PersistenciaException("No se pudo registrar la venta correctamente.");
         }
     }
+
+    @Override
+    public void marcarFacturada(String idVenta) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

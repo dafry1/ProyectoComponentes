@@ -11,10 +11,11 @@ public class DetallesVentaDTO extends DTO {
     private int cantidad;
     private double subtotal;
     private PiezaDTO pieza;
+    private double antesImpuestos;
 
     public DetallesVentaDTO(){}
     
-    public DetallesVentaDTO(String id, double costo, int cantidad, double subtotal, PiezaDTO pieza) {
+    public DetallesVentaDTO(String id, double costo, int cantidad, double subtotal, PiezaDTO pieza, double antesImpuesots) {
         super(id);
         this.costo = costo;
         this.cantidad = cantidad;
@@ -27,6 +28,10 @@ public class DetallesVentaDTO extends DTO {
      */
     private void recalcularSubtotal() {
         this.subtotal = this.costo * this.cantidad;
+    }
+    
+    private void recalcularAntesImpuestos() {
+        this.antesImpuestos = this.pieza.getAntesImpuestos() * this.cantidad;
     }
 
     public double getCosto() {
@@ -48,7 +53,7 @@ public class DetallesVentaDTO extends DTO {
     }
 
     public double getSubtotal() {
-        return subtotal;
+        return subtotal; 
     }
 
     public void setSubtotal(double subtotal) {
@@ -66,4 +71,17 @@ public class DetallesVentaDTO extends DTO {
             recalcularSubtotal();
         }
     }
+
+    public double getAntesImpuestos() {
+        recalcularAntesImpuestos();
+        return antesImpuestos;
+    }
+
+    public void setAntesImpuestos(double antesImpuestos) {
+        this.antesImpuestos = antesImpuestos;
+    }
+    
+    
+    
+    
 }
