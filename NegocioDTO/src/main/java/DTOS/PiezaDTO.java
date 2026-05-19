@@ -15,13 +15,16 @@ public class PiezaDTO extends DTO {
     private String modeloPieza;
     private double costoPieza;
     private int stockPieza;
+    
+    //Atributos CU factura
     private double antesImpuestos;
+    private double iva;
     
     /**
      * Constructor vacio de la clase PiezaDTO.
      */
     public PiezaDTO(){}
-    public PiezaDTO(String id, String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza, double antesImpuestos) {
+    public PiezaDTO(String id, String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza, double antesImpuestos, double iva) {
         super(id);
         this.nombre = nombre;
         this.categoria = categoria;
@@ -30,18 +33,10 @@ public class PiezaDTO extends DTO {
         this.costoPieza = costoPieza;
         this.stockPieza = stockPieza;
         this.antesImpuestos = antesImpuestos;
+        this.iva = iva;
     }
     
-    //CONSTRUCTOR BASICO TEMPORAL
-//    public PiezaDTO(String nombre, String categoria, String marcaPieza, double costoPieza) {
-//        this.nombre = nombre;
-//        this.categoria = categoria;
-//        this.marcaPieza = marcaPieza;
-//        this.costoPieza = costoPieza;
-//    }
-    
-    
-    /**
+    /** 
      * Método para obtener el valor del tipo de la pieza.
      * 
      * @return Valor del tipo de la pieza.
@@ -136,6 +131,16 @@ public class PiezaDTO extends DTO {
     public void setAntesImpuestos(double antesImpuestos) {
         this.antesImpuestos = antesImpuestos;
     }
+
+    public double getIva() {
+        return iva;
+    }
+
+    public void setIva(double iva) {
+        this.iva = iva;
+    }
+    
+    
     
     
 }

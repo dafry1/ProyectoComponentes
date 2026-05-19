@@ -5,15 +5,23 @@ import DTOS.DetallesVentaDTO;
 import DTOS.EmpleadoDTO;
 import DTOS.PiezaDTO;
 import DTOS.VentaDTO;
+import coordinadores.ICoordinadorPresentacion;
 import ensambladores.IEnsambladorDTO;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import observadores.IObservador;
+import utilPresentacion.Util;
 
-public class DetalleVenta extends JDialog {
-
-    public DetalleVenta(Frame padre, VentaDTO venta, IEnsambladorDTO ensambladorDTO) {
+public class DetalleVenta extends JDialog implements IObservador {
+    ICoordinadorPresentacion coordinadorPresentacion;
+    IObservador observador;
+    
+    public DetalleVenta(ICoordinadorPresentacion cp, Frame padre, VentaDTO venta, IEnsambladorDTO ensambladorDTO, IObservador observador) {
         super(padre, "Detalle de Venta", true);
+        
+        coordinadorPresentacion = cp;
+        this.observador = observador;
         
         this.setResizable(false);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -96,9 +104,26 @@ public class DetalleVenta extends JDialog {
         panelPrincipal.add(Box.createRigidArea(new Dimension(0, 20)));
         panelPrincipal.add(scrollPane);
         panelPrincipal.add(lblTotal);
-
+        
+        //Si la venta aún no está facturada, da acceso al botón correspondiente
+        if (!venta.isFacturada()) {
+            JButton botonFacturar = Util.crearBoton("Facturar");
+            botonFacturar.addActionListener(e -> coordinadorPresentacion.abrirIngresarRFC(DetalleVenta.this));
+            panelPrincipal.add(botonFacturar);
+        }
+        
         this.add(panelPrincipal);
         this.pack();
         this.setLocationRelativeTo(padre);
+    }
+
+    /**
+     * Es notificado si se encuentra un contribuyente, y a
+     * su vez notifica al historial de ventas para que navegue
+     * a la pantalla para facturar
+     */
+    @Override
+    public void observar() {
+        if (observador != null) observador.observar();
     }
 }

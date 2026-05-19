@@ -17,6 +17,8 @@ public final class AdaptadorPieza {
         if (dto == null) return null;
         
         Pieza entidad = new Pieza();
+        
+        //CU base
         entidad.setId(dto.getId());
         entidad.setNombre(dto.getNombre());
         entidad.setCategoria(dto.getCategoria());
@@ -24,7 +26,11 @@ public final class AdaptadorPieza {
         entidad.setModeloPieza(dto.getModeloPieza());
         entidad.setCostoPieza(dto.getCostoPieza());
         entidad.setStockPieza(dto.getStockPieza());
+        
+        //CU factura
         entidad.setAntesImpuestos(dto.getAntesImpuestos());
+        entidad.setIva(dto.getIva());
+        
         return entidad;
     }
     
@@ -37,6 +43,7 @@ public final class AdaptadorPieza {
         if (entidad == null) return null;
         
         PiezaDTO dto = new PiezaDTO();
+        
         dto.setId(entidad.getId());
         dto.setNombre(entidad.getNombre());
         dto.setCategoria(entidad.getCategoria());
@@ -44,7 +51,11 @@ public final class AdaptadorPieza {
         dto.setModeloPieza(entidad.getModeloPieza());
         dto.setCostoPieza(entidad.getCostoPieza());
         dto.setStockPieza(entidad.getStockPieza());
+        
+        //CU factura
         dto.setAntesImpuestos(dto.getAntesImpuestos());
+        dto.setIva(dto.getIva());
+        
         return dto;
     }
     

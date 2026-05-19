@@ -16,11 +16,16 @@ public final class AdaptadorDetallesVenta {
     public static DetallesVenta Entidad(DetallesVentaDTO dto) {
         if (dto == null) return null;
         
+        //Datos del CU base
         DetallesVenta entidad = new DetallesVenta();
         entidad.setCosto(dto.getCosto());
         entidad.setSubtotal(dto.getSubtotal());
         entidad.setCantidad(dto.getCantidad());
         entidad.setPieza(AdaptadorPieza.Entidad(dto.getPieza()));
+        
+        //Datos del CU factura
+        entidad.setAntesImpuestos(dto.getAntesImpuestos());
+        
         return entidad;
     }
 
@@ -32,11 +37,16 @@ public final class AdaptadorDetallesVenta {
     public static DetallesVentaDTO DTO(DetallesVenta entidad) {
         if (entidad == null) return null;
         
+        //Datos del CU base
         DetallesVentaDTO dto = new DetallesVentaDTO();
         dto.setCosto(entidad.getCosto());
         dto.setSubtotal(entidad.getSubtotal());
         dto.setCantidad(entidad.getCantidad());
         dto.setPieza(AdaptadorPieza.DTO(entidad.getPieza()));
+        
+        //Datos del CU factura
+        dto.setAntesImpuestos(entidad.getAntesImpuestos());
+        
         return dto;
     }
 

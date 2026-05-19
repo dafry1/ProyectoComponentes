@@ -16,7 +16,7 @@ import javax.swing.border.EmptyBorder;
 import observadores.IObservador;
 import utilPresentacion.Constantes;
 import utilEstilos.UtilFormato;
-import utilPresentacion.FachadaUtil;
+import utilPresentacion.Util;
 import utilEstilos.UtilBoton;
 import utilEstilos.UtilBoton.BotonAlmacenador;
 import utilEstilos.UtilPanel;
@@ -51,8 +51,8 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
         this.coordinadorEstados = coordinadorEstados;
 
         // Configuración estética del Frame
-        FachadaUtil.configurarFrame("Iniciar Solicitud de Piezas", this);
-        add(FachadaUtil.crearNavegacion(this, coordinadorPresentacion), BorderLayout.NORTH);
+        Util.configurarFrame("Iniciar Solicitud de Piezas", this);
+        add(Util.crearNavegacion(this, coordinadorPresentacion), BorderLayout.NORTH);
 
         JPanel contenido = new JPanel(new GridBagLayout());
         contenido.setBackground(Constantes.COLOR_FONDO);
@@ -129,7 +129,7 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
     }
 
     private JPanel crearPanelBusqueda() {
-        JPanel p = FachadaUtil.crearPanel();
+        JPanel p = Util.crearPanel();
         p.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         
@@ -144,7 +144,7 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
         gbc.insets = new Insets(20, 20, 10, 20);
         p.add(titulo, gbc);
         
-        JTextField campoBuscar = FachadaUtil.crearCampoTexto();
+        JTextField campoBuscar = Util.crearCampoTexto();
         gbc.gridy = 1;
         gbc.insets = new Insets(5, 20, 15, 20);
         p.add(campoBuscar, gbc);
@@ -155,11 +155,11 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
             gbc.gridy = ordenGbc++;
             gbc.insets = new Insets(3, 10, 3, 10);
             
-            JButton botonFiltro = FachadaUtil.crearBoton(stringCampo);
+            JButton botonFiltro = Util.crearBoton(stringCampo);
             botonFiltro.addActionListener(e -> {
                 String filtro = campoBuscar.getText().trim();
                 if (filtro.isBlank()) {
-                    FachadaUtil.dialogoAlerta(ViniciarSolicitud.this, "Campo vacío");
+                    Util.dialogoAlerta(ViniciarSolicitud.this, "Campo vacío");
                     return;
                 }
                 inyectarLogicaFiltradoBoton(filtro, stringCampo);
@@ -168,7 +168,7 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
             mapaBotonesFiltros.put(stringCampo, botonFiltro);
         }
         
-        JButton eliminarFiltros = FachadaUtil.crearBoton("Restablecer filtros");
+        JButton eliminarFiltros = Util.crearBoton("Restablecer filtros");
         eliminarFiltros.addActionListener(e -> {
             campoBuscar.setText("");
             piezasMostrar = coordinadorNegocio.consultarPiezasBodega();
@@ -189,7 +189,7 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
             case Constantes.PIEZA_MODELO -> piezasMostrar = coordinadorNegocio.filtrarPorModeloSoli(filtro);
             case Constantes.PIEZA_PRECIOMAX -> {
                 if (!UtilFormato.numeroEnteroPositivo(filtro)) {
-                    FachadaUtil.dialogoAlerta(ViniciarSolicitud.this, "Ingrese un número entero positivo");
+                    Util.dialogoAlerta(ViniciarSolicitud.this, "Ingrese un número entero positivo");
                     return;
                 }
                 piezasMostrar = coordinadorNegocio.filtrarPorPrecioMaxSoli(Double.parseDouble(filtro));
@@ -301,14 +301,14 @@ public class ViniciarSolicitud extends JFrame implements IObservador {
         p.setBackground(Color.WHITE);
         p.setBorder(new EmptyBorder(10, 30, 20, 30));
 
-        JButton btnRegresar = FachadaUtil.crearBotonRegresar();
+        JButton btnRegresar = Util.crearBotonRegresar();
         btnRegresar.addActionListener(e -> coordinadorPresentacion.mostrarVentanaInicio());
 
-        JButton btnContinuar = FachadaUtil.crearBoton("Siguiente");
+        JButton btnContinuar = Util.crearBoton("Siguiente");
         btnContinuar.setPreferredSize(new Dimension(200, 50));
         btnContinuar.addActionListener(e -> {
             if (coordinadorEstados.carritoSolicitudVacio()) {
-                FachadaUtil.dialogoAlerta(this, "La solicitud está vacía");
+                Util.dialogoAlerta(this, "La solicitud está vacía");
                 return;
             }
             coordinadorPresentacion.abrirResumenSolicitud(); 

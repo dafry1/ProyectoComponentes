@@ -193,8 +193,8 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     }
 
     @Override
-    public void abrirDetalleVenta(VentaDTO venta) {
-        abrirDialogo(() -> new DetalleVenta(ventanaActual, venta, ensambladorDTO));
+    public void abrirDetalleVenta(VentaDTO venta, IObservador observador) {
+        abrirDialogo(() -> new DetalleVenta(this, ventanaActual, venta, ensambladorDTO, observador));
     }
 
     @Override
@@ -225,11 +225,11 @@ public class CoordinadorPresentacion implements ICoordinadorPresentacion {
     
     
     
-    
+     
     //MÉTODOS DE FACTURA
     @Override
     public void abrirIngresarRFC(IObservador observador) {
-        abrirDialogo(() -> new IngresarRFC(coordinadorNegocio, observador));
+        abrirDialogo(() -> new IngresarRFC(this, coordinadorNegocio, observador));
     }
 
     @Override

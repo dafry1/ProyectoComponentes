@@ -15,7 +15,7 @@ public class DetallesVentaDTO extends DTO {
 
     public DetallesVentaDTO(){}
     
-    public DetallesVentaDTO(String id, double costo, int cantidad, double subtotal, PiezaDTO pieza, double antesImpuesots) {
+    public DetallesVentaDTO(String id, double costo, int cantidad, double subtotal, PiezaDTO pieza) {
         super(id);
         this.costo = costo;
         this.cantidad = cantidad;
@@ -80,8 +80,4 @@ public class DetallesVentaDTO extends DTO {
     public void setAntesImpuestos(double antesImpuestos) {
         this.antesImpuestos = antesImpuestos;
     }
-    
-    
-    
-    
 }

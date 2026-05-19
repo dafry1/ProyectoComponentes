@@ -104,7 +104,9 @@ public class PiezaDAO implements IPiezaDAO {
                     Accumulators.first("marcaPieza", "$detalles.pieza.marcaPieza"),
                     Accumulators.first("modeloPieza", "$detalles.pieza.modeloPieza"),
                     Accumulators.first("costoPieza", "$detalles.pieza.costoPieza"),
-                    Accumulators.first("stockPieza", "$detalles.pieza.stockPieza")
+                    Accumulators.first("stockPieza", "$detalles.pieza.stockPieza"),
+                    Accumulators.first("antesImpuestos", "$detalles.pieza.antesImpuestos"),
+                    Accumulators.first("iva", "$detalles.pieza.iva")
                 ),
 
                 // Ordena de mayor a menor éxito de ventas
@@ -113,7 +115,7 @@ public class PiezaDAO implements IPiezaDAO {
                 // Proyección limpia para tu adaptador
                 Aggregates.project(Projections.fields(
                     Projections.computed("id", "$_id"), 
-                    Projections.include("nombre", "categoria", "marcaPieza", "modeloPieza", "costoPieza", "stockPieza"),
+                    Projections.include("nombre", "categoria", "marcaPieza", "modeloPieza", "costoPieza", "stockPieza", "antesImpuestos", "iva"),
                     Projections.excludeId()
                 ))
             );

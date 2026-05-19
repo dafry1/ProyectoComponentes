@@ -11,16 +11,18 @@ public class DetallesVenta {
     private int cantidad;
     private double subtotal;
     private Pieza pieza;
+    private double antesImpuestos;
 
     public DetallesVenta() {}
 
-    public DetallesVenta(double costo, int cantidad, double subtotal, Pieza pieza) {
+    public DetallesVenta(double costo, int cantidad, double subtotal, Pieza pieza, double antesImpuestos) {
         this.costo = costo;
         this.cantidad = cantidad;
         this.subtotal = subtotal;
         this.pieza = pieza;
+        this.antesImpuestos = antesImpuestos;
     }
-
+    
     public double getCosto() {
         return costo;
     }
@@ -52,6 +54,12 @@ public class DetallesVenta {
     public void setPieza(Pieza pieza) {
         this.pieza = pieza;
     }
-    
-    
+
+    public double getAntesImpuestos() {
+        return antesImpuestos;
+    }
+
+    public void setAntesImpuestos(double antesImpuestos) {
+        this.antesImpuestos = antesImpuestos;
+    }
 }

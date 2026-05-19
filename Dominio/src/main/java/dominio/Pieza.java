@@ -17,12 +17,11 @@ public class Pieza {
     private String id;
     
     private double antesImpuestos;
-    
-    private static final double IVA = 1.16;
+    private double iva;
  
     public Pieza(){}
     
-    public Pieza(String id, String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza) {
+    public Pieza(String id, String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza, double iva) {
         this.id = id;
         this.nombre = nombre;
         this.categoria = categoria;
@@ -30,20 +29,21 @@ public class Pieza {
         this.modeloPieza = modeloPieza;
         this.costoPieza = costoPieza;
         this.stockPieza = stockPieza;
-        this.antesImpuestos = costoPieza/IVA;
+        this.iva = iva;
+        this.antesImpuestos = costoPieza/iva;
     }
 
-    public Pieza(String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza) {
+    public Pieza(String nombre, String categoria, String marcaPieza, String modeloPieza, double costoPieza, int stockPieza, double iva) {
         this.nombre = nombre;
         this.categoria = categoria;
         this.marcaPieza = marcaPieza;
         this.modeloPieza = modeloPieza;
         this.costoPieza = costoPieza;
         this.stockPieza = stockPieza;
+        this.iva = iva;
+        this.antesImpuestos = costoPieza/iva;
     }
     
-    
-
     public String getId() {
         return id;
     }
@@ -107,8 +107,14 @@ public class Pieza {
     public void setAntesImpuestos(double antesImpuestos) {
         this.antesImpuestos = antesImpuestos;
     }
-    
-    
+
+    public double getIva() {
+        return iva;
+    }
+
+    public void setIva(double iva) {
+        this.iva = iva;
+    }
     
     @Override
     public boolean equals(Object o) {

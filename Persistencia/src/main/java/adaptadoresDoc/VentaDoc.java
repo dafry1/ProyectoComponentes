@@ -53,6 +53,11 @@ public final class VentaDoc {
         venta.setFechaHora(doc.getString("fechaHora"));
         venta.setFolio(doc.getString("folio"));
         
+        Number antesImpuestos = doc.get("antesImpuestos", Number.class);
+        venta.setAntesImpuestos(antesImpuestos != null ? antesImpuestos.doubleValue() : 0.0);
+        
+        venta.setFacturada(doc.getBoolean("facturada"));
+        
         return venta;
     }
 
@@ -82,6 +87,9 @@ public final class VentaDoc {
         doc.put("fechaHora", venta.getFechaHora());
         doc.put("folio", venta.getFolio());
 
+        doc.put("antesImpuestos", venta.getAntesImpuestos());
+        doc.put("facturada", venta.isFacturada());
+        
         return doc;
     }
 }

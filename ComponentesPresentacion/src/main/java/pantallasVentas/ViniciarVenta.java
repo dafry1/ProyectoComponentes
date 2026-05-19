@@ -20,7 +20,7 @@ import utilEstilos.UtilPanel;
 import java.util.List;
 import observadores.IObservador;
 import utilEstilos.UtilFormato;
-import utilPresentacion.FachadaUtil;
+import utilPresentacion.Util;
 import utilEstilos.UtilBoton.BotonAlmacenador;
 
 /**
@@ -47,7 +47,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
     Map<String, JButton> mapaBotonesFiltros = new HashMap<>();
     
     //Botón de buscar como atributo para usarlo en más de un método
-    JButton botonBuscar = FachadaUtil.crearBoton("Buscar");
+    JButton botonBuscar = Util.crearBoton("Buscar");
     
     //Arreglo de constantes ya definidas para los campos de texto y así no pelearnos con strings sueltos
     private String[] campos = {Constantes.PIEZA_NOMBRE, Constantes.PIEZA_CATEGORIA, Constantes.PIEZA_MARCA, Constantes.PIEZA_PRECIOMAX};
@@ -76,10 +76,10 @@ public class ViniciarVenta extends JFrame implements IObservador {
         this.coordinadorEstados = coordinadorEstados;
         
         //Configuración general
-        FachadaUtil.configurarFrame("Iniciar venta", this);
+        Util.configurarFrame("Iniciar venta", this);
 
         //Añade el panel posterior
-        add(FachadaUtil.crearNavegacion(this, coordinadorPresentacion), BorderLayout.NORTH);
+        add(Util.crearNavegacion(this, coordinadorPresentacion), BorderLayout.NORTH);
 
         //Crea el panel principal que contiene lo importante
         JPanel contenido = new JPanel(new GridBagLayout()); 
@@ -198,17 +198,17 @@ public class ViniciarVenta extends JFrame implements IObservador {
         p.setBorder(new EmptyBorder(10, 30, 20, 30));
         
         //Crea el botón de regreso
-        JButton botonRegresar = FachadaUtil.crearBotonRegresar();
+        JButton botonRegresar = Util.crearBotonRegresar();
         botonRegresar.addActionListener(e -> coordinadorPresentacion.mostrarVentanaInicio());
 
         //Creaa el botón de continuar y le agrega navegación
-        JButton botonContinuar = FachadaUtil.crearBoton("Continuar");
+        JButton botonContinuar = Util.crearBoton("Continuar");
         botonContinuar.setPreferredSize(new Dimension(200, 50));
         botonContinuar.addActionListener(e -> {
             
             //Verifica que el carrito no esté vacío
             if (coordinadorEstados.carritoVentaVacio()) {
-                FachadaUtil.dialogoAlerta(this, "El carrito está vacío");
+                Util.dialogoAlerta(this, "El carrito está vacío");
                 return;
             }
             coordinadorPresentacion.abrirResumenVenta();
@@ -229,7 +229,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
     private JPanel crearPanelBusqueda() {
         
         //Configura el panel
-        JPanel p = FachadaUtil.crearPanel();
+        JPanel p = Util.crearPanel();
         p.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         
@@ -246,7 +246,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         p.add(titulo, gbc);
         
         //Campo de búsqueda
-        JTextField campoBuscar = FachadaUtil.crearCampoTexto();
+        JTextField campoBuscar = Util.crearCampoTexto();
         gbc.gridy = 1;
         gbc.insets = new Insets(5, 20, 15, 20);
         p.add(campoBuscar, gbc);
@@ -266,13 +266,13 @@ public class ViniciarVenta extends JFrame implements IObservador {
             gbc.insets = new Insets(3, 10, 3, 10);
             
             //Crea un botón de filtrado
-            JButton botonFiltro = FachadaUtil.crearBoton(stringCampo);
+            JButton botonFiltro = Util.crearBoton(stringCampo);
             botonFiltro.addActionListener(e -> {
                 
                 //Verifica que el string sea válido primero
                 String filtro = campoBuscar.getText();
                 if (filtro.isBlank()) {
-                    FachadaUtil.dialogoAlerta(ViniciarVenta.this, "Campo vacío");
+                    Util.dialogoAlerta(ViniciarVenta.this, "Campo vacío");
                     return;
                 }
                 inyectarLogicaFiltradoBoton(filtro, stringCampo);
@@ -284,7 +284,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         }
         
         //Botón encargado de restablecer los filtros y buscar todas las piezas
-        JButton eliminarFiltros = FachadaUtil.crearBoton("Restablecer filtros");
+        JButton eliminarFiltros = Util.crearBoton("Restablecer filtros");
         eliminarFiltros.addActionListener(e -> {
             piezasMostrar = coordinadorNegocio.consultarPiezas();
             reconsultarPiezasFiltro();
@@ -319,7 +319,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
                     ? coordinadorNegocio.filtrarPorPrecioMax(Double.parseDouble(filtro)) 
                     : piezasMostrar;
                 if (!UtilFormato.numeroEnteroPositivo(filtro)) {
-                    FachadaUtil.dialogoAlerta(ViniciarVenta.this, "Ingrese un número entero positivo");
+                    Util.dialogoAlerta(ViniciarVenta.this, "Ingrese un número entero positivo");
                     return;
                 }
             }

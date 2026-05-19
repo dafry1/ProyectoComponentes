@@ -4,7 +4,7 @@ import coordinadores.ICoordinadorNegocio;
 import coordinadores.ICoordinadorPresentacion;
 import java.awt.*;
 import javax.swing.*;
-import utilPresentacion.FachadaUtil;
+import utilPresentacion.Util;
 
 /**
  * AÚN EN PROCESITO
@@ -37,12 +37,12 @@ public class IngresarDatosContribuyente extends JFrame {
     private JLabel lblTitulo;
 
     public IngresarDatosContribuyente(ICoordinadorPresentacion coordinadorPresentacion, ICoordinadorNegocio coordinadorNegocio) {
-        FachadaUtil.configurarFrame("Ingresar datos fiscales", this);
+        Util.configurarFrame("Ingresar datos fiscales", this);
         this.coordinadorPresentacion = coordinadorPresentacion;
         this.coordinadorNegocio = coordinadorNegocio;
         
         //Crea el panel principal
-        JPanel panelPrincipal = FachadaUtil.crearPanel();
+        JPanel panelPrincipal = Util.crearPanel();
         panelPrincipal.setLayout(new BorderLayout());
         panelPrincipal.setBackground(Color.WHITE);
 
@@ -55,7 +55,7 @@ public class IngresarDatosContribuyente extends JFrame {
         panelCentroContenedor.setOpaque(false);
 
         //Panel tal cual para el formulario
-        JPanel panelFormulario = FachadaUtil.crearPanel();
+        JPanel panelFormulario = Util.crearPanel();
         panelFormulario.setLayout(new GridBagLayout());
         panelFormulario.setBorder(BorderFactory.createEmptyBorder(35, 45, 35, 45));
         inicializarCamposFormulario();
@@ -72,7 +72,7 @@ public class IngresarDatosContribuyente extends JFrame {
     }
     
     private void iniciarGraficos() {
-        FachadaUtil.configurarFrame("Factura electrónica", this);
+        Util.configurarFrame("Factura electrónica", this);
         
     }
 
@@ -119,23 +119,23 @@ public class IngresarDatosContribuyente extends JFrame {
 
     private void inicializarCamposFormulario() {
         // Fila 1
-        txtCorreo = FachadaUtil.crearCampoTexto();
+        txtCorreo = Util.crearCampoTexto();
         txtCorreo.setPreferredSize(new Dimension(220, 40));
         
-        txtTelefono = FachadaUtil.crearCampoTexto();
+        txtTelefono = Util.crearCampoTexto();
         txtTelefono.setPreferredSize(new Dimension(220, 40));
 
         // Fila 2 (Utilizan las dimensiones estilizadas automáticas fijadas por la factoría)
-        String[] formasPago = {"Efectivo", "Tarjeta de Crédito", "Tarjeta de Débito", "Transferencia"};
-        comboFormaPago = FachadaUtil.crearComboBox(formasPago);
+        String[] formasPago = coordinadorNegocio.obtenerFormasPago();
+        comboFormaPago = Util.crearComboBox(formasPago);
         comboFormaPago.setPreferredSize(new Dimension(140, 40));
 
-        String[] regimenes = {"Sueldos y Salarios", "RESICO", "Actividad Empresarial"};
-        comboRegimen = FachadaUtil.crearComboBox(regimenes);
+        String[] regimenes = coordinadorNegocio.obtenerRegimenesFiscales();
+        comboRegimen = Util.crearComboBox(regimenes);
         comboRegimen.setPreferredSize(new Dimension(140, 40));
 
-        String[] usosCfdi = {"G03 - Gastos en general", "P01 - Por definir"};
-        comboUsoCfdi = FachadaUtil.crearComboBox(usosCfdi);
+        String[] usosCfdi = coordinadorNegocio.obtenerCfdis();
+        comboUsoCfdi = Util.crearComboBox(usosCfdi);
         comboUsoCfdi.setPreferredSize(new Dimension(140, 40));
     }
 
@@ -197,12 +197,12 @@ public class IngresarDatosContribuyente extends JFrame {
         footer.setBorder(BorderFactory.createEmptyBorder(20, 40, 30, 40));
 
         // Botón Regresar (Atrás) alineado a la izquierda
-        btnAtras = FachadaUtil.crearBotonRegresar();
+        btnAtras = Util.crearBotonRegresar();
         btnAtras.setText("Atrás");
         btnAtras.setPreferredSize(new Dimension(160, 45));
 
         // Botón Continuar alineado a la derecha
-        btnContinuar = FachadaUtil.crearBoton("Continuar");
+        btnContinuar = Util.crearBoton("Continuar");
         btnContinuar.setPreferredSize(new Dimension(160, 45));
         
         // Acciones
@@ -211,7 +211,7 @@ public class IngresarDatosContribuyente extends JFrame {
         });
         
         btnContinuar.addActionListener(e -> {
-            FachadaUtil.dialogoAviso(this, "Procesando datos del CFDI...");
+            Util.dialogoAviso(this, "Procesando datos del CFDI...");
         });
 
         footer.add(btnAtras, BorderLayout.WEST);

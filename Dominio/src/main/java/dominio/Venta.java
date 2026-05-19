@@ -14,6 +14,9 @@ public class Venta {
     private String fechaHora;
     private String folio;
     private String id;
+    
+    private boolean facturada = false;
+    private double antesImpuestos;
 
     public Venta() {
     }
@@ -94,7 +97,20 @@ public class Venta {
     public void setId(String id) {
         this.id = id;
     }
-    
-    
-    
+
+    public boolean isFacturada() {
+        return facturada;
+    }
+
+    public void setFacturada(boolean facturada) {
+        this.facturada = facturada;
+    }
+
+    public double getAntesImpuestos() {
+        return antesImpuestos;
+    }
+
+    public void setAntesImpuestos(double antesImpuestos) {
+        this.antesImpuestos = antesImpuestos;
+    }
 }

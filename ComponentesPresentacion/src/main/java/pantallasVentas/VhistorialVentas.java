@@ -198,7 +198,7 @@ public class VhistorialVentas extends JFrame implements IObservador {
 
             //Agrega funcionalidad al botón de mostrarInfo
             botonInfo.addActionListener(e -> {
-                coordinadorPresentacion.abrirDetalleVenta(venta);
+                coordinadorPresentacion.abrirDetalleVenta(venta, VhistorialVentas.this);
             });
 
             //Agrega al panel principal

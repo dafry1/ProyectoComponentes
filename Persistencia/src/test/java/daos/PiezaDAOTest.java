@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Andre
  */
 public class PiezaDAOTest {
+    private static final double IVA = 1.16;
     
     private static MongoClient mongoClient;
     private static MongoDatabase database;
@@ -86,7 +87,7 @@ public class PiezaDAOTest {
     @Test
     public void testInsertar_GuardaPiezaCorrectamente() {
         // Arrange (Preparar)
-        Pieza nuevaPieza = new Pieza("Core i5-14600K", "Procesador", "Intel", "Raptor Lake", 3200.0, 15);
+        Pieza nuevaPieza = new Pieza("Core i5-14600K", "Procesador", "Intel", "Raptor Lake", 3200.0, 15, IVA);
         nuevaPieza.setId(new ObjectId().toString()); 
 
         // Act (Ejecutar)
@@ -109,8 +110,8 @@ public class PiezaDAOTest {
         assertTrue(listaVacia.isEmpty(), "Debería retornar una lista vacía si no hay registros");
 
         // 2. Arrange: Insertar elementos de prueba usando el mapeo manual
-        Pieza p1 = new Pieza("Trident Z5", "RAM", "G.Skill", "DDR5", 1800.0, 30);
-        Pieza p2 = new Pieza("Vengeance", "RAM", "Corsair", "DDR5", 2100.0, 25);
+        Pieza p1 = new Pieza("Trident Z5", "RAM", "G.Skill", "DDR5", 1800.0, 30, IVA);
+        Pieza p2 = new Pieza("Vengeance", "RAM", "Corsair", "DDR5", 2100.0, 25, IVA);
         p1.setId(new ObjectId().toString());
         p2.setId(new ObjectId().toString());
 
@@ -131,7 +132,7 @@ public class PiezaDAOTest {
     public void testActualizarStock_ReduceStockDeUnaPieza() {
         // Arrange: Guardar una pieza con 50 unidades de stock inicial
         String idPieza = new ObjectId().toString();
-        Pieza pieza = new Pieza("Ryzen 5 9600X", "Procesador", "AMD", "Zen 5", 2500.0, 50);
+        Pieza pieza = new Pieza("Ryzen 5 9600X", "Procesador", "AMD", "Zen 5", 2500.0, 50, IVA);
         pieza.setId(idPieza);
         piezasDocCollection.insertOne(PiezaDoc.toDocument(pieza));
 
@@ -155,11 +156,11 @@ public class PiezaDAOTest {
     public void testActualizarStockTrasVenta_ReduceStockDeMultiplesPiezas() {
         // Arrange: Crear e insertar dos piezas distintas con sus respectivos stocks iniciales
         String idPieza1 = new ObjectId().toString();
-        Pieza pieza1 = new Pieza("Pieza Uno", "Test", "Marca", "Mod", 100.0, 20); // Stock: 20
+        Pieza pieza1 = new Pieza("Pieza Uno", "Test", "Marca", "Mod", 100.0, 20, IVA); // Stock: 20
         pieza1.setId(idPieza1);
 
         String idPieza2 = new ObjectId().toString();
-        Pieza pieza2 = new Pieza("Pieza Dos", "Test", "Marca", "Mod", 200.0, 10); // Stock: 10
+        Pieza pieza2 = new Pieza("Pieza Dos", "Test", "Marca", "Mod", 200.0, 10, IVA); // Stock: 10
         pieza2.setId(idPieza2);
 
         piezasDocCollection.insertOne(PiezaDoc.toDocument(pieza1));

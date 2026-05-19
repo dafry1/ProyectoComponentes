@@ -3,6 +3,8 @@ package fachadas;
 import DTOS.ContribuyenteDTO;
 import DTOS.FacturaDTO;
 import DTOS.ParticipanteDTO;
+import controles.ControlDatos;
+import controles.ControlFactura;
 
 /**
  * Fachada que expone el subsistema para consumo de presentación
@@ -10,6 +12,10 @@ import DTOS.ParticipanteDTO;
  */
 public class FachadaFactura implements IFachadaFactura {
 
+    //Controles
+    ControlDatos controlDatos = new ControlDatos();
+    ControlFactura controlFactura = new ControlFactura();
+    
     /**
      * Consulta un contribuyente por RFC
      * 
@@ -19,7 +25,11 @@ public class FachadaFactura implements IFachadaFactura {
      */
     @Override
     public ContribuyenteDTO obtenerContribuyente(String rfc) {
-        return new ContribuyenteDTO();
+        ContribuyenteDTO contribuyente = controlFactura.obtenerContribuyente(rfc);
+        if (contribuyente != null) {
+            controlDatos.setContribuyente(contribuyente);
+        }
+        return contribuyente;
     }
 
     /**
@@ -78,7 +88,7 @@ public class FachadaFactura implements IFachadaFactura {
      */
     @Override
     public String[] obtenerFormasPago() {
-        return new String[0];
+        return controlDatos.obtenerFormasPago();
     }
 
     /**
@@ -87,7 +97,7 @@ public class FachadaFactura implements IFachadaFactura {
      */
     @Override
     public String[] obtenerRegimenesFiscales() {
-        return new String[0];
+        return controlDatos.obtenerRegimenesFiscales();
     }
 
     /**
@@ -97,6 +107,6 @@ public class FachadaFactura implements IFachadaFactura {
      */
     @Override
     public String[] obtenerCfdis() {
-        return new String[0];
+        return controlDatos.obtenerCfdis();
     }
 }

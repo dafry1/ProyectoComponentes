@@ -3,7 +3,7 @@ package pantallasFactura;
 import coordinadores.ICoordinadorNegocio;
 import coordinadores.ICoordinadorPresentacion;
 import javax.swing.JFrame;
-import utilPresentacion.FachadaUtil;
+import utilPresentacion.Util;
 
 /**
  *
@@ -14,7 +14,7 @@ public class ResumenFactura extends JFrame {
     private ICoordinadorNegocio coordinadorNegocio;
     
     public ResumenFactura(ICoordinadorPresentacion coordinadorPresentacion, ICoordinadorNegocio coordinadorNegocio) {
-        FachadaUtil.configurarFrame("Resumen de la factura", this);
+        Util.configurarFrame("Resumen de la factura", this);
         this.coordinadorPresentacion = coordinadorPresentacion;
         this.coordinadorNegocio = coordinadorNegocio;
     }

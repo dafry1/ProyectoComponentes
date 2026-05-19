@@ -40,6 +40,12 @@ public final class PiezaDoc {
         pieza.setCostoPieza(costo != null ? costo.doubleValue() : 0.0);
         
         pieza.setStockPieza(doc.getInteger("stockPieza") != null ? doc.getInteger("stockPieza") : 0);
+        
+        //CU factura
+        Number antesImpuestos = doc.get("antesImpuestos", Number.class);
+        pieza.setAntesImpuestos(antesImpuestos.doubleValue());
+        Number iva = doc.get("iva", Number.class);
+        pieza.setIva(iva.doubleValue());
 
         return pieza;
     }
@@ -61,10 +67,15 @@ public final class PiezaDoc {
         pieza.setCategoria(doc.getString("categoria"));
         pieza.setMarcaPieza(doc.getString("marcaPieza"));
         pieza.setModeloPieza(doc.getString("modeloPieza"));
-        
         Number costo = doc.get("costoPieza", Number.class);
         pieza.setCostoPieza(costo != null ? costo.doubleValue() : 0.0);
-
+        
+        //CU factura
+        Number antesImpuestos = doc.get("antesImpuestos", Number.class);
+        pieza.setAntesImpuestos(antesImpuestos != null ? antesImpuestos.doubleValue() : 0.0);
+        Number iva = doc.get("iva", Number.class);
+        pieza.setIva(iva != null ? iva.doubleValue() : 0.0);
+        
         return pieza;
     }
 
@@ -92,6 +103,9 @@ public final class PiezaDoc {
         doc.put("costoPieza", pieza.getCostoPieza());
         doc.put("stockPieza", pieza.getStockPieza());
         
+        doc.put("antesImpuestos", pieza.getAntesImpuestos());
+        doc.put("iva", pieza.getIva());
+        
         return doc;
     }
 
@@ -117,6 +131,9 @@ public final class PiezaDoc {
         doc.put("marcaPieza", pieza.getMarcaPieza());
         doc.put("modeloPieza", pieza.getModeloPieza());
         doc.put("costoPieza", pieza.getCostoPieza());
+        
+        doc.put("antesImpuestos", pieza.getAntesImpuestos());
+        doc.put("iva", pieza.getIva());
         
         return doc;
     }

@@ -10,13 +10,17 @@ import java.util.List;
  */
 public class VentaDTO extends DTO {
     
-    //Atributos
+    //Atributos del CU base
     private ClienteDTO cliente;
     private EmpleadoDTO empleado;
     private List<DetallesVentaDTO> detalles;
     private double total;
     private String fechaHora;
     private String folio;
+    
+    //Atributos del CU factura
+    private boolean facturada = false;
+    private double antesImpuestos;
 
     /** Constructor vacío */
     public VentaDTO() {}  
@@ -55,6 +59,23 @@ public class VentaDTO extends DTO {
         this.empleado = empleado;
     }
 
+    private void recalcularAntesImpuestos() {
+        double cantidad = 0;
+        for (DetallesVentaDTO detalle: detalles) {
+            cantidad += detalle.getAntesImpuestos();
+        }
+        antesImpuestos = cantidad;
+    }
+
+    public double getAntesImpuestos() {
+        recalcularAntesImpuestos();
+        return antesImpuestos;
+    }
+
+    public void setAntesImpuestos(double antesImpuestos) {
+        this.antesImpuestos = antesImpuestos;
+    }
+    
     public ClienteDTO getCliente() {
         return cliente;
     }
@@ -106,4 +127,14 @@ public class VentaDTO extends DTO {
     public void setEmpleado(EmpleadoDTO empleado) {
         this.empleado = empleado;
     }
+
+    public boolean isFacturada() {
+        return facturada;
+    }
+
+    public void setFacturada(boolean facturada) {
+        this.facturada = facturada;
+    }
+    
+    
 }

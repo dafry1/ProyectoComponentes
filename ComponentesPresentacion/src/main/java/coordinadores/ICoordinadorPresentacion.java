@@ -66,7 +66,7 @@ public interface ICoordinadorPresentacion {
         
     void abrirInfoDetalle(IObservador observador, DetallesVentaDTO detalle);
         
-    void abrirDetalleVenta(VentaDTO venta);
+    void abrirDetalleVenta(VentaDTO venta, IObservador observador);
     
     void abrirInfoCliente( IObservador observador, IEnsambladorDTO ensambladorDTO);
     

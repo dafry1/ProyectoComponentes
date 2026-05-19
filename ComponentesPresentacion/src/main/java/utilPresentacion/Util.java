@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import utilEstilos.UtilBuild;
@@ -19,12 +20,27 @@ import utilEstilos.UtilSwing;
 /**
  * Fachada de utilerías para que las pantallas solo
  * importen lo que realmente importa, eliminando el
- * ruido de las clases anidadas
+ * ruido de las clases anidadas o el abuso de imports
  * 
  * @author Andre
  */
-public class FachadaUtil {
-    private FachadaUtil(){}
+public class Util {
+    private Util(){}
+    
+    
+    /**
+     * Fábrica de un label que ya carga consigo mismo la fuente del
+     * programa, lo que lo aleja un poco de un simple envoltorio
+     * innecesario. Anticipa decisiones más complejas en un
+     * futuro
+     * 
+     * @param texto del label
+     * 
+     * @return el label estilizado
+     */
+    public static JLabel crearLabel(String texto) {
+        return UtilGeneral.crearLabel(texto);
+    }
     
     public static JButton crearBoton(String texto) {
         return UtilBoton.crearBoton(texto);
