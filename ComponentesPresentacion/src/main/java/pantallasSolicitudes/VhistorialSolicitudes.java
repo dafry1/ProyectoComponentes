@@ -13,11 +13,11 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import observadores.IObservador;
-import utilEstilos.Constantes;
+import utilPresentacion.Constantes;
 import utilEstilos.UtilBuild;
 import utilEstilos.UtilSwing;
-import utilPresentacion.UtilBoton;
-import utilPresentacion.UtilPanel;
+import utilEstilos.UtilBoton;
+import utilEstilos.UtilPanel;
 
 /**
  * Pantalla que muestra el historial de solicitudes realizadas.

@@ -1,5 +1,4 @@
-package utilPresentacion;
-import utilEstilos.Constantes;
+package utilEstilos;
 import java.awt.Color;
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +7,10 @@ import java.util.function.Function;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import utilClases.ComboBoxPersonalizado;
+import utilClases.ComboBoxRenderizador;
+import utilClases.CampoTextoRedondeado;
+import utilPresentacion.Constantes;
 
 /**
  * Utilerías que guarda cosas que se ocupan en toda la presentación
@@ -30,50 +33,37 @@ public class UtilGeneral {
         return label;
     }
     
-    
-    //Clase anidada de un campo de texto redondeado
-    private static class CampoTextoRedondeado extends JTextField {
-
-        public CampoTextoRedondeado(int tamaño) {
-            super(tamaño);
-            //Evita que dibuje el rectánglo completo
-            setOpaque(false);
-            //Padding
-            setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
-            setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-
-            //Suavizado de bordes
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            //Relleno redondeado
-            g2.setColor(getBackground());
-            g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
-
-            //Dibuja todo y libera memoria
-            super.paintComponent(g2);
-            g2.dispose();
-        }
-
-        @Override
-        protected void paintBorder(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-
-            //Suavizado de bordes y color
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setColor(Color.GRAY);
-
-            //Dibuja el borde
-            g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
-            g2.dispose();
-        }
+    /**
+     * Fábrica de un ComboBox personalizado
+     * 
+     * @param items Elementos del combo
+     * 
+     * @return JComboBox personalizado
+     */
+    public static <T> JComboBox<T> crearComboBox(T[] items) {
+        JComboBox<T> combo = new JComboBox<>(items);
+        
+        //Aplica UI
+        combo.setUI(new ComboBoxPersonalizado());
+        combo.setOpaque(false);
+        
+        //Decisiones visuales
+        combo.setFont(Constantes.FUENTE);
+        combo.setBackground(Constantes.COLOR_BOTONES);
+        combo.setForeground(Constantes.COLOR_TEXTO_BOTONES);
+        
+        //Bordes internos
+        combo.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+        
+        //Manita por ncima
+        combo.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        //Asigna el renderizador para la lista desplegable
+        combo.setRenderer(new ComboBoxRenderizador());
+        
+        //Regresa el Combobox
+        return combo;
     }
-
-    
     
     /**
      * Fábrica de una tabla ya estilizada
@@ -135,25 +125,15 @@ public class UtilGeneral {
         //Regresa la tabla
         return tabla;
     }
-
-    
-    
-   
-    
-   
-    
-    
     
     /**
      * Fábrica de un campo de texto redondeado
      *
-     * @param tamanio
      * @return el campo redondeado
      */
-    public static CampoTextoRedondeado crearCampoTexto() {
+    public static JTextField crearCampoTexto() {
         return new CampoTextoRedondeado(Constantes.NUM_CARACTERES);
     }
-    
     
     /**
      * Método que añade un registro a la tabla 

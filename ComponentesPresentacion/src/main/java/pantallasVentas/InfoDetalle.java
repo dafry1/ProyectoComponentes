@@ -12,8 +12,8 @@ import javax.swing.*;
 import observadores.IObservador;
 import utilEstilos.UtilFormato;
 import utilEstilos.UtilSwing;
-import utilPresentacion.UtilBoton;
-import utilPresentacion.UtilGeneral;
+import utilEstilos.UtilBoton;
+import utilEstilos.UtilGeneral;
 
 /**
  * Diálogo para editar la cantidad de una pieza ya presente en el carrito

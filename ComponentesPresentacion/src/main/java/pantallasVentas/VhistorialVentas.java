@@ -11,15 +11,15 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import utilEstilos.Constantes;
-import utilPresentacion.UtilBoton;
-import utilPresentacion.UtilGeneral;
-import utilPresentacion.UtilPanel;
+import utilPresentacion.Constantes;
+import utilEstilos.UtilBoton;
+import utilEstilos.UtilGeneral;
+import utilEstilos.UtilPanel;
 import java.util.List;
 import observadores.IObservador;
 import utilEstilos.UtilBuild;
 import utilEstilos.UtilSwing;
-import utilPresentacion.UtilBoton.BotonAlmacenador;
+import utilEstilos.UtilBoton.BotonAlmacenador;
 
 /**
  * Pantalla donde se eligen piezas para el carrito

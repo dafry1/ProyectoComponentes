@@ -20,8 +20,8 @@ import observadores.IObservador;
 import pantallasVentas.InfoPieza;
 import utilEstilos.UtilFormato;
 import utilEstilos.UtilSwing;
-import utilPresentacion.UtilBoton;
-import utilPresentacion.UtilGeneral;
+import utilEstilos.UtilBoton;
+import utilEstilos.UtilGeneral;
 
 /**
  *

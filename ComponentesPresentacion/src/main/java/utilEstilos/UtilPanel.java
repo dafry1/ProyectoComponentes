@@ -1,4 +1,4 @@
-package utilPresentacion;
+package utilEstilos;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -10,7 +10,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import utilEstilos.Constantes;
+import utilPresentacion.Constantes;
 
 /**
  * Clase que centraliza la lógica para crear el panel de navegación superior

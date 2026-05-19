@@ -16,8 +16,8 @@ import java.util.Map;
 import javax.swing.*;
 import observadores.IObservador;
 import utilEstilos.UtilSwing;
-import utilPresentacion.UtilBoton;
-import utilPresentacion.UtilGeneral;
+import utilEstilos.UtilBoton;
+import utilEstilos.UtilGeneral;
 
 /**
  * Pantalla para capturar datos del cliente y su dirección para una Solicitud.

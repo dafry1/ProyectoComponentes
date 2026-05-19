@@ -14,12 +14,12 @@ import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import observadores.IObservador;
-import utilEstilos.Constantes;
+import utilPresentacion.Constantes;
 import utilEstilos.UtilFormato;
 import utilPresentacion.FachadaUtil;
-import utilPresentacion.UtilBoton;
-import utilPresentacion.UtilBoton.BotonAlmacenador;
-import utilPresentacion.UtilPanel;
+import utilEstilos.UtilBoton;
+import utilEstilos.UtilBoton.BotonAlmacenador;
+import utilEstilos.UtilPanel;
 
 /**
  * Pantalla para iniciar una solicitud de piezas (Carrito de solicitud)

@@ -16,8 +16,8 @@ import java.awt.geom.RoundRectangle2D;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import utilEstilos.UtilSwing;
-import utilPresentacion.UtilBoton;
-import utilPresentacion.UtilGeneral;
+import utilEstilos.UtilBoton;
+import utilEstilos.UtilGeneral;
 
 /**
  *

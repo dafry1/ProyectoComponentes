@@ -1,5 +1,6 @@
 package utilEstilos;
 
+import utilPresentacion.Constantes;
 import coordinadores.ICoordinadorPresentacion;
 import java.awt.Color;
 import java.awt.Cursor;

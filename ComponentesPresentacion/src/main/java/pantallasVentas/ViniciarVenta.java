@@ -14,14 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import utilEstilos.Constantes;
-import utilPresentacion.UtilBoton;
-import utilPresentacion.UtilPanel;
+import utilPresentacion.Constantes;
+import utilEstilos.UtilBoton;
+import utilEstilos.UtilPanel;
 import java.util.List;
 import observadores.IObservador;
 import utilEstilos.UtilFormato;
 import utilPresentacion.FachadaUtil;
-import utilPresentacion.UtilBoton.BotonAlmacenador;
+import utilEstilos.UtilBoton.BotonAlmacenador;
 
 /**
  * Pantalla donde se eligen piezas para el carrito
@@ -160,7 +160,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
         contenedorListaDetalles = new JPanel();
         contenedorListaDetalles.setLayout(new BoxLayout(contenedorListaDetalles, BoxLayout.Y_AXIS));
         contenedorListaDetalles.setBackground(Color.WHITE);
-
+        
         /**
          * Cuando el botón filtrar sea cliqueado, se dispara
          * el filtro de las piezas YA traídas de la BD por
@@ -213,7 +213,7 @@ public class ViniciarVenta extends JFrame implements IObservador {
             }
             coordinadorPresentacion.abrirResumenVenta();
         });
-
+        
         //Agrega los botones al panel
         p.add(botonRegresar, BorderLayout.WEST); 
         p.add(botonContinuar, BorderLayout.EAST);

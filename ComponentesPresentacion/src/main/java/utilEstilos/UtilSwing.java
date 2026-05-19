@@ -1,4 +1,5 @@
 package utilEstilos;
+import utilPresentacion.Constantes;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.BoxLayout;

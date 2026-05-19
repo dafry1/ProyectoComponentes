@@ -8,14 +8,14 @@ import ensambladores.IEnsambladorDTO;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import utilEstilos.Constantes;
-import utilPresentacion.UtilBoton;
-import utilPresentacion.UtilPanel;
+import utilPresentacion.Constantes;
+import utilEstilos.UtilBoton;
+import utilEstilos.UtilPanel;
 import java.util.List;
 import observadores.IObservador;
 import utilEstilos.UtilBuild;
 import utilEstilos.UtilSwing;
-import utilPresentacion.UtilBoton.BotonAlmacenador;
+import utilEstilos.UtilBoton.BotonAlmacenador;
 
 /**
  * Pantalla que muestra el resumen del carrito antes de generar la Solicitud

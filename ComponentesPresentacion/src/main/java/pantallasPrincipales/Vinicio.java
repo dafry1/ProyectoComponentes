@@ -15,7 +15,7 @@ import javax.swing.*;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import utilEstilos.UtilBuild;
-import utilPresentacion.UtilPanel;
+import utilEstilos.UtilPanel;
 import java.util.List;
 
 /**

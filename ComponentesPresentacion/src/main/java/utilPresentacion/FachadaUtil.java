@@ -1,10 +1,14 @@
 package utilPresentacion;
 
+import utilEstilos.UtilPanel;
+import utilEstilos.UtilGeneral;
+import utilEstilos.UtilBoton;
 import DTOS.DTO;
 import coordinadores.ICoordinadorPresentacion;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -44,6 +48,10 @@ public class FachadaUtil {
     
     public static JTextField crearCampoTexto() {
         return UtilGeneral.crearCampoTexto();
+    }
+    
+    public static JComboBox crearComboBox(String[] elementos) {
+        return UtilGeneral.crearComboBox(elementos);
     }
     
     public static JPanel crearNavegacion(JFrame frame, ICoordinadorPresentacion coordinador) {
